@@ -17,7 +17,10 @@
     "vite": "^4.1.0"
   },
   "dependencies": {
+    "drift-zoom": "^1.5.1",
+    "sass": "^1.62.0",
     "svelte-spa-chunk": "^2.0.0",
-    "svelte-spa-router": "^3.3.0"
+    "svelte-spa-router": "^3.3.0",
+    "svelte-use-click-outside": "^1.0.0"
   }
 }

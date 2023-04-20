@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+	@apply scroll-smooth;
+}
+
+body {
+	@apply grid grid-rows-[max-content,1fr,max-content] min-h-screen;
+}
+
+@layer components {
+	.rounded-btn-shadow {
+		@apply shadow-xl active:shadow-none border rounded;
+	}
+}
