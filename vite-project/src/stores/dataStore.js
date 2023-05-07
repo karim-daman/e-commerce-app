@@ -34,58 +34,7 @@ export async function getProductById(id) {
     .catch((error) => console.log("error", error));
 }
 
-// export async function createProduct(json) {
-//   var myHeaders = new Headers();
-//   myHeaders.append("Content-Type", "application/json");
-//   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-//   // var raw = JSON.stringify({
-//   //   name: "product 1",
-//   //   description: "description",
-//   //   richDescription: "richDescription",
-//   //   image: "image",
-//   //   brand: "nokie",
-//   //   price: 100,
-//   //   category: "6448d7289bd209330c87e584",
-//   //   countInStock: 10,
-//   //   rating: 3,
-//   //   numReviews: 22,
-//   //   isFeatured: true,
-//   // });
-
-//   // note: no images are attached here, must modify backend to accept uploading images.
-
-//   var raw = JSON.stringify({
-//     name: json.name,
-//     description: json.description,
-//     richDescription: json.richDescription,
-//     image: json.image,
-//     brand: json.brand,
-//     price: json.price,
-//     category: json.category,
-//     countInStock: json.countInStock,
-//     rating: json.rating,
-//     numReviews: json.numReviews,
-//     isFeatured: json.isFeatured,
-//   });
-
-//   const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/products`;
-
-//   fetch(endPoint, {
-//     method: "POST",
-//     headers: myHeaders,
-//     body: raw,
-//     redirect: "follow",
-//   })
-//     .then((response) => response.text())
-//     .then((result) => console.log(result))
-//     .catch((error) => console.log("error", error));
-// }
-
 export async function createProduct(json) {
-
-  
-
   var myHeaders = new Headers();
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
   // myHeaders.append("content-type", "multipart/form-data");
@@ -130,39 +79,29 @@ export async function createProduct(json) {
     .catch((error) => console.log("error", error));
 }
 
-// export async function createProduct(json) {
-//   const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/products`;
+export async function createCategory(json) {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/categories`;
 
-//   console.log(JSON.stringify(json, null, 2));
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
-//   var raw = JSON.stringify({
-//     name: json.name,
-//     description: json.description,
-//     richDescription: json.richDescription,
-//     image: json.image,
-//     images: json.images,
-//     brand: json.brand,
-//     price: json.price,
-//     category: json.category,
-//     countInStock: json.countInStock,
-//     rating: json.rating,
-//     numReviews: json.numReviews,
-//     isFeatured: json.isFeatured,
-//   });
+  var raw = JSON.stringify({
+    name: json.name,
+    icon: json.icon,
+    color: json.color,
+  });
 
-//   await fetch(endPoint, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: "Bearer " + localStorage.getItem("token"),
-//     },
-//     body: raw,
-//     redirect: "follow",
-//   })
-//     .then((response) => response.text())
-//     .then((result) => console.log(result))
-//     .catch((error) => console.log("error", error));
-// }
+  fetch(endPoint, {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  })
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
+}
 
 export async function getCategories() {
   const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/categories`;
