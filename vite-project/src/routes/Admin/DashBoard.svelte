@@ -1,4 +1,6 @@
 <script>
+  import toast from "svelte-french-toast";
+
   import AdminSideBar from "$components/Admin/Sidebar.svelte";
   import AdminCreateProduct from "$components/Admin/CreateProductModal.svelte";
 
@@ -7,6 +9,7 @@
 
   import { app_product_details } from "$stores/dataStore";
   import { Button, Checkbox, Chevron, Dropdown, Search } from "flowbite-svelte";
+  import { onMount } from "svelte";
 </script>
 
 <pre class="text-xs">

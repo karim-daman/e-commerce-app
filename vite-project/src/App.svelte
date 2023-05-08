@@ -3,7 +3,7 @@
   import routes from "./routes";
   import { onMount } from "svelte";
   import { app_user, decodeToken, getProducts } from "$stores/dataStore";
-
+  import toast, { Toaster } from "svelte-french-toast";
   import Navbar from "./components/Navbar.svelte";
 
   onMount(() => {
@@ -16,6 +16,8 @@
     products = await getProducts();
   });
 </script>
+
+<Toaster />
 
 <Navbar />
 

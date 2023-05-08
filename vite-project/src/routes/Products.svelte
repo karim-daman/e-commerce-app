@@ -1,9 +1,10 @@
 <script>
   import ProductFilter from "$components/ProductFilter.svelte";
-  import { app_products, app_user, getProducts } from "$stores/dataStore";
+  import { app_products, app_user, deleteProduct, getProducts } from "$stores/dataStore";
   import { Badge, Button, Card, Dropdown, DropdownItem, MenuButton, Modal, Rating } from "flowbite-svelte";
   import { onMount } from "svelte";
   import { fade, fly } from "svelte/transition";
+  import toast, { Toaster } from "svelte-french-toast";
 
   // import { page } from "$app/stores";
   import { Pagination, ChevronLeft, ChevronRight } from "flowbite-svelte";
@@ -56,7 +57,36 @@
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
+
+  let suggestedProduct;
+
+  function initDeleteProduct(product) {
+    suggestedProduct = product;
+    popupModal = true;
+  }
+
+  async function handleDeleteProduct() {
+    const promise = new Promise((resolve, reject) => {
+      deleteProduct(suggestedProduct.id).then((response) => {
+        response.success == true ? resolve() : reject();
+      });
+    });
+
+    toast.promise(
+      promise,
+      {
+        loading: `Deleting product ${suggestedProduct.name}`,
+        success: `Deleted successfully!`,
+        error: `Could not Delete.`,
+      },
+      {
+        position: "top-right",
+      }
+    );
+  }
 </script>
+
+<Toaster />
 
 <div class="grid grid-rows-[max-content,1fr,max-content] min-h-screen">
   <main class="max-w-[1320px] px-5 lg:px-0 w-full grid grid-cols-[minmax(0,308px),1fr] grid-rows-[auto,1fr] my-10 gap-4 justify-self-center">
@@ -126,7 +156,7 @@
                         d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                     </svg>
 
-                    <button on:click={() => (popupModal = true)} class="text-red-600">Delete</button></DropdownItem>
+                    <button on:click={() => initDeleteProduct(product)} class="text-red-600">Delete</button></DropdownItem>
                 </Dropdown>
               {/if}
             </div>
@@ -179,7 +209,14 @@
     <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
       ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
-    <Button color="red" class="mr-2">Yes, I'm sure</Button>
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">product: {suggestedProduct.name}</h3>
+
+    <Button
+      on:click={() => {
+        handleDeleteProduct();
+      }}
+      color="red"
+      class="mr-2">Yes, I'm sure</Button>
     <Button color="alternative">No, cancel</Button>
   </div>
 </Modal>
