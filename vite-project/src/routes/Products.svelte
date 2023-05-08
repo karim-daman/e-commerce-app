@@ -8,6 +8,7 @@
 
   // import { page } from "$app/stores";
   import { Pagination, ChevronLeft, ChevronRight } from "flowbite-svelte";
+  import ImageLoader from "$components/ImageLoader.svelte";
 
   // $: activeUrl = $page.url.searchParams.get("page");
   let pages = [
@@ -65,7 +66,7 @@
     popupModal = true;
   }
 
-  async function handleDeleteProduct() {
+  function handleDeleteProduct() {
     const promise = new Promise((resolve, reject) => {
       deleteProduct(suggestedProduct.id).then((response) => {
         response.success == true ? resolve() : reject();
@@ -104,7 +105,7 @@
       </form>
 
       <div class="border-b px-2 py-2">
-        <p class="text-[.85rem]">{9} Item(s) found</p>
+        <p class="text-[.85rem]">{$app_products.length} Item(s) found</p>
       </div>
     </section>
 
@@ -112,7 +113,7 @@
 
     <section class="  col-span-full md:col-auto grid justify-center grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 grid-flow-row auto-rows-max">
       {#each $app_products as product}
-        <div in:fly={{ y: randomIntFromInterval(15, 100) }} out:fly={{ y: -randomIntFromInterval(15, 100) }}>
+        <div in:fly={{ y: randomIntFromInterval(15, 50) }} out:fly={{ y: -randomIntFromInterval(15, 50) }}>
           <Card padding="none">
             <div class="flex justify-end">
               <button
@@ -160,12 +161,17 @@
                 </Dropdown>
               {/if}
             </div>
+            <!-- <a href="#/ProductDetails/{product.id}">
+              <img class="p-8 rounded-t-lg pointer-events-none h-[284px]" src={product.images[0]} alt="product 1" />
+            </a> -->
+
             <a href="#/ProductDetails/{product.id}">
-              <img class="p-8 rounded-t-lg pointer-events-none" src={product.images[0]} alt="product 1" />
+              <ImageLoader src={product.images[0]} alt={product.name} />
             </a>
+
             <div class="px-5 pb-5">
               <a href="#/ProductDetails/{product.id}">
-                <h5 class="text-xl font-semibold tracking-tight hover:text-blue-600 text-gray-900 dark:text-white">{product.name}</h5>
+                <h5 class="text-xl font-semibold tracking-tight hover:text-blue-600 text-gray-900 dark:text-white truncate">{product.name}</h5>
               </a>
               <Rating rating={product.rating} size="18" class="mt-2.5 mb-5">
                 <Badge slot="text" class="ml-3">{product.rating}/5</Badge>

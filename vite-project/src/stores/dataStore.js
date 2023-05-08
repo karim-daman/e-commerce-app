@@ -33,33 +33,6 @@ export async function deleteProduct(id) {
   return response;
 }
 
-export async function getProducts() {
-  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/products`;
-  await fetch(endPoint, {
-    method: "GET",
-    redirect: "follow",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      app_products.set(data);
-    })
-    .catch((error) => console.error(error));
-}
-
-export async function getProductById(id) {
-  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/products/${id}`;
-  await fetch(endPoint, {
-    method: "GET",
-    redirect: "follow",
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      app_product_details.set(result);
-    })
-    .catch((error) => console.log("error", error));
-}
-
 export async function createProduct(json) {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -84,6 +57,8 @@ export async function createProduct(json) {
   formdata.append("numReviews", "0");
   formdata.append("isFeatured", json.isFeatured);
 
+  let response;
+
   const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/products`;
 
   console.log("fetching from : ");
@@ -99,8 +74,40 @@ export async function createProduct(json) {
     body: formdata,
     redirect: "follow",
   })
-    .then((response) => response.text())
-    .then((result) => console.log(result))
+    .then((response) => response.json())
+    .then((result) => {
+      response = result;
+    })
+    .catch((error) => {
+      response = error;
+    });
+  console.log(response);
+  return response;
+}
+export async function getProducts() {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/products`;
+  await fetch(endPoint, {
+    method: "GET",
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      app_products.set(data);
+    })
+    .catch((error) => console.error(error));
+}
+
+export async function getProductById(id) {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/products/${id}`;
+  await fetch(endPoint, {
+    method: "GET",
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      app_product_details.set(result);
+    })
     .catch((error) => console.log("error", error));
 }
 

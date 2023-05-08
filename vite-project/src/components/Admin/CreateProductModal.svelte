@@ -7,6 +7,7 @@
   import Dropzone from "svelte-file-dropzone/Dropzone.svelte";
   import { onMount } from "svelte";
   import { app_categories, createCategory, createProduct, getCategories, isFetching } from "$stores/dataStore";
+  import toast, { Toaster } from "svelte-french-toast";
 
   let categoryOption = "Category";
 
@@ -37,9 +38,7 @@
     getCategories();
   }
 
-  async function handleCreateProduct() {
-    // $isFetching = true;
-
+  function handleCreateProduct() {
     //check if fields are defined
 
     let selected_category_id;
@@ -62,8 +61,23 @@
       isFeatured: false,
     };
 
-    await createProduct(raw);
-    // $isFetching = false;
+    const promise = new Promise((resolve, reject) => {
+      createProduct(raw).then((response) => {
+        response.success == true ? resolve() : reject();
+      });
+    });
+
+    toast.promise(
+      promise,
+      {
+        loading: `Creating a new product..`,
+        success: `Created successfully!`,
+        error: `Could not create product, try again.`,
+      },
+      {
+        position: "top-right",
+      }
+    );
   }
 
   let files = {
@@ -98,8 +112,11 @@
   }
 </script>
 
+<Toaster />
+
 <Modal title="Add a new product" bind:open={createProductModal}>
-  <div class="" in:fade out:fade use:clickOutside={clickOutsideHandler}>
+  <div class="" in:fade out:fade>
+    <!-- use:clickOutside={clickOutsideHandler} -->
     <form>
       <div class="grid gap-4 sm:grid-cols-8 sm:gap-6">
         <div class="sm:col-span-4">

@@ -60,7 +60,7 @@
 
 <pre class="text-xs">
   <!-- {JSON.stringify(params)} -->
-  {JSON.stringify($app_product_details, null, 2)}
+  <!-- {JSON.stringify($app_product_details, null, 2)} -->
 </pre>
 
 <div class="grid grid-rows-[max-content,1fr,max-content] min-h-screen">
