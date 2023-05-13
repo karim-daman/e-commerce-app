@@ -383,3 +383,51 @@
     </div>
   </Modal>
 {/if}
+
+<!-- 
+
+make sure to use this password strength measurement:
+
+
+<script>
+  import { Popover, Label, Input, Checkbox, Button } from 'flowbite-svelte'
+</script>
+
+<form on:submit|preventDefault class="mb-8">
+  <div class="mb-6">
+    <Label for="email" class="mb-2">Your email</Label>
+    <Input type="email" id="email" placeholder="name@flowbite.com" required="" />
+  </div>
+  <div class="mb-6">
+    <Label for="password" class="mb-2">Your password</Label>
+    <Input type="password" id="password" required="" />
+  </div>
+  <Checkbox class="mb-6">Remember me</Checkbox>
+  <Button type="submit">Submit</Button>
+</form>
+<Popover class="text-sm" triggeredBy="#password" placement="bottom">
+  <h3 class="font-semibold text-gray-900 dark:text-white">Must have at least 6 characters</h3>
+  <div class="grid grid-cols-4 gap-2">
+      <div class="h-1 bg-orange-300 dark:bg-orange-400"></div>
+      <div class="h-1 bg-orange-300 dark:bg-orange-400"></div>
+      <div class="h-1 bg-gray-200 dark:bg-gray-600"></div>
+      <div class="h-1 bg-gray-200 dark:bg-gray-600"></div>
+  </div>
+  <p class="py-2">It’s better to have:</p>
+  <ul>
+      <li class="flex items-center mb-1">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-green-400 dark:text-green-500"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+Upper &amp; lower case letters 
+      </li>
+      <li class="flex items-center mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-gray-300 dark:text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          A symbol (#$&amp;) 
+      </li>
+      <li class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-gray-300 dark:text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>A longer password (min. 12 chars.)
+      </li>
+  </ul>
+</Popover>
+
+
+ -->

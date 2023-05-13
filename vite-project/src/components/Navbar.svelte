@@ -1,6 +1,6 @@
 <script>
   // import { authHandlers, authStore } from "$stores/authStore";
-  import { authModalStore } from "$stores/appStore";
+  import { adminSideBarToggleStore, authModalStore } from "$stores/appStore";
   import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider } from "flowbite-svelte";
   import AuthModal from "./AuthModal.svelte";
 
@@ -36,6 +36,21 @@
 <AuthModal {authType} />
 
 <Navbar class="fixed border bg-teal-500 backdrop-blur-sm bg-opacity-40 z-10" let:hidden let:toggle>
+  {#if $app_user?.isAdmin}
+    <NavLi>
+      <button
+        on:click={() => {
+          $adminSideBarToggleStore = !$adminSideBarToggleStore;
+        }}
+        type="button"
+        class=" transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
+    </NavLi>
+  {/if}
+
   <NavBrand href="/">
     <img src="vite.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
   </NavBrand>
@@ -115,6 +130,17 @@
 
   <NavUl>
     {#if $app_user?.isAdmin}
+      <!-- <NavLi>
+        <button
+          on:click={() => {}}
+          type="button"
+          class=" transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+        </button>
+      </NavLi> -->
+
       <NavLi href="#/Dashboard" active={$location == "/Dashboard" ? true : false}>Dashboard</NavLi>
     {/if}
 
@@ -125,7 +151,7 @@
     <NavLi href="#/pricing" active={$location == "/pricing" ? true : false}>Pricing</NavLi>
     <NavLi href="#/contact" active={$location == "/contact" ? true : false}>Contact</NavLi>
   </NavUl>
-  <div id="bell" class="inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400">
+  <!-- <div id="bell" class="inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400">
     <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
       ><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
     <div class="flex relative">
@@ -172,5 +198,5 @@
         View all
       </div>
     </a>
-  </Dropdown>
+  </Dropdown> -->
 </Navbar>

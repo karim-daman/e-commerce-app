@@ -1,15 +1,14 @@
 <script>
   import toast from "svelte-french-toast";
 
-  import AdminSideBar from "$components/Admin/Sidebar.svelte";
   import AdminCreateProduct from "$components/Admin/CreateProductModal.svelte";
 
-  let hidden2 = true;
   let defaultModal;
 
   import { app_product_details } from "$stores/dataStore";
   import { Button, Checkbox, Chevron, Dropdown, Search } from "flowbite-svelte";
   import { onMount } from "svelte";
+  import { adminSideBarToggleStore } from "$stores/appStore";
 </script>
 
 <pre class="text-xs">
@@ -18,10 +17,8 @@
 
 <div class="grid grid-rows-[max-content,1fr,max-content] min-h-screen">
   <div class="text-center">
-    <Button on:click={() => (hidden2 = !hidden2)}>Show navigation</Button>
     <Button on:click={() => (defaultModal = !defaultModal)}>creatre prod</Button>
   </div>
 
-  <AdminSideBar {hidden2} />
   <AdminCreateProduct createProductModal={defaultModal} />
 </div>

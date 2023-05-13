@@ -5,6 +5,7 @@
   import { app_user, decodeToken, getProducts } from "$stores/dataStore";
   import toast, { Toaster } from "svelte-french-toast";
   import Navbar from "./components/Navbar.svelte";
+  import AdminSideBar from "$components/Admin/Sidebar.svelte";
 
   onMount(() => {
     app_user.set(decodeToken(localStorage.getItem("token")));
@@ -18,11 +19,11 @@
 </script>
 
 <Toaster />
-
+<AdminSideBar />
 <Navbar />
 
 <br /><br /><br /> <br />
 
 <main class="">
-  <Router {routes} />
+  <Router {routes} restoreScrollState={true} />
 </main>

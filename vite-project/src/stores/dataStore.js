@@ -33,6 +33,32 @@ export async function deleteProduct(id) {
   return response;
 }
 
+export async function deleteCategory(id) {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  let response;
+
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/categories/${id}`;
+  await fetch(endPoint, {
+    method: "DELETE",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      app_categories.update((categories) => categories.filter((category) => category.id != id));
+      response = result;
+    })
+    .catch((error) => {
+      console.log("error", error);
+      response = error;
+    });
+  return response;
+}
+
 export async function createProduct(json) {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -123,16 +149,23 @@ export async function createCategory(json) {
     icon: json.icon,
     color: json.color,
   });
+  let response;
 
-  fetch(endPoint, {
+  await fetch(endPoint, {
     method: "POST",
     headers: myHeaders,
     body: raw,
     redirect: "follow",
   })
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+    .then((response) => response.json())
+    .then((result) => {
+      response = result;
+    })
+    .catch((error) => {
+      response = error;
+    });
+  // console.log(response);
+  return response;
 }
 
 export async function getCategories() {
@@ -144,7 +177,7 @@ export async function getCategories() {
     .then((response) => response.json())
     .then((data) => {
       app_categories.set(data);
-      console.log(data);
+      // console.log(data);
     })
     .catch((error) => console.error(error));
 }

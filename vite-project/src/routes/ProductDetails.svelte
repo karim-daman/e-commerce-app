@@ -2,6 +2,7 @@
   import { app_product_details, getProductById } from "$stores/dataStore";
   import { Dropdown, DropdownItem, MenuButton } from "flowbite-svelte";
   import { onMount } from "svelte";
+  import Drift from "drift-zoom";
   export let params;
 
   let popupModal;
@@ -10,6 +11,17 @@
   let displayContainer;
   let thumbnails = [];
   let selectedThumbnailIndex = 0;
+
+  onMount(() => {
+    const options = {
+      handleTouch: false,
+    };
+
+    new Drift(triggerZone, {
+      ...options,
+      paneContainer: displayContainer,
+    });
+  });
 
   onMount(async () => {
     await getProductById(params.product_id);
@@ -70,21 +82,21 @@
      -->
 
       <article id="detail" class=" flex justify-center max-w-[660px] w-full px-5 md:px-0">
-        <div class="thumbs-wrap w-[100px] h-[500px] overflow-x-auto grid gap-[0.3rem]">
+        <div class="flex flex-col mr-2 w-[100px] h-[500px] overflow-x-auto">
           {#each thumbnails as thumbnail, i}
-            <button on:click={() => handleChangeImage(i)}>
+            <button class="mb-2 mr-2" on:click={() => handleChangeImage(i)}>
               <img draggable="false" src={thumbnail} class="border rounded-sm object-cover" alt="thumbnail" />
             </button>
           {/each}
         </div>
 
         <div class="relative" bind:this={displayContainer}>
-          <img draggable="false" class=" h-[500px] w-[500px] border rounded object-cover" src="/home-products-2.jpg" alt="product" />
+          <img draggable="false" class="border h-[500px] w-[500px] rounded object-cover" src={thumbnails[selectedThumbnailIndex]} alt="product" />
 
           <img
             bind:this={triggerZone}
             src={thumbnails[selectedThumbnailIndex]}
-            data-zoom="/home-products-2.jpg"
+            data-zoom={thumbnails[selectedThumbnailIndex]}
             draggable="false"
             class="hidden sm:block absolute right-0 top-0 h-[500px] w-[500px] border rounded object-cover"
             alt="temp" />
@@ -99,7 +111,7 @@
             <button
               on:click={() => (liked = !liked)}
               type="button"
-              class=" focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 mt-2 mr-2 transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
+              class=" hover:outline-none whitespace-normal rounded-lg hover:ring-2 p-1.5 hover:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 mt-2 mr-2 transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
               <svg xmlns="http://www.w3.org/2000/svg" fill={liked ? "red" : "gray"} viewBox="0 0 24 24" stroke-width="1.5" stroke={liked ? "red" : "gray"} class=" w-5 h-5">
                 <path
                   stroke-linecap="round"
@@ -164,7 +176,7 @@
         </div>
 
         <p>
-          Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ipsum dolor sit amet, consectetur adipiscing elit.
+          {$app_product_details?.description}
         </p>
 
         <hr class="my-4" />
@@ -175,7 +187,7 @@
             <td class="hover:underline hover:text-blue-500"> {$app_product_details.brand} </td>
           </a>
 
-          <th class="text-left"> Article number </th>
+          <th class="text-left"> Article ID </th>
           <td class="justify-self-end"> {$app_product_details.id} </td>
 
           <th class="text-left"> Garantee </th>
