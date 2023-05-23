@@ -11,9 +11,9 @@
   import { adminSideBarToggleStore } from "$stores/appStore";
 </script>
 
-<pre class="text-xs">
+<!-- <pre class="text-xs">
   {JSON.stringify($app_product_details, null, 2)}
-</pre>
+</pre> -->
 
 <div class="grid grid-rows-[max-content,1fr,max-content] min-h-screen">
   <div class="text-center">

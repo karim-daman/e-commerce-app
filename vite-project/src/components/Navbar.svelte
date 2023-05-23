@@ -1,13 +1,11 @@
 <script>
-  // import { authHandlers, authStore } from "$stores/authStore";
   import { adminSideBarToggleStore, authModalStore } from "$stores/appStore";
-  import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider } from "flowbite-svelte";
-  import AuthModal from "./AuthModal.svelte";
-
+  import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, Button, Indicator } from "flowbite-svelte";
+  import { app_user } from "$stores/dataStore";
   import { onDestroy, onMount } from "svelte";
   import { location, push } from "svelte-spa-router";
 
-  import { app_user } from "$stores/dataStore";
+  import AuthModal from "./AuthModal.svelte";
 
   let authType = false;
 
@@ -37,18 +35,16 @@
 
 <Navbar class="fixed border bg-teal-500 backdrop-blur-sm bg-opacity-40 z-10" let:hidden let:toggle>
   {#if $app_user?.isAdmin}
-    <NavLi>
-      <button
-        on:click={() => {
-          $adminSideBarToggleStore = !$adminSideBarToggleStore;
-        }}
-        type="button"
-        class=" transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-      </button>
-    </NavLi>
+    <button
+      on:click={() => {
+        $adminSideBarToggleStore = !$adminSideBarToggleStore;
+      }}
+      type="button"
+      class=" transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+    </button>
   {/if}
 
   <NavBrand href="/">
@@ -59,6 +55,7 @@
     <img class=" transition hover:scale-110 h-10 bg-slate-300 rounded-full border border-gray-100 shadow-sm" src={"/avatar.svg"} alt="avatar" id="avatar-menu" />
     <NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1" />
   </button>
+
   <Dropdown placement="bottom" triggeredBy="#avatar-menu">
     {#if user}
       <DropdownHeader>
@@ -75,7 +72,7 @@
             d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
         </svg>
 
-        <a href="#/Profile">Dashboard</a></DropdownItem>
+        <a href="#/Profile">Profile</a></DropdownItem>
       <DropdownItem class="flex transition hover:-translate-y-1">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
           <path
@@ -151,52 +148,19 @@
     <NavLi href="#/pricing" active={$location == "/pricing" ? true : false}>Pricing</NavLi>
     <NavLi href="#/contact" active={$location == "/contact" ? true : false}>Contact</NavLi>
   </NavUl>
-  <!-- <div id="bell" class="inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400">
-    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
-      ><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
-    <div class="flex relative">
-      <div class="inline-flex relative -top-2 right-3 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-gray-900" />
-    </div>
-  </div>
-  <Dropdown triggeredBy="#bell" class="w-full max-w-sm rounded divide-y divide-gray-100 shadow dark:bg-gray-800 dark:divide-gray-700">
-    <div slot="header" class="text-center py-2 font-bold">Notifications</div>
-    <DropdownItem class="flex space-x-4">
-      <Avatar src="/images/profile-picture-1.webp" dot={{ color: "bg-gray-300" }} rounded />
-      <div class="pl-3 w-full">
-        <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
-          New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's up? All set for the presentation?"
-        </div>
-        <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
-      </div>
-    </DropdownItem>
-    <DropdownItem class="flex space-x-4">
-      <Avatar src="/images/profile-picture-2.webp" dot={{ color: "bg-red-400" }} rounded />
-      <div class="pl-3 w-full">
-        <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
-          <span class="font-semibold text-gray-900 dark:text-white">Joseph Mcfall</span> and <span class="font-medium text-gray-900 dark:text-white">5 others</span> started following you.
-        </div>
-        <div class="text-xs text-blue-600 dark:text-blue-500">10 minutes ago</div>
-      </div>
-    </DropdownItem>
-    <DropdownItem class="flex space-x-4">
-      <Avatar src="/images/profile-picture-3.webp" dot={{ color: "bg-green-400" }} rounded />
-      <div class="pl-3 w-full">
-        <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
-          <span class="font-semibold text-gray-900 dark:text-white">Bonnie Green</span> and <span class="font-medium text-gray-900 dark:text-white">141 others</span> love your story. See it and view more
-          stories.
-        </div>
-        <div class="text-xs text-blue-600 dark:text-blue-500">44 minutes ago</div>
-      </div>
-    </DropdownItem>
-    <a slot="footer" href="/" class="block py-2 -my-1 text-sm font-medium text-center text-gray-900 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
-      <div class="inline-flex items-center">
-        <svg class="mr-2 w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
-          ><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path
-            fill-rule="evenodd"
-            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-            clip-rule="evenodd" /></svg>
-        View all
-      </div>
-    </a>
-  </Dropdown> -->
+
+  {#if user}
+    <button
+      class="h-8 w-9 bg-blue-600 relative border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-5 h-5 ml-1.5">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+      </svg>
+      <Indicator color="red" border size="xl" placement="top-right">
+        <span class="text-white text-xs">99</span>
+      </Indicator>
+    </button>
+  {/if}
 </Navbar>

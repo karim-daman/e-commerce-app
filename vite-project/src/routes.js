@@ -9,6 +9,7 @@ export default {
   "/": Chunk(() => import("./routes/Home.svelte")),
 
   "/Dashboard": Chunk(() => import("./routes/Admin/DashBoard.svelte")),
+  "/Users": Chunk(() => import("./routes/Admin/UserManagement.svelte")),
 
   "/Products": Chunk(() => import("./routes/Products.svelte")),
   "/ProductDetails/:product_id": Chunk(() => import("./routes/ProductDetails.svelte")),

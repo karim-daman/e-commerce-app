@@ -1,20 +1,19 @@
 <script>
-  export let createProductModal, createCategoryModal;
   import { Button, Dropdown, Chevron, Checkbox, Radio, Toast, Listgroup, DropdownItem, Avatar, Search, SpeedDialButton, SpeedDial, Popover } from "flowbite-svelte";
   import { clickOutside } from "svelte-use-click-outside";
   import { Modal } from "flowbite-svelte";
   import { fade, slide } from "svelte/transition";
   import Dropzone from "svelte-file-dropzone/Dropzone.svelte";
   import { onMount } from "svelte";
-  import { app_categories, deleteCategory, createCategory, createProduct, getCategories, isFetching } from "$stores/dataStore";
+  import { app_categories, deleteCategory, createCategory, createProduct, getCategories, isFetching, getProducts } from "$stores/dataStore";
   import toast, { Toaster } from "svelte-french-toast";
+  import { adminProductCreateModalStore } from "$stores/appStore";
 
   let categoryOption = "Select a Category";
-  let placement;
 
-  function clickOutsideHandler() {
-    createProductModal = false;
-  }
+  // function clickOutsideHandler() {
+  //   $adminProductCreateModalStore = false;
+  // }
 
   let filteredCategory = [];
   $: filteredCategory = $app_categories;
@@ -133,6 +132,7 @@
     const promise = new Promise((resolve, reject) => {
       createProduct(raw).then((response) => {
         response.success == true ? resolve() : reject();
+        getProducts();
       });
     });
 
@@ -190,7 +190,7 @@
 
 <Toaster />
 
-<Modal class=" max-h-[778px]" title="Add a new product" bind:open={createProductModal}>
+<Modal class=" max-h-[778px]" title="Add a new product" bind:open={$adminProductCreateModalStore}>
   <div in:fade out:fade>
     <!-- use:clickOutside={clickOutsideHandler} -->
     <div class="grid gap-4 sm:grid-cols-8 sm:gap-6">
@@ -251,7 +251,7 @@
                 type="text"
                 id="input-group-search"
                 class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search user" />
+                placeholder="Search category" />
             </div>
           </div>
           <ul class="h-40 overflow-y-auto border px-3 pb-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
@@ -281,7 +281,9 @@
               placeholder="Type product name"
               required />
           </div>
+        </div>
 
+        <div class="flex">
           <div class="w-full m-0.5">
             <label for="brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
             <input
@@ -310,6 +312,7 @@
           <div class="w-full m-0.5">
             <label for="item-weight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Stock count</label>
             <input
+              min="1"
               bind:value={countInStock}
               type="number"
               name="item-weight"
@@ -395,16 +398,10 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
       </svg>
     </Button>
-    <Button color="alternative">Cancel</Button>
+    <Button
+      on:click={() => {
+        $adminProductCreateModalStore = false;
+      }}
+      color="alternative">Cancel</Button>
   </svelte:fragment>
-</Modal>
-
-<Modal title="Terms of Service" bind:open={createCategoryModal}>
-  <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-    With less than a month to go before the European Union enacts new consumer privacy laws for its citizens, companies around the world are updating their terms of service agreements to comply.
-  </p>
-  <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-    The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to ensure a common set of data rights in the European Union. It requires organizations to
-    notify users as soon as possible of high-risk data breaches that could personally affect them.
-  </p>
 </Modal>

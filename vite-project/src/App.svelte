@@ -7,6 +7,8 @@
   import Navbar from "./components/Navbar.svelte";
   import AdminSideBar from "$components/Admin/Sidebar.svelte";
 
+  import Footer from "$components/Footer.svelte";
+
   onMount(() => {
     app_user.set(decodeToken(localStorage.getItem("token")));
   });
@@ -22,8 +24,10 @@
 <AdminSideBar />
 <Navbar />
 
-<br /><br /><br /> <br />
+<br /><br /><br />
 
 <main class="">
   <Router {routes} restoreScrollState={true} />
 </main>
+
+<Footer />

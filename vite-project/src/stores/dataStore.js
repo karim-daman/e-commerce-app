@@ -4,6 +4,7 @@ import jwt_decode from "jwt-decode";
 export const isFetching = writable(false);
 export const app_user = writable({});
 export const app_products = writable([]);
+export const app_user_list = writable([]);
 export const app_categories = writable([]);
 export const app_product_details = writable({});
 
@@ -168,6 +169,26 @@ export async function createCategory(json) {
   return response;
 }
 
+export async function getUsers() {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/users`;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  await fetch(endPoint, {
+    method: "Get",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      app_user_list.set(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 export async function getCategories() {
   const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/categories`;
   await fetch(endPoint, {
@@ -202,6 +223,36 @@ export async function loginHandler(json) {
       localStorage.setItem("user", data.user);
       localStorage.setItem("token", data.token);
       app_user.set(decodeToken(data.token));
+    })
+    .catch((error) => console.error(error));
+}
+
+export async function registerHanlder(json) {
+  isFetching.set(true);
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/users/register`;
+  var raw = JSON.stringify({
+    name: "undefined",
+    email: json.email,
+    password: json.password,
+    phone: "undefined",
+    isAdmin: "false",
+    street: "undefined",
+    apartment: "undefined",
+    zip: "undefined",
+    city: "undefined",
+    country: "undefined",
+  });
+
+  await fetch(endPoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: raw,
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      isFetching.set(false);
+      console.log(data);
     })
     .catch((error) => console.error(error));
 }

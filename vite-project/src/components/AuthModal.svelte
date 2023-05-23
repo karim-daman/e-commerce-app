@@ -1,11 +1,43 @@
 <script>
   import { authModalStore, isPasswordLost } from "$stores/appStore";
-  import { Alert, Spinner, Button, Modal, Label, Input, Checkbox } from "flowbite-svelte";
+  import { Alert, Spinner, Button, Modal, Label, Input, Checkbox, Popover } from "flowbite-svelte";
   import { push } from "svelte-spa-router";
   import { fade, fly } from "svelte/transition";
   import { clickOutside } from "svelte-use-click-outside";
-  import { loginHandler, isFetching } from "$stores/dataStore";
-  import { prevent_default } from "svelte/internal";
+  import { loginHandler, isFetching, registerHanlder } from "$stores/dataStore";
+  import toast, { Toaster } from "svelte-french-toast";
+
+  let passesFirstPasswordCheck, passesSecondPasswordCheck, passesThirdPasswordCheck, passesFourthPasswordCheck;
+  let passwordStrength = "gray";
+  let passwordStrengthLevel = 0;
+  let passwordMatch = false;
+
+  function checkPassword() {
+    var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    passesFirstPasswordCheck = /[A-Z]/.test(password) ? true : false;
+    passesSecondPasswordCheck = format.test(password) ? true : false;
+    passesThirdPasswordCheck = password.length > 5 ? true : false;
+    passesFourthPasswordCheck = /\d/.test(password) ? true : false;
+
+    const arr = [passesFirstPasswordCheck, passesSecondPasswordCheck, passesThirdPasswordCheck, passesFourthPasswordCheck];
+    passwordStrengthLevel = arr.filter(Boolean).length;
+
+    if (passwordStrengthLevel == 1) passwordStrength = "red";
+    else if (passwordStrengthLevel == 2) passwordStrength = "orange";
+    else if (passwordStrengthLevel == 3) passwordStrength = "yellow";
+    else if (passwordStrengthLevel == 4) passwordStrength = "green";
+    else passwordStrength = "gray";
+  }
+
+  let passwordFieldColor = "base",
+    confirmPasswordFieldColor = "base";
+
+  function checkMatch() {
+    if (!authType) return;
+    passwordMatch = password == confirmPassword ? true : false;
+    passwordFieldColor = passwordMatch ? "green" : "base";
+    confirmPasswordFieldColor = passwordMatch ? "green" : "base";
+  }
 
   function clickOutsideHandler() {
     closeAuthModal();
@@ -48,7 +80,13 @@
   }
 
   function handleSubmit() {
-    if (!email || !password) return;
+    if (!email || !password) {
+      toast.error(" Email and Password are manadatory!", {
+        position: "top-right",
+        style: "float: left; width: 500px ;background: #333; color: #fff;margin-right: 1rem; margin-top: 2rem;",
+      });
+      return;
+    }
     // message = email = password = "";
 
     if (authType) signup();
@@ -106,7 +144,52 @@
     // }
   }
 
+  function clearInputs() {
+    email = password = confirmPassword = "";
+  }
+
   async function signup() {
+    if (!passwordMatch) {
+      passwordFieldColor = confirmPasswordFieldColor = "red";
+
+      toast.error("Password mismatch!", {
+        position: "top-right",
+        style: "float: left; width: 500px ;background: #333; color: #fff;margin-right: 1rem; margin-top: 2rem;",
+      });
+
+      setTimeout(function () {
+        passwordFieldColor = "base";
+        confirmPasswordFieldColor = "base";
+      }, 3000);
+
+      return;
+    }
+
+    let raw = {
+      name: undefined,
+      email: email,
+      password: password,
+      phone: undefined,
+      isAdmin: "false",
+      street: undefined,
+      apartment: undefined,
+      zip: undefined,
+      city: undefined,
+      country: undefined,
+    };
+
+    try {
+      await registerHanlder(raw);
+      clearInputs();
+      closeAuthModal();
+    } catch (error) {
+      errorMessage = error;
+      setTimeout(() => {
+        errorMessage = email = password = "";
+      }, 3000);
+      closeAuthModal();
+    }
+
     // if (password != confirmPassword) {
     //   invalidPassword = invalidConfirmPassword = true;
     //   errorMessage = "Password mismatch";
@@ -144,7 +227,9 @@
   }
 </script>
 
-{#if successMessage}
+<Toaster />
+
+<!-- {#if successMessage}
   <Alert border color="green" class="m-4 w-80 absolute z-50 ">
     <span slot="icon">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -157,7 +242,7 @@
     <span class="font-medium">Success!</span> <br />
     <p class="text-xs">{successMessage}</p>
   </Alert>
-{/if}
+{/if} -->
 
 {#if $isFetching}
   <div out:fade in:fade class="fixed inset-0 w-full h-full backdrop-blur-sm overflow-auto">
@@ -240,7 +325,15 @@
 
           <Label class="space-y-2">
             <span>Your password</span>
-            <Input type={showPass ? "text" : "password"} color={invalidPassword ? "red" : "base"} name="password" placeholder="••••••••" required bind:value={password}>
+            <Input
+              on:input={checkPassword}
+              id="password"
+              type={showPass ? "text" : "password"}
+              color={authType ? (confirmPassword.length != password.length && confirmPassword.length != 0 && password.length != 0 ? "base" : passwordFieldColor) : "base"}
+              name="password"
+              placeholder="••••••••"
+              required
+              bind:value={password}>
               <svg slot="left" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                 <path
                   stroke-linecap="round"
@@ -274,12 +367,77 @@
                 {/if}
               </svg>
             </Input>
+
+            {#if authType}
+              <Popover class="text-sm" triggeredBy="#password" placement="right">
+                <h3 class="font-semibold text-gray-900 dark:text-white">Password must have :</h3>
+
+                <ul>
+                  <li class="flex items-center mb-1">
+                    {#if passesFirstPasswordCheck}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-green-400 dark:text-green-500"
+                        ><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                    {:else}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-gray-300 dark:text-gray-400"
+                        ><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    {/if}
+
+                    Upper &amp; lower case letters
+                  </li>
+                  <li class="flex items-center mb-1">
+                    {#if passesSecondPasswordCheck}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-green-400 dark:text-green-500"
+                        ><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                    {:else}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-gray-300 dark:text-gray-400"
+                        ><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    {/if} Symbol(s) '#$&amp;...'
+                  </li>
+                  <li class="flex items-center mb-1">
+                    {#if passesThirdPasswordCheck}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-green-400 dark:text-green-500"
+                        ><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                    {:else}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-gray-300 dark:text-gray-400"
+                        ><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    {/if}
+                    At least 6 characters
+                  </li>
+
+                  <li class="flex items-center mb-1">
+                    {#if passesFourthPasswordCheck}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-green-400 dark:text-green-500"
+                        ><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                    {:else}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 w-4 h-4 text-gray-300 dark:text-gray-400"
+                        ><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    {/if}
+                    Number(s)
+                  </li>
+                </ul>
+
+                <h3 class="font-semibold text-gray-900 dark:text-white">Password strength</h3>
+                <div class="mt-4 grid grid-cols-4 gap-2">
+                  <div class="rounded-md h-1 {passwordStrengthLevel > 0 ? `bg-${passwordStrength}-300` : 'bg-gray-300'} " />
+                  <div class="rounded-md h-1 {passwordStrengthLevel > 1 ? `bg-${passwordStrength}-300` : 'bg-gray-300'} " />
+                  <div class="rounded-md h-1 {passwordStrengthLevel > 2 ? `bg-${passwordStrength}-300` : 'bg-gray-300'} " />
+                  <div class="rounded-md h-1 {passwordStrengthLevel > 3 ? `bg-${passwordStrength}-300` : 'bg-gray-300'} " />
+                </div>
+              </Popover>
+            {/if}
           </Label>
 
           {#if authType}
             <Label class="space-y-2">
               <span>Confirm your password</span>
-              <Input type={showConfirmPass ? "text" : "password"} color={invalidConfirmPassword ? "red" : "base"} name="password" placeholder="••••••••" required bind:value={confirmPassword}>
+              <Input
+                on:input={checkMatch}
+                color={confirmPassword.length != password.length ? "base" : passwordFieldColor}
+                type={showConfirmPass ? "text" : "password"}
+                name="password"
+                placeholder="••••••••"
+                required
+                bind:value={confirmPassword}>
                 <svg slot="left" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                   <path
                     stroke-linecap="round"

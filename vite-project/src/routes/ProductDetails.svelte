@@ -84,7 +84,7 @@
       <article id="detail" class=" flex justify-center max-w-[660px] w-full px-5 md:px-0">
         <div class="flex flex-col mr-2 w-[100px] h-[500px] overflow-x-auto">
           {#each thumbnails as thumbnail, i}
-            <button class="mb-2 mr-2" on:click={() => handleChangeImage(i)}>
+            <button class="mb-2 mr-2 border rounded-md hover:border-black hover:border-2" on:mouseenter={() => handleChangeImage(i)}>
               <img draggable="false" src={thumbnail} class="border rounded-sm object-cover" alt="thumbnail" />
             </button>
           {/each}

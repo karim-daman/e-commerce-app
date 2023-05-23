@@ -1,7 +1,10 @@
 <script>
+  import AdminCreateProduct from "$components/Admin/CreateProductModal.svelte";
   import ProductFilter from "$components/ProductFilter.svelte";
-  import { app_products, app_user, deleteProduct, getProducts } from "$stores/dataStore";
-  import { Badge, Button, Card, Dropdown, DropdownItem, MenuButton, Modal, Rating } from "flowbite-svelte";
+  import { app_products, app_user, deleteProduct, getCategories, getProducts } from "$stores/dataStore";
+  import { authModalStore } from "$stores/appStore";
+
+  import { Badge, Button, ButtonGroup, Card, Dropdown, DropdownItem, Input, InputAddon, Label, MenuButton, Modal, Rating } from "flowbite-svelte";
   import { onMount } from "svelte";
   import { fade, fly } from "svelte/transition";
   import toast, { Toaster } from "svelte-french-toast";
@@ -9,6 +12,8 @@
   // import { page } from "$app/stores";
   import { Pagination, ChevronLeft, ChevronRight } from "flowbite-svelte";
   import ImageLoader from "$components/ImageLoader.svelte";
+  import { adminProductCreateModalStore, adminProductEditModalStore } from "$stores/appStore";
+  import EditProductModal from "$components/Admin/EditProductModal.svelte";
 
   // $: activeUrl = $page.url.searchParams.get("page");
   let pages = [
@@ -48,10 +53,11 @@
 
   let popupModal = false;
 
-  let liked = true;
+  let liked = false;
 
   onMount(async () => {
     await getProducts();
+    await getCategories();
   });
 
   function randomIntFromInterval(min, max) {
@@ -85,6 +91,15 @@
       }
     );
   }
+
+  function handleAddToCart() {
+    if (!$app_user) {
+      $authModalStore = true;
+      return;
+    }
+  }
+
+  let editedProduct;
 </script>
 
 <Toaster />
@@ -92,31 +107,68 @@
 <div class="grid grid-rows-[max-content,1fr,max-content] min-h-screen">
   <main class="max-w-[1320px] px-5 lg:px-0 w-full grid grid-cols-[minmax(0,308px),1fr] grid-rows-[auto,1fr] my-10 gap-4 justify-self-center">
     <section class="col-span-full md:col-auto w-full grid">
-      <form class="grid grid-cols-[1fr,repeat(2,max-content)]" on:submit|preventDefault>
+      {#if $app_user?.isAdmin}
+        <div class="mb-2">
+          <Button on:click={() => ($adminProductCreateModalStore = !$adminProductCreateModalStore)}
+            >Add product <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-2 -mr-2 w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg></Button>
+        </div>
+
+        <AdminCreateProduct />
+        <EditProductModal product={editedProduct} />
+      {/if}
+
+      <!-- <form class="grid grid-cols-[1fr,repeat(2,max-content)]" on:submit|preventDefault>
         <input class="w-full rounded-l-[.25rem] border px-2 h-full" placeholder="Search" bind:value={search} type="text" />
-        <!-- <SearchDropdown /> -->
 
         <button type="button" class="border rounded-r-[.25rem] bg-gray-100 text-gray-500 hover:text-blue-primary transition-colors p-2">
-          <!-- <NavbarSearchIcon class="w-5 h-5" /> -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
           </svg>
         </button>
-      </form>
+      </form> -->
+
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg class="w-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+            ><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+        </div>
+        <input
+          type="text"
+          id="input-group-search"
+          class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search category" />
+        <button
+          type="button"
+          class=" absolute w-40 top-0 right-0 p-2 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          <!-- <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+            ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+         -->
+
+          Search
+
+          <!-- <span class="sr-only"> Search</span> -->
+        </button>
+      </div>
 
       <div class="border-b px-2 py-2">
-        <p class="text-[.85rem]">{$app_products.length} Item(s) found</p>
+        <p class="text-xs">{$app_products.length} Item(s) found</p>
       </div>
     </section>
 
     <ProductFilter />
 
-    <section class="  col-span-full md:col-auto grid justify-center grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 grid-flow-row auto-rows-max">
+    <!-- <section class="col-span-full md:col-auto grid justify-center grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 grid-flow-row auto-rows-max"> -->
+    <section class="col-span-full md:col-auto grid justify-center grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4 grid-flow-row auto-rows-max">
       {#each $app_products as product}
         <div in:fly={{ y: randomIntFromInterval(15, 50) }} out:fly={{ y: -randomIntFromInterval(15, 50) }}>
           <Card padding="none">
             <div class="flex justify-end">
               <button
+                on:click={() => {
+                  liked = !liked;
+                }}
                 type="button"
                 class="focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 mt-2 mr-2 transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
                 <svg xmlns="http://www.w3.org/2000/svg" fill={liked ? "red" : "gray"} viewBox="0 0 24 24" stroke-width="1.5" stroke={liked ? "red" : "gray"} class=" w-5 h-5">
@@ -131,8 +183,8 @@
                 <MenuButton class="mt-2 mr-2 transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0" />
 
                 <Dropdown class="w-36 ">
-                  <DropdownItem class="flex transition hover:-translate-y-1">
-                    <button>
+                  <DropdownItem class="flex transition hover:-translate-y-1 active:transform active:translate-y-0">
+                    <button class="">
                       <div class="flex">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -142,8 +194,13 @@
                       </div>
                     </button></DropdownItem>
 
-                  <DropdownItem class="flex transition hover:-translate-y-1">
-                    <button>
+                  <DropdownItem class="flex transition hover:-translate-y-1 active:transform active:translate-y-0 ">
+                    <button
+                      class=""
+                      on:click={() => {
+                        editedProduct = product;
+                        $adminProductEditModalStore = !$adminProductEditModalStore;
+                      }}>
                       <div class="flex">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                           <path
@@ -155,10 +212,11 @@
 
                         Edit
                       </div>
-                    </button></DropdownItem>
+                    </button>
+                  </DropdownItem>
 
-                  <DropdownItem class="flex transition hover:-translate-y-1">
-                    <button on:click={() => initDeleteProduct(product)} class="text-red-600">
+                  <DropdownItem class="flex transition hover:-translate-y-1 active:transform active:translate-y-0 ">
+                    <button class=" text-red-600" on:click={() => initDeleteProduct(product)}>
                       <div class="flex">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="w-5 h-5 mr-3">
                           <path
@@ -173,12 +231,14 @@
                 </Dropdown>
               {/if}
             </div>
+
             <!-- <a href="#/ProductDetails/{product.id}">
               <img class="p-8 rounded-t-lg pointer-events-none h-[284px]" src={product.images[0]} alt="product 1" />
             </a> -->
 
-            <a href="#/ProductDetails/{product.id}">
+            <a class="m-1 border-b" href="#/ProductDetails/{product.id}">
               <ImageLoader src={product.images[0]} alt={product.name} />
+              <span class=" ml-4 text-xs font-bold text-green-500 dark:text-white"> $ {product.price}</span>
             </a>
 
             <div class="px-5 pb-5">
@@ -189,8 +249,8 @@
                 <Badge slot="text" class="ml-3">{product.rating}/5</Badge>
               </Rating>
               <div class="flex justify-between items-center">
-                <span class="text-3xl font-bold text-gray-900 dark:text-white">${product.price}</span>
-                <Button href="/" class="transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
+                <!-- <span class="text-xs font-bold text-green-500 dark:text-white">${product.price}</span> -->
+                <Button on:click={handleAddToCart} class="w-full transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
                   add to cart
 
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-3">
@@ -206,7 +266,7 @@
         </div>
       {/each}
 
-      <div class=" col-span-3 justify-self-end">
+      <div class="  col-span-full justify-self-end">
         <Pagination {pages} on:previous={previous} on:next={next} icon>
           <svelte:fragment slot="prev">
             <span class="sr-only">Previous</span>
