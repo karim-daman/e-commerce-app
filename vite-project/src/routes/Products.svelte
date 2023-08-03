@@ -1,7 +1,7 @@
 <script>
   import AdminCreateProduct from "$components/Admin/CreateProductModal.svelte";
   import ProductFilter from "$components/ProductFilter.svelte";
-  import { app_products, app_user, deleteProduct, getCategories, getProducts } from "$stores/dataStore";
+  import { addCartItemToCart, app_products, app_user, app_user_cart, clearCart, deleteProduct, getCartById, getCategories, getProducts } from "$stores/dataStore";
   import { authModalStore } from "$stores/appStore";
 
   import { Badge, Button, ButtonGroup, Card, Dropdown, DropdownItem, Input, InputAddon, Label, MenuButton, Modal, Rating } from "flowbite-svelte";
@@ -92,11 +92,36 @@
     );
   }
 
-  function handleAddToCart() {
+  async function handleAddToCart(product) {
     if (!$app_user) {
       $authModalStore = true;
       return;
     }
+
+    let newCartItem = {
+      quantity: 1,
+      product: product.id,
+    };
+
+    const promise = new Promise((resolve, reject) => {
+      addCartItemToCart($app_user?.cart?.id, newCartItem).then((response) => {
+        console.log(response);
+
+        response.success == true ? resolve() : reject();
+      });
+    });
+
+    toast.promise(
+      promise,
+      {
+        loading: `Adding ${product.name} to your cart..`,
+        success: `Added successfully!`,
+        error: `Could not add, Try again!.`,
+      },
+      {
+        position: "top-right",
+      }
+    );
   }
 
   let editedProduct;
@@ -138,7 +163,7 @@
           type="text"
           id="input-group-search"
           class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Search category" />
+          placeholder="Search" />
         <button
           type="button"
           class=" absolute w-40 top-0 right-0 p-2 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -153,7 +178,7 @@
       </div>
 
       <div class="border-b px-2 py-2">
-        <p class="text-xs">{$app_products.length} Item(s) found</p>
+        <p class="text-xs">{$app_products.length} Item{$app_products.length > 1 ? "s" : ""} found</p>
       </div>
     </section>
 
@@ -162,7 +187,8 @@
     <!-- <section class="col-span-full md:col-auto grid justify-center grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 grid-flow-row auto-rows-max"> -->
     <section class="col-span-full md:col-auto grid justify-center grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4 grid-flow-row auto-rows-max">
       {#each $app_products as product}
-        <div in:fly={{ y: randomIntFromInterval(15, 50) }} out:fly={{ y: -randomIntFromInterval(15, 50) }}>
+        <!-- in:fly={{ y: randomIntFromInterval(15, 50) }} out:fly={{ y: -randomIntFromInterval(15, 50) }} -->
+        <div>
           <Card padding="none">
             <div class="flex justify-end">
               <button
@@ -245,12 +271,12 @@
               <a href="#/ProductDetails/{product.id}">
                 <h5 class="text-xl font-semibold tracking-tight hover:text-blue-600 text-gray-900 dark:text-white truncate">{product.name}</h5>
               </a>
-              <Rating rating={product.rating} size="18" class="mt-2.5 mb-5">
-                <Badge slot="text" class="ml-3">{product.rating}/5</Badge>
+              <Rating rating={product.rating} size="14" class="mt-2.5 mb-5">
+                <Badge slot="text" class="ml-3 text-xs">{product.rating}/5</Badge>
               </Rating>
               <div class="flex justify-between items-center">
                 <!-- <span class="text-xs font-bold text-green-500 dark:text-white">${product.price}</span> -->
-                <Button on:click={handleAddToCart} class="w-full transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
+                <Button on:click={handleAddToCart(product)} class="w-full transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
                   add to cart
 
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-3">

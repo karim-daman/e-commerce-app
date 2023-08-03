@@ -31,6 +31,19 @@
   });
 </script>
 
+<svelte:head>
+  <!-- Import the component -->
+  <!-- Import the component -->
+  <!-- Import the component -->
+  <!-- Import the component -->
+  <!-- Import the component -->
+  <!-- Import the component -->
+  <!-- Import the component -->
+  <!-- Import the component -->
+  <!-- Import the component -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+</svelte:head>
+
 <AuthModal {authType} />
 
 <Navbar class="fixed border bg-teal-500 backdrop-blur-sm bg-opacity-40 z-10" let:hidden let:toggle>
@@ -47,13 +60,46 @@
     </button>
   {/if}
 
+  <!--   
   <NavBrand href="/">
-    <img src="vite.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
-  </NavBrand>
+
+  
+     <img src="vite.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" /> 
+  </NavBrand> -->
+
+  <!-- Use it like any other HTML element -->
+  <model-viewer class="h-20" alt="3DCart" src="/src/assets/3DCart/scene.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y" />
 
   <button class="flex items-center md:order-2">
-    <img class=" transition hover:scale-110 h-10 bg-slate-300 rounded-full border border-gray-100 shadow-sm" src={"/avatar.svg"} alt="avatar" id="avatar-menu" />
-    <NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1" />
+    {#if user}
+      <img class=" transition hover:scale-110 h-10 bg-slate-300 rounded-full border border-gray-100 shadow-sm" src={"/avatar.svg"} alt="avatar" id="avatar-menu" />
+      <NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1" />
+    {:else}
+      <button
+        on:click={() => openAuthModal(false)}
+        class="flex justify-center mx-2 border w-24 rounded-md p-1 text-xs transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-3">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+        </svg>
+
+        Login
+      </button>
+      <button
+        on:click={() => openAuthModal(true)}
+        class="flex justify-center mx-2 border w-24 rounded-md p-1 text-xs transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-3">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+        </svg>
+
+        Register
+      </button>
+    {/if}
   </button>
 
   <Dropdown placement="bottom" triggeredBy="#avatar-menu">
@@ -73,6 +119,17 @@
         </svg>
 
         <a href="#/Profile">Profile</a></DropdownItem>
+
+      <DropdownItem class="flex transition hover:-translate-y-1">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+        </svg>
+
+        <a href="#/Cart">My cart</a></DropdownItem>
+
       <DropdownItem class="flex transition hover:-translate-y-1">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
           <path
@@ -150,17 +207,18 @@
   </NavUl>
 
   {#if user}
-    <button
+    <a
+      href="#/cart"
       class="h-8 w-9 bg-blue-600 relative border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-5 h-5 ml-1.5">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-5 h-5 m-1.5">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
           d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
       </svg>
       <Indicator color="red" border size="xl" placement="top-right">
-        <span class="text-white text-xs">99</span>
+        <span class="text-white text-xs"> {$app_user?.cart?.cartItems?.length} </span>
       </Indicator>
-    </button>
+    </a>
   {/if}
 </Navbar>

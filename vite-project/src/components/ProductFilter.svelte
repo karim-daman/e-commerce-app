@@ -94,19 +94,13 @@
 
         <span class="text-xs"> Price</span>
       </span>
-      <div class="w-full grid grid-cols-2 gap-x-4 grid-flow-row auto-rows-max">
-        <!-- <input class="styled-slider w-full col-span-2 mb-2" type="range" /> -->
-        <!-- <NumberInput placeholder="$0">Min</NumberInput>
-            <NumberInput placeholder="$1000">Max</NumberInput> -->
 
+      <div class="labels flex w-full">
+        <div class="label pr-4">{nice(start)}</div>
         <DoubleRangeSlider bind:start bind:end />
-        <div class="labels">
-          <div class="label">{nice(start)}</div>
-          <div class="label">{nice(end)}</div>
-        </div>
-
-        <button class="mt-4 px-[14px] py-[6px] col-span-2 rounded-[.25rem] text-white bg-[#0d6efd] hover:bg-[#0d6efd]/90"> Apply </button>
+        <div class="label pl-4">{nice(end)}</div>
       </div>
+      <Button class="w-full mt-5 transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">Apply</Button>
     </AccordionItem>
     <AccordionItem open="true">
       <span slot="header" class="text-base flex gap-2">

@@ -44,6 +44,10 @@
     { id: 5, title: "Five Stars" },
   ];
 
+  function handleRating(star) {
+    rating = star.id;
+  }
+
   let title = "star";
   let filled = false;
   let starId;
@@ -102,12 +106,6 @@
             alt="temp" />
 
           <div class="absolute top-0 right-4 z-10">
-            <!-- <button class="rounded-btn-shadow bg-white flex flex-row mx-px text-white px-2.5 mt-[11px] mb-4 py-[7px] rounded-[.25rem] border">
-              <svg xmlns="http://www.w3.org/2000/svg" class="text-red-600 z-10 h-5 w-5" fill="red" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </button> -->
-
             <button
               on:click={() => (liked = !liked)}
               type="button"
@@ -133,21 +131,34 @@
 
             <div class="flex items-center">
               {#each stars as star (star.id)}
-                <!-- <Star
-			class="h-5 w-5"
-			filled={hoverRating ? hoverRating >= star.id : rating >= star.id}
-			starId={star.id}
-		/> -->
-
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" on:mouseover on:mouseleave on:click on:focus data-starid={starId} class="{$$props.class} ">
-                  <title>{title}</title>
-                  <path
-                    class:filled
-                    data-starid={starId}
-                    class="starPath"
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+                <button
+                  on:click={() => {
+                    handleRating(star);
+                  }}
+                  type="button"
+                  class=" transition hover:-translate-y-1 active:transform active:translate-y-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="{rating >= star.id ? 'orange' : 'none'}  " viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                  </svg>
+                </button>
               {/each}
+
+              <button
+                on:click={() => {
+                  rating = 0;
+                }}
+                type="button"
+                class=" transition hover:-translate-y-1 active:transform active:translate-y-0">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="red" class="w-5 h-5">
+                  <path
+                    fill-rule="evenodd"
+                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
             </div>
 
             <small class=" flex">
@@ -171,7 +182,7 @@
         <!-- <ProductDetailsInformation quantity={1} /> -->
 
         <div class="mb-3 flex flex-col">
-          <div class="text-xl font-extrabold text-green-500">$ {$app_product_details.price}</div>
+          <div class="text-3xl font-extrabold text-green-500">$ {$app_product_details.price}</div>
           <!-- <div class="text-xl">USD 787.5 incl. VAT</div> -->
         </div>
 
@@ -182,13 +193,16 @@
         <hr class="my-4" />
 
         <table class="grid grid-cols-[max-content,1fr] items-center gap-2 my-2">
+          <th class="text-left"> Article ID </th>
+          <td class="justify-self-end"> {$app_product_details.id} </td>
+
           <th class="text-left"> Brand </th>
           <a class="justify-self-end" href="/">
             <td class="hover:underline hover:text-blue-500"> {$app_product_details.brand} </td>
           </a>
 
-          <th class="text-left"> Article ID </th>
-          <td class="justify-self-end"> {$app_product_details.id} </td>
+          <th class="text-left"> Category </th>
+          <td class="justify-self-end"> {$app_product_details.category?.name}</td>
 
           <th class="text-left"> Garantee </th>
           <td class="justify-self-end">2 years</td>
@@ -231,26 +245,16 @@
         </table>
 
         <!-- <ProductDetailsOptions /> -->
-        <div class="flex justify-center">
-          <button class="rounded-btn-shadow max-w-60 w-full items-center flex flex-row mx-px text-white px-[14px] mt-[11px] mb-4 py-[7px] bg-[#0b5ed7] rounded-[.25rem]">
-            <!-- <CartIcon class="mx-2" /> -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="mx-2 h-5 w-5" viewBox="0 0 20 20" fill="white">
-              <path
-                d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-            </svg>
+        <button
+          class="bg-yellow-300 transition hover:-translate-y-1 active:transform active:translate-y-0 flex justify-center rounded-btn-shadow max-w-60 w-full items-center flex-row mx-px text-white px-[14px] mt-[11px] mb-4 py-[7px] bg-[#0b5ed7] rounded-[.25rem]">
+          <!-- <CartIcon class="mx-2" /> -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="mx-2 h-5 w-5" viewBox="0 0 20 20" fill="black">
+            <path
+              d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+          </svg>
 
-            Add to cart!
-          </button>
-
-          <button class="rounded-btn-shadow max-w-60 w-full items-center flex flex-row mx-px text-white px-[14px] mt-[11px] mb-4 py-[7px] bg-[#0b5ed7] rounded-[.25rem]">
-            <!-- <MailIcon class="" /> -->
-            <svg class="mx-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-
-            Contact supplier
-          </button>
-        </div>
+          <p class="text-black text-xl">Add to cart!</p>
+        </button>
       </article>
     </section>
 

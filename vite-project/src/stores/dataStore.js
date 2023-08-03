@@ -4,9 +4,13 @@ import jwt_decode from "jwt-decode";
 export const isFetching = writable(false);
 export const app_user = writable({});
 export const app_products = writable([]);
-export const app_user_list = writable([]);
+export const app_user_cart = writable({});
 export const app_categories = writable([]);
 export const app_product_details = writable({});
+
+export const app_user_list = writable([]);
+export const app_cart_list = writable([]);
+export const app_review_list = writable([]);
 
 export async function deleteProduct(id) {
   var myHeaders = new Headers();
@@ -169,6 +173,169 @@ export async function createCategory(json) {
   return response;
 }
 
+export async function getCarts() {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/carts`;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  await fetch(endPoint, {
+    method: "Get",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      app_cart_list.set(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+export async function removeFromCart(id) {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/cartItems/${id}`;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  await fetch(endPoint, {
+    method: "Delete",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.text())
+    .then((result) => {
+      console.log(result);
+    })
+
+    .catch((error) => console.log("error", error));
+}
+
+export async function clearCart(id) {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/carts/clear/${id}`;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  await fetch(endPoint, {
+    method: "Get",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.text())
+    .then((result) => {
+      console.log(result);
+      app_user_cart.set(result);
+    })
+
+    .catch((error) => console.log("error", error));
+}
+
+export async function addCartItemToCart(id, item) {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/carts/${id}`;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  let response;
+
+  await fetch(endPoint, {
+    method: "PUT",
+    headers: myHeaders,
+    body: JSON.stringify(item),
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result.cart);
+      app_user_cart.set(result.cart);
+      response = result;
+    })
+    .catch((error) => {
+      console.log("error", error);
+      response = error;
+    });
+  return response;
+}
+
+// export async function updateCart(id, raw) {
+//   const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/carts/${id}`;
+//   var myHeaders = new Headers();
+//   myHeaders.append("Content-Type", "application/json");
+//   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+//   fetch(endPoint, {
+//     method: "PUT",
+//     headers: myHeaders,
+//     body: raw,
+//     redirect: "follow",
+//   })
+//     .then((response) => response.text())
+//     .then((result) => app_user_cart.set(result))
+//     .catch((error) => console.log("error", error));
+// }
+
+// export async function getUserCart(user_id) {
+//   const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/carts/${user_id}`;
+//   var myHeaders = new Headers();
+//   myHeaders.append("Content-Type", "application/json");
+//   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+//   await fetch(endPoint, {
+//     method: "Get",
+//     headers: myHeaders,
+//     redirect: "follow",
+//   })
+//     .then((response) => response.json())
+//     .then((result) => {
+//       app_user_cart.set(result);
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
+
+export async function getCartById(id) {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/carts/${id}`;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  await fetch(endPoint, {
+    method: "Get",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      app_user_cart.set(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+export async function getReviews() {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/reviews`;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  await fetch(endPoint, {
+    method: "Get",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      app_review_list.set(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 export async function getUsers() {
   const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/users`;
   var myHeaders = new Headers();
@@ -257,11 +424,43 @@ export async function registerHanlder(json) {
     .catch((error) => console.error(error));
 }
 
+export async function verifyTokenExpiry() {
+  const endPoint = `${import.meta.env.VITE_backend_uri + import.meta.env.VITE_api_url}/users/verify`;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", localStorage.getItem("token"));
+
+  let response;
+
+  await fetch(endPoint, {
+    method: "POST",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("verification: ");
+      console.log(data);
+
+      if (!data.success) {
+        app_user.update((user) => (user = null));
+        localStorage.clear();
+      }
+
+      response = data;
+    })
+    .catch((error) => {
+      console.error("!!! " + error);
+      response = error;
+    });
+
+  return response;
+}
+
 export function decodeToken(token) {
   if (token == null) {
     console.log("not logged in.");
     return null;
   }
-  console.log("logged in user: " + JSON.stringify(jwt_decode(token)));
   return jwt_decode(token);
 }

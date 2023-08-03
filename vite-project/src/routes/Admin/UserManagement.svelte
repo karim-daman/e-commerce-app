@@ -1,6 +1,6 @@
 <script>
   import { app_user_list, getUsers } from "$stores/dataStore";
-  import { ChevronLeft, ChevronRight, Input, Pagination } from "flowbite-svelte";
+  import { Badge, ChevronLeft, ChevronRight, Input, Pagination } from "flowbite-svelte";
   import { onMount } from "svelte";
 
   onMount(async () => {
@@ -112,7 +112,13 @@
               </td>
               <td class="px-6 py-4"> {user.id} </td>
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"> {user.email} </th>
-              <td class="px-6 py-4"> {user.isAdmin ? "Admin" : "User"} </td>
+              <td class="px-6 py-4">
+                {#if user.isAdmin}
+                  <Badge class="my-1 w-20" color="green">{"Admin"}</Badge>
+                {:else}
+                  <Badge class="my-1 w-20" color="yellow">{"User"}</Badge>
+                {/if}
+              </td>
               <td class="px-6 py-4">
                 <button class="  transition hover:-translate-y-1 active:transform active:translate-y-0" on:click={() => {}}>
                   <div class="flex">
