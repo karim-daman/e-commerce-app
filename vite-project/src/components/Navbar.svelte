@@ -35,6 +35,8 @@
   <!-- Import the component -->
   <!-- Import the component -->
   <!-- Import the component -->
+  <!-- Import the component -->
+  <!-- Import the component -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
 </svelte:head>
 
@@ -62,7 +64,7 @@
   </NavBrand> -->
 
   <!-- Use it like any other HTML element -->
-  <model-viewer class="h-20" alt="3DCart" src="/public/3DCart/scene.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y" />
+  <model-viewer class="h-20" alt="3DCart" src="/3DCart/scene.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y" />
 
   <button class="flex items-center md:order-2">
     {#if user}
