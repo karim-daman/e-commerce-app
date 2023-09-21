@@ -1,4 +1,6 @@
 <script>
+  // @ts-nocheck
+
   import { adminSideBarToggleStore, authModalStore } from "$stores/appStore";
   import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, Button, Indicator } from "flowbite-svelte";
   import { app_user } from "$stores/dataStore";
@@ -32,11 +34,6 @@
 </script>
 
 <svelte:head>
-  <!-- Import the component -->
-  <!-- Import the component -->
-  <!-- Import the component -->
-  <!-- Import the component -->
-  <!-- Import the component -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
 </svelte:head>
 
@@ -58,13 +55,11 @@
 
   <!--   
   <NavBrand href="/">
-
-  
      <img src="vite.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" /> 
   </NavBrand> -->
 
   <!-- Use it like any other HTML element -->
-  <model-viewer class="h-20" alt="3DCart" src="/3DCart/scene.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y" />
+  <model-viewer class="h-20" alt="3DCart" src="3DCart/scene.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y" />
 
   <button class="flex items-center md:order-2">
     {#if user}

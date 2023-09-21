@@ -114,19 +114,19 @@
           </button>
         </div>
 
-        <div class="col-start-1 col-span-5 border-b" />
+        <div class="col-start-1 col-span-5" />
 
-        <div class="col-start-1 col-span-5 bg-slate-50 transition-all duration-500 ease-in-out {array[i] ? 'h-full' : ' h-0'} overflow-hidden">
-          <div class="grid grid-cols-5 gap-4 p-4 rounded-md border">
+        <div class="col-start-1 col-span-5 bg-slate-50 transition-all duration-500 ease-in-out {array[i] ? 'h-52 border rounded' : ' h-0'} overflow-hidden border-b">
+          <div class="grid grid-cols-5 gap-4 p-4 rounded-md max-h-52 overflow-y-auto">
             {#if cart.cartItems.length == 0}
               <div class="col-span-5 col-start-3">
                 <p class="">this cart is empty!</p>
               </div>
             {:else}
-              <div class="bg-slate-200 font-bold p-2 col-span-2 rounded-md">Product</div>
-              <div class="bg-slate-200 font-bold p-2 rounded-md">Category</div>
-              <div class="bg-slate-200 font-bold p-2 rounded-md">Quantity</div>
-              <div class="bg-slate-200 font-bold p-2 rounded-md">Price</div>
+              <div class=" font-bold p-2 col-span-2 rounded-md">Product</div>
+              <div class=" font-bold p-2 rounded-md">Category</div>
+              <div class=" font-bold p-2 rounded-md">Quantity</div>
+              <div class=" font-bold p-2 rounded-md">Price</div>
             {/if}
 
             <!-- <img src={item.product.image} class="border rounded-md sm:row-span-full justify-self-center sm:w-[72px] sm:h-[72px]" alt="product" /> -->

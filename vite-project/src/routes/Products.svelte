@@ -1,7 +1,9 @@
 <script>
+  // @ts-nocheck
+
   import AdminCreateProduct from "$components/Admin/CreateProductModal.svelte";
   import ProductFilter from "$components/ProductFilter.svelte";
-  import { addCartItemToCart, app_products, app_user, app_user_cart, clearCart, deleteProduct, getCartById, getCategories, getProducts } from "$stores/dataStore";
+  import { addCartItemToCart, app_products, app_user, app_user_cart, clearCart, deleteProduct, filteredProducts, getCartById, getCategories, getProducts } from "$stores/dataStore";
   import { authModalStore } from "$stores/appStore";
 
   import { Badge, Button, ButtonGroup, Card, Dropdown, DropdownItem, Input, InputAddon, Label, MenuButton, Modal, Rating } from "flowbite-svelte";
@@ -167,18 +169,12 @@
         <button
           type="button"
           class=" absolute w-40 top-0 right-0 p-2 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          <!-- <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
-            ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-         -->
-
           Search
-
-          <!-- <span class="sr-only"> Search</span> -->
         </button>
       </div>
 
-      <div class="border-b px-2 py-2">
-        <p class="text-xs">{$app_products.length} Item{$app_products.length > 1 ? "s" : ""} found</p>
+      <div class="border-b py-2 flex justify-between">
+        <p class="text-xs">({$filteredProducts.length}) Item{$filteredProducts.length > 1 || $filteredProducts.length == 0 ? "s" : ""} found</p>
       </div>
     </section>
 
@@ -186,9 +182,9 @@
 
     <!-- <section class="col-span-full md:col-auto grid justify-center grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 grid-flow-row auto-rows-max"> -->
     <section class="col-span-full md:col-auto grid justify-center grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4 grid-flow-row auto-rows-max">
-      {#each $app_products as product}
+      {#each $filteredProducts as product}
         <!-- in:fly={{ y: randomIntFromInterval(15, 50) }} out:fly={{ y: -randomIntFromInterval(15, 50) }} -->
-        <div>
+        <div in:fly={{ y: 100 }} out:fly={{ y: -100 }}>
           <Card padding="none">
             <div class="flex justify-end">
               <button
@@ -268,8 +264,8 @@
             </a>
 
             <div class="px-5 pb-5">
-              <a href="#/ProductDetails/{product.id}">
-                <h5 class="text-xl font-semibold tracking-tight hover:text-blue-600 text-gray-900 dark:text-white truncate">{product.name}</h5>
+              <a href="#/ProductDetails/{product.id}" class="flex justify-between">
+                <h5 class="text- font-semibold tracking-tight hover:text-blue-600 text-gray-900 dark:text-white truncate">{product.name}</h5>
               </a>
               <Rating rating={product.rating} size="14" class="mt-2.5 mb-5">
                 <Badge slot="text" class="ml-3 text-xs">{product.rating}/5</Badge>

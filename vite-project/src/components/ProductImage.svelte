@@ -12,10 +12,9 @@
   });
 </script>
 
-{#if !loaded}
-  <div class="flex items-center justify-center h-[284.28px]">
+<div class="h-[284.28px] flex justify-center items-center">
+  {#if !loaded}
     <Spinner color="purple" />
-  </div>
-{/if}
-
-<img class="{loaded ? 'opacity-1' : 'opacity-0'} transition ease-in duration-300" {src} {alt} class:loaded bind:this={thisImage} loading="lazy" />
+  {/if}
+  <img class="{loaded ? 'opacity-1' : 'opacity-0'} transition ease-in duration-300" {src} {alt} class:loaded bind:this={thisImage} loading="lazy" />
+</div>

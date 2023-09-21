@@ -1,4 +1,6 @@
 <script>
+  // @ts-nocheck
+
   import { app_user, getProducts, app_user_cart, getCartById, removeFromCart, clearCart } from "$stores/dataStore";
   import { onMount } from "svelte";
   import { fly } from "svelte/transition";

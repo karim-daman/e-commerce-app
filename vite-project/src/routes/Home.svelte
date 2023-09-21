@@ -1,6 +1,4 @@
 <script>
-  import { clickOutside } from "svelte-use-click-outside";
-
   let carts = [
     {
       id: 1,
@@ -10,6 +8,9 @@
         { id: 2, name: "Item 2", price: 20 },
         { id: 3, name: "Item 3", price: 15 },
         { id: 2, name: "Item 6", price: 28 },
+        { id: 2, name: "Item 5", price: 88 },
+        { id: 2, name: "Item 5", price: 88 },
+        { id: 2, name: "Item 5", price: 88 },
         { id: 2, name: "Item 5", price: 88 },
       ],
     },
@@ -33,53 +34,51 @@
     },
   ];
 
-  let expandedCart = null;
-  let val = false;
-
-  function toggleAccordion(cartId) {
-    if (expandedCart === cartId) {
-      expandedCart = null;
-    } else {
-      expandedCart = cartId;
-    }
-  }
-
-  let v;
-
-  let array = [false, false, false];
-
-  function toggle(id) {
-    if (v === id) v = null;
-    else v = id;
-
-    alert(v);
-  }
+  let states = [false, false, false];
 </script>
 
-<!-- <div class=" bg-slate-50 transition-all duration-200 ease-in-out h-8 hover:h-40" /> -->
+<br />
+<br />
+<br />
 
 <div class="grid grid-rows-[max-content,1fr,max-content] min-h-screen">
   <main class="max-w-[1320px] px-5 lg:px-0 w-full grid grid-cols-[minmax(1,308px),1fr] grid-rows-[auto,1fr] my-10 gap-4 justify-self-center">
-    <div class="relative border p-2 sm:rounded-lg">
-      <div class="grid grid-cols-5 gap-4">
-        {#each carts as cart, i}
-          <div>{cart.id}</div>
-          <div>{cart.name}</div>
-          <div>{cart.name}</div>
-          <div>{cart.name}</div>
-          <div>
-            <button
-              on:click={() => {
-                array[i] = !array[i];
-              }}
-              class="transition hover:-translate-y-1 active:transform active:translate-y-0">
-              <div class="flex">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                </svg>
-              </div>
-            </button>
-            <button class="  transition hover:-translate-y-1 active:transform active:translate-y-0" on:click={() => {}}>
+    <div class="grid grid-cols-5 gap-1 border p-2 sm:rounded-lg">
+      {#each carts as cart, i}
+        <div class="">{cart.id}</div>
+        <div class="">{cart.name}</div>
+        <div class="">{cart.name}</div>
+        <div class="">{cart.name}</div>
+        <div class="">
+          <button
+            on:click={() => {
+              states[i] = !states[i];
+            }}
+            class="transition hover:-translate-y-1 active:transform active:translate-y-0">
+            <div class="flex">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </div>
+          </button>
+        </div>
+        <div class="col-start-1 col-span-5 bg-slate-50 transition-all duration-500 ease-in-out {states[i] ? 'h-0' : 'h-32'} overflow-hidden">
+          <div class="grid grid-cols-4 gap-1 p-4 rounded-md border max-h-32 overflow-y-auto">
+            {#each cart.items as item}
+              <div class="">{item.id}</div>
+              <div class="">{item.name}</div>
+              <div class="">qty</div>
+              <div class="">{item.price}</div>
+            {/each}
+          </div>
+        </div>
+      {/each}
+    </div>
+  </main>
+</div>
+
+<!-- 
+ <button class="  transition hover:-translate-y-1 active:transform active:translate-y-0" on:click={() => {}}>
               <div class="flex">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                   <path
@@ -100,19 +99,4 @@
                 </svg>
               </div>
             </button>
-          </div>
-          <div class="col-start-1 col-span-5 bg-slate-50 transition-all duration-500 ease-in-out {array[i] ? 'h-0' : 'h-full'} overflow-hidden">
-            <div class="grid grid-cols-4 gap-4 p-4 rounded-md border">
-              {#each cart.items as item}
-                <div>{item.id}</div>
-                <div>{item.name}</div>
-                <div>qty</div>
-                <div>{item.price}</div>
-              {/each}
-            </div>
-          </div>
-        {/each}
-      </div>
-    </div>
-  </main>
-</div>
+ -->
