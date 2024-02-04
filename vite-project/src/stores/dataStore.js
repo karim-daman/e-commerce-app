@@ -90,7 +90,7 @@ export async function createProduct(json) {
 
   let response;
 
-  const endPoint = `${import.meta.env.VITE_backend_uri}/products`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/products`;
 
   console.log("fetching from : ");
   console.log(endPoint);
@@ -116,7 +116,7 @@ export async function createProduct(json) {
   return response;
 }
 export async function getProducts() {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/products`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/products`;
   await fetch(endPoint, {
     method: "GET",
     redirect: "follow",
@@ -130,7 +130,7 @@ export async function getProducts() {
 }
 
 export async function getProductById(id) {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/products/${id}`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/products/${id}`;
   await fetch(endPoint, {
     method: "GET",
     redirect: "follow",
@@ -144,7 +144,7 @@ export async function getProductById(id) {
 }
 
 export async function createCategory(json) {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/categories`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/categories`;
 
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -175,7 +175,7 @@ export async function createCategory(json) {
 }
 
 export async function getCarts() {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/carts`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/carts`;
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -235,7 +235,7 @@ export async function removeFromCart(id) {
 }
 
 export async function clearCart(id) {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/carts/clear/${id}`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/carts/clear/${id}`;
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -255,7 +255,7 @@ export async function clearCart(id) {
 }
 
 export async function addCartItemToCart(id, item) {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/carts/${id}`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/carts/${id}`;
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -319,7 +319,7 @@ export async function addCartItemToCart(id, item) {
 // }
 
 export async function getCartById(id) {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/carts/${id}`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/carts/${id}`;
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -339,7 +339,7 @@ export async function getCartById(id) {
 }
 
 export async function getReviews() {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/reviews`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/reviews`;
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -359,7 +359,7 @@ export async function getReviews() {
 }
 
 export async function getUsers() {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/users`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/users`;
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -379,7 +379,7 @@ export async function getUsers() {
 }
 
 export async function getCategories() {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/categories`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/categories`;
   await fetch(endPoint, {
     method: "GET",
     redirect: "follow",
@@ -394,7 +394,7 @@ export async function getCategories() {
 
 export async function loginHandler(json) {
   isFetching.set(true);
-  const endPoint = `${import.meta.env.VITE_backend_uri}/users/login`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/users/login`;
   var raw = JSON.stringify({
     email: json.email,
     password: json.password,
@@ -418,7 +418,7 @@ export async function loginHandler(json) {
 
 export async function registerHanlder(json) {
   isFetching.set(true);
-  const endPoint = `${import.meta.env.VITE_backend_uri}/users/register`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/users/register`;
   var raw = JSON.stringify({
     name: "undefined",
     email: json.email,
@@ -451,7 +451,7 @@ export async function verifyTokenExpiry() {
     return { success: false, error: "Undefined token", token: "null" };
   }
 
-  const endPoint = `${import.meta.env.VITE_backend_uri}/users/verify`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/users/verify`;
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", localStorage.getItem("token"));
