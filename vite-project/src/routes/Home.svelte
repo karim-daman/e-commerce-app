@@ -1,5 +1,10 @@
 <script>
-  import { app_products } from "$stores/dataStore";
+  import { app_products, getProducts } from "$stores/dataStore";
+  import { onMount } from "svelte";
+
+  onMount(async () => {
+    await getProducts();
+  });
 </script>
 
 <!--
@@ -7,28 +12,6 @@
 // https://v0.dev/t/QPTM8apmS6F
 -->
 <div class="flex flex-col min-h-screen">
-  <!-- <header class="px-4 lg:px-6 h-16 flex items-center">
-    <a class="flex items-center justify-center" href="#"
-      ><svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="h-6 w-6"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg
-      ><span class="sr-only">E-Shop</span></a>
-    <nav class="ml-auto flex gap-4 sm:gap-6">
-      <a class="text-sm font-medium hover:underline underline-offset-4" href="#"> Home </a><a class="text-sm font-medium hover:underline underline-offset-4" href="#"> Shop </a><a
-        class="text-sm font-medium hover:underline underline-offset-4"
-        href="#">
-        About
-      </a><a class="text-sm font-medium hover:underline underline-offset-4" href="#"> Contact </a>
-    </nav>
-  </header> -->
   <main class="flex-1">
     <section class="w-full pt-12 md:pt-24 lg:pt-32 border-y">
       <div class="px-4 md:px-6 space-y-10 xl:space-y-16">
@@ -67,7 +50,7 @@
             </a>
           </div>
           <div class="grid gap-1">
-            <img src={$app_products[0].image} width="300" height="300" alt="Product " class="mx-auto border aspect-square overflow-hidden rounded-xl object-cover" />
+            <img src={$app_products[1].image} width="300" height="300" alt="Product " class="mx-auto border aspect-square overflow-hidden rounded-xl object-cover" />
             <h3 class="text-lg font-bold">Product 2</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400">$79.99</p>
             <a
@@ -77,7 +60,7 @@
             </a>
           </div>
           <div class="grid gap-1">
-            <img src={$app_products[0].image} width="300" height="300" alt="Product " class="mx-auto border aspect-square overflow-hidden rounded-xl object-cover" />
+            <img src={$app_products[2].image} width="300" height="300" alt="Product " class="mx-auto border aspect-square overflow-hidden rounded-xl object-cover" />
             <h3 class="text-lg font-bold">Product 3</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400">$59.99</p>
             <a
@@ -103,10 +86,4 @@
       </div>
     </section>
   </main>
-  <footer class="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-    <p class="text-xs text-gray-500 dark:text-gray-400">© 2024 E-Shop. All rights reserved.</p>
-    <nav class="sm:ml-auto flex gap-4 sm:gap-6">
-      <a class="text-xs hover:underline underline-offset-4" href="#"> Terms of Service </a><a class="text-xs hover:underline underline-offset-4" href="#"> Privacy </a>
-    </nav>
-  </footer>
 </div>
