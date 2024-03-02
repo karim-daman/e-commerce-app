@@ -59,9 +59,10 @@
   </NavBrand> -->
 
   <!-- Use it like any other HTML element -->
-  <model-viewer class="h-20" alt="3DCart" src="3DCart/scene.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y" />
+  <!-- <model-viewer class="h-20" alt="3DCart" src="3DCart/scene.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y" /> -->
 
-  <button class="flex items-center md:order-2">
+  <!-- <button class="w-full flex justify-end md:order-2"> -->
+  <button class=" flex justify-end md:order-2">
     {#if user}
       <img class=" transition hover:scale-110 h-10 bg-slate-300 rounded-full border border-gray-100 shadow-sm" src={"/avatar.svg"} alt="avatar" id="avatar-menu" />
       <NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1" />

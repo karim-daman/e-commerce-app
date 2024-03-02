@@ -1,6 +1,4 @@
 <script>
-  // @ts-nocheck
-
   import Router, { push, location } from "svelte-spa-router";
   import routes from "./routes";
   import { onMount } from "svelte";
@@ -8,7 +6,6 @@
   import toast, { Toaster } from "svelte-french-toast";
   import Navbar from "./components/Navbar.svelte";
   import AdminSideBar from "$components/Admin/Sidebar.svelte";
-
   import Footer from "$components/Footer.svelte";
 
   onMount(() => {
@@ -47,6 +44,8 @@
     // console.log($app_user_cart);
   });
 </script>
+
+<!-- <div class="fixed top-0 left-0 bg-red-500 z-50">app: {$location}</div> -->
 
 <Toaster />
 <AdminSideBar />

@@ -1,6 +1,4 @@
 <script>
-  // @ts-nocheck
-
   import AdminCreateProduct from "$components/Admin/CreateProductModal.svelte";
   import ProductFilter from "$components/ProductFilter.svelte";
   import { addCartItemToCart, app_products, app_user, app_user_cart, clearCart, deleteProduct, filteredProducts, getCartById, getCategories, getProducts } from "$stores/dataStore";
@@ -8,7 +6,7 @@
 
   import { Badge, Button, ButtonGroup, Card, Dropdown, DropdownItem, Input, InputAddon, Label, MenuButton, Modal, Rating } from "flowbite-svelte";
   import { onMount } from "svelte";
-  import { fade, fly } from "svelte/transition";
+  import { fade, fly, scale } from "svelte/transition";
   import toast, { Toaster } from "svelte-french-toast";
 
   // import { page } from "$app/stores";
@@ -184,7 +182,8 @@
     <section class="col-span-full md:col-auto grid justify-center grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4 grid-flow-row auto-rows-max">
       {#each $filteredProducts as product}
         <!-- in:fly={{ y: randomIntFromInterval(15, 50) }} out:fly={{ y: -randomIntFromInterval(15, 50) }} -->
-        <div in:fly={{ y: 100 }} out:fly={{ y: -100 }}>
+        <div in:scale={{ duration: 100, start: 0.95 }} out:scale={{ duration: 75, start: 0.95 }}>
+          <!--  in:fly={{ y: 100 }} out:fly={{ y: -100 }} -->
           <Card padding="none">
             <div class="flex justify-end">
               <button

@@ -4,6 +4,7 @@
   import { app_user, getProducts, app_user_cart, getCartById, removeFromCart, clearCart } from "$stores/dataStore";
   import { onMount } from "svelte";
   import { fly } from "svelte/transition";
+  import { location, querystring } from "svelte-spa-router";
 
   let cartItemList = [];
 

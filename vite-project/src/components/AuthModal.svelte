@@ -2,7 +2,7 @@
   import { authModalStore, isPasswordLost } from "$stores/appStore";
   import { Alert, Spinner, Button, Modal, Label, Input, Checkbox, Popover } from "flowbite-svelte";
   import { push } from "svelte-spa-router";
-  import { fade, fly } from "svelte/transition";
+  import { fade, fly, scale } from "svelte/transition";
   import { clickOutside } from "svelte-use-click-outside";
   import { loginHandler, isFetching, registerHanlder } from "$stores/dataStore";
   import toast, { Toaster } from "svelte-french-toast";
@@ -245,7 +245,8 @@
 {/if} -->
 
 {#if $isFetching}
-  <div out:fade in:fade class="fixed inset-0 w-full h-full backdrop-blur-sm overflow-auto">
+  <div in:scale={{ duration: 100, start: 0.95 }} out:scale={{ duration: 75, start: 0.95 }} class="fixed inset-0 w-full h-full backdrop-blur-sm overflow-auto">
+    <!-- in:fade out:fade -->
     <div class="grid h-screen place-items-center">
       <Button disabled color="alternative">
         <Spinner class="mr-3" size="4" />Loading ...
@@ -254,7 +255,8 @@
   </div>
 {:else}
   <Modal bind:open={$authModalStore} size="xs" autoclose={false} class="w-full" backdropClasses="backdrop-blur-sm bg-gray-900 bg-opacity-50 dark:bg-opacity-80">
-    <div in:fade out:fade use:clickOutside={clickOutsideHandler}>
+    <div in:scale={{ duration: 100, start: 0.95 }} out:scale={{ duration: 75, start: 0.95 }} use:clickOutside={clickOutsideHandler}>
+      <!-- in:fade out:fade -->
       {#if errorMessage}
         <div out:fade in:fade class=" absolute left-0 -top-20">
           <Alert color="red" dismissable>
