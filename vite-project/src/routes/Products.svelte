@@ -1,7 +1,7 @@
 <script>
   import AdminCreateProduct from "$components/Admin/CreateProductModal.svelte";
   import ProductFilter from "$components/ProductFilter.svelte";
-  import { addCartItemToCart, app_products, app_user, app_user_cart, clearCart, deleteProduct, filteredProducts, getCartById, getCategories, getProducts } from "$stores/dataStore";
+  import { addCartItemToCart, app_categories, app_products, app_user, app_user_cart, clearCart, deleteProduct, filteredProducts, getCartById, getCategories, getProducts } from "$stores/dataStore";
   import { authModalStore } from "$stores/appStore";
 
   import { Badge, Button, ButtonGroup, Card, Dropdown, DropdownItem, Input, InputAddon, Label, MenuButton, Modal, Rating } from "flowbite-svelte";
@@ -56,8 +56,8 @@
   let liked = false;
 
   onMount(async () => {
-    await getProducts();
-    await getCategories();
+    if ($app_products.length == 0) await getProducts();
+    if ($app_categories.length == 0) await getCategories();
   });
 
   function randomIntFromInterval(min, max) {
