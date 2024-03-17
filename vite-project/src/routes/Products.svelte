@@ -17,11 +17,11 @@
 
   // $: activeUrl = $page.url.searchParams.get("page");
   let pages = [
-    { name: 6, href: "/components/pagination?page=6" },
-    { name: 7, href: "/components/pagination?page=7" },
-    { name: 8, href: "/components/pagination?page=8" },
-    { name: 9, href: "/components/pagination?page=9" },
-    { name: 10, href: "/components/pagination?page=10" },
+    { name: 6, href: "#/Products/page=6" },
+    { name: 7, href: "#/Products/page=7" },
+    { name: 8, href: "#/Products/page=8" },
+    { name: 9, href: "#/Products/page=9" },
+    { name: 10, href: "#/Products/page=10" },
   ];
 
   $: {

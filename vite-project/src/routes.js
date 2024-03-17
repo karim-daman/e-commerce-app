@@ -19,6 +19,7 @@ export default {
 
   "/Profile": Chunk(() => import("./routes/Profile.svelte")),
 
+  "/FAQ": Chunk(() => import("./routes/FAQ.svelte")),
   "/NotFound": Chunk(() => import("./routes/NotFound.svelte")),
   "*": Chunk(() => import("./routes/NotFound.svelte")),
 };
