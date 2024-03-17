@@ -22,10 +22,10 @@
 
           <h1 class="mb-8 text-4xl font-bold text-black sm:text-5xl md:mb-12 md:text-6xl">Discover Your Next Favorite Product</h1>
 
-          <div class="  gap-2.5 sm:flex-row sm:justify-center lg:justify-start">
+          <div class=" z-10 gap-2.5 sm:flex-row sm:justify-center lg:justify-start">
             <div class="space-x-4">
               <a
-                class=" inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-5 text-7xl w-full font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
+                class=" inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-5 text-2xl sm:text-7xl w-full font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
                 href="#/products">
                 Start Shopping
               </a>
@@ -34,7 +34,7 @@
         </div>
         <!-- content - end -->
 
-        <div class="flex flex-row min-h-screen justify-center items-center">
+        <div class="flex flex-row h-[300px] sm:min-h-screen justify-center items-center">
           <!-- Use it like any other HTML element -->
           <model-viewer
             auto-rotate
@@ -70,7 +70,7 @@
     <div class="grid gap-x-4 gap-y-6 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 xl:grid-cols-4">
       <!-- product - start -->
       <div>
-        <a href="#" class="group mb-2 block h-96 overflow-hidden rounded-lg bg-gray-100 shadow-lg lg:mb-3">
+        <a href="#/ProductDetails/{$app_products[6].id}" class="group mb-2 block h-96 overflow-hidden rounded-lg bg-gray-100 shadow-lg lg:mb-3">
           {#if $app_products.length > 0}
             <!-- Ensure $app_products[0] is defined and has an image property -->
             {#if $app_products[6].image}
@@ -104,7 +104,7 @@
 
       <!-- product - start -->
       <div>
-        <a href="#" class="group mb-2 block h-96 overflow-hidden rounded-lg bg-gray-100 shadow-lg lg:mb-3">
+        <a href="#/ProductDetails/{$app_products[4].id}" class="group mb-2 block h-96 overflow-hidden rounded-lg bg-gray-100 shadow-lg lg:mb-3">
           {#if $app_products.length > 0}
             <!-- Ensure $app_products[0] is defined and has an image property -->
             {#if $app_products[4].image}
@@ -138,7 +138,7 @@
 
       <!-- product - start -->
       <div>
-        <a href="#" class="group mb-2 block h-96 overflow-hidden rounded-lg bg-gray-100 shadow-lg lg:mb-3">
+        <a href="#/ProductDetails/{$app_products[2].id}" class="group mb-2 block h-96 overflow-hidden rounded-lg bg-gray-100 shadow-lg lg:mb-3">
           {#if $app_products.length > 0}
             <!-- Ensure $app_products[0] is defined and has an image property -->
             {#if $app_products[2].image}
@@ -172,7 +172,7 @@
 
       <!-- product - start -->
       <div>
-        <a href="#" class="group mb-2 block h-96 overflow-hidden rounded-lg bg-gray-100 shadow-lg lg:mb-3">
+        <a href="#/ProductDetails/{$app_products[3].id}" class="group mb-2 block h-96 overflow-hidden rounded-lg bg-gray-100 shadow-lg lg:mb-3">
           {#if $app_products.length > 0}
             <!-- Ensure $app_products[0] is defined and has an image property -->
             {#if $app_products[3].image}

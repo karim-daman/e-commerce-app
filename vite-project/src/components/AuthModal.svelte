@@ -313,7 +313,7 @@
         <form class="flex flex-col space-y-6" action="#">
           <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">{authType ? "Sign up" : "Login"}</h3>
 
-          <Label class="space-y-2">
+          <Label class="">
             <span>Your email</span>
             <Input type="email" placeholder="name@Company.com" color={invalidEmail ? "red" : "base"} required bind:value={email}>
               <svg slot="left" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -325,7 +325,7 @@
             </Input>
           </Label>
 
-          <Label class="space-y-2">
+          <Label class="">
             <span>Your password</span>
             <Input
               on:input={checkPassword}
@@ -430,7 +430,7 @@
           </Label>
 
           {#if authType}
-            <Label class="space-y-2">
+            <Label class="">
               <span>Confirm your password</span>
               <Input
                 on:input={checkMatch}
@@ -483,12 +483,12 @@
                 on:click={() => {
                   $isPasswordLost = true;
                 }}
-                class="  ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500">Lost password?</button>
+                class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500">Lost password?</button>
             {/if}
           </div>
           <button
             type="button"
-            class=" transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg active:drop-shadow-none"
+            class="transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg active:drop-shadow-none"
             on:click={handleSubmit}>
             {authType ? "Register a new account" : "Login to your account"}
           </button>
@@ -514,29 +514,29 @@
           <span class="absolute inset-x-0 h-px bg-gray-300" />
           <span class="relative bg-white px-4 text-sm text-gray-400">{authType ? "Signup" : "Log"} in with social</span>
         </div>
-        <div class="flex">
+        <div class="flex mt-2">
           <button
             type="button"
             on:click={googleSignIn}
             aria-label="Continue with google"
-            class="transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 m-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4">
-            <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg2.svg" alt="google" />
-            <p class="text-base font-medium ml-4 text-gray-700">Google</p>
+            class="transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 m-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-2 border rounded-lg border-gray-700 flex items-center w-full">
+            <img class="ml-1" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg2.svg" alt="google" />
+            <p class="text-base font-medium ml-1 text-gray-700">Google</p>
           </button>
           <button
             type="button"
             on:click={gitHubSignIn}
             aria-label="Continue with github"
-            class="transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 m-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4">
-            <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg3.svg" alt="github" />
-            <p class="text-base font-medium ml-4 text-gray-700">Github</p>
+            class="transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 m-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py25 border rounded-lg border-gray-700 flex items-center w-full">
+            <img class="ml-1" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg3.svg" alt="github" />
+            <p class="text-base font-medium ml-1 text-gray-700">Github</p>
           </button>
           <button
             type="button"
             aria-label="Continue with twitter"
-            class="transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 m-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4">
-            <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg4.svg" alt="twitter" />
-            <p class="text-base font-medium ml-4 text-gray-700">Twitter</p>
+            class="transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0 m-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py25 border rounded-lg border-gray-700 flex items-center w-full">
+            <img class="ml-1" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg4.svg" alt="twitter" />
+            <p class="text-base font-medium ml-1 text-gray-700">Twitter</p>
           </button>
         </div>
       {/if}
