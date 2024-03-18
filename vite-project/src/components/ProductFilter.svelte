@@ -54,6 +54,19 @@
     { rating: 2, selected: false },
     { rating: 1, selected: false },
   ];
+  let rating = 0;
+
+  let stars = [
+    { id: 1, title: "One Star" },
+    { id: 2, title: "Two Stars" },
+    { id: 3, title: "Three Stars" },
+    { id: 4, title: "Four Stars" },
+    { id: 5, title: "Five Stars" },
+  ];
+
+  function handleRating(star) {
+    rating = star.id;
+  }
 
   function filterByCategory(category) {
     console.log(category.name);
@@ -233,6 +246,7 @@
               class="py-[7px] cursor-pointer text-[#212529] peer-checked:border-[#0d6efd] peer-checked:bg-[#e9ecef] hover:text-[#0d6efd] hover:bg-[#f9fafb] transition-colors peer-checked:text-[#0d6efd] hover:border-[#c1c9d0] border border-[#dee2e6] rounded-[.25rem] px-[14px]"
               for={"id"}>
               <slot />
+              XL
             </label>
           </div>
         {/each}
@@ -251,23 +265,53 @@
         <span class="text-xs"> Rating</span>
       </span>
       <div>
-        {#each ratings as item}
+        <div class="w-52">
+          {#each stars as star (star.id)}
+            <button
+              on:click={() => {
+                handleRating(star);
+              }}
+              type="button"
+              class=" transition hover:-translate-y-1 active:transform active:translate-y-0">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="{rating >= star.id ? 'orange' : 'lightgray'}  " viewBox="0 0 24 24" stroke-width="0.5" stroke="none" class="w-6 h-6">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+              </svg>
+            </button>
+          {/each}
+          <button
+            on:click={() => {
+              rating = 0;
+            }}
+            type="button"
+            class=" transition hover:-translate-y-1 active:transform active:translate-y-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="red" class="w-5 h-5">
+              <path
+                fill-rule="evenodd"
+                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- {#each ratings as item}
           <div class="flex gap-2 flex-row">
             <input id="rating-{item.rating}" bind:checked={item.selected} type="checkbox" />
 
             <label for="rating-{item.rating}" class="flex gap-1 flex-row">
               {#each Array.from({ length: 5 }, (_, index) => index) as currentIndex}
                 {#if currentIndex < item.rating}
-                  <!-- gold start -->
-                  <!-- <FilterStar class="text-yellow-500" /> -->
+                
+               
 
                   <svg class="text-yellow-500" width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"
                     ><path
                       d="M7.22303 0.665992C7.32551 0.419604 7.67454 0.419604 7.77702 0.665992L9.41343 4.60039C9.45663 4.70426 9.55432 4.77523 9.66645 4.78422L13.914 5.12475C14.18 5.14607 14.2878 5.47802 14.0852 5.65162L10.849 8.42374C10.7636 8.49692 10.7263 8.61176 10.7524 8.72118L11.7411 12.866C11.803 13.1256 11.5206 13.3308 11.2929 13.1917L7.6564 10.9705C7.5604 10.9119 7.43965 10.9119 7.34365 10.9705L3.70718 13.1917C3.47945 13.3308 3.19708 13.1256 3.25899 12.866L4.24769 8.72118C4.2738 8.61176 4.23648 8.49692 4.15105 8.42374L0.914889 5.65162C0.712228 5.47802 0.820086 5.14607 1.08608 5.12475L5.3336 4.78422C5.44573 4.77523 5.54342 4.70426 5.58662 4.60039L7.22303 0.665992Z"
                       fill="currentColor" /></svg>
                 {:else}
-                  <!-- grey start -->
-                  <!-- <FilterStar class="" /> -->
+                
 
                   <svg class="text-gray-300" width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"
                     ><path
@@ -277,7 +321,7 @@
               {/each}
             </label>
           </div>
-        {/each}
+        {/each} -->
       </div>
     </AccordionItem>
   </Accordion>

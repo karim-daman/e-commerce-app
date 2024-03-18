@@ -1,10 +1,11 @@
 <script>
-  import { app_product_details, getProductById } from "$stores/dataStore";
+  import { app_product_details, app_user, getProductById } from "$stores/dataStore";
   import { Dropdown, DropdownItem, MenuButton } from "flowbite-svelte";
   import { onMount } from "svelte";
   import Drift from "drift-zoom";
   import Review from "$components/Review.svelte";
   import { random } from "yootils";
+  import { authModalStore } from "$stores/appStore";
   export let params;
 
   let liked;
@@ -128,41 +129,7 @@
 
         <div class="my-3">
           <div class="flex justify-between">
-            <!-- <Rating rating={3} /> -->
-
-            <div class="flex items-center">
-              {#each stars as star (star.id)}
-                <button
-                  on:click={() => {
-                    handleRating(star);
-                  }}
-                  type="button"
-                  class=" transition hover:-translate-y-1 active:transform active:translate-y-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="{rating >= star.id ? 'orange' : 'none'}  " viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                  </svg>
-                </button>
-              {/each}
-
-              <button
-                on:click={() => {
-                  rating = 0;
-                }}
-                type="button"
-                class=" transition hover:-translate-y-1 active:transform active:translate-y-0">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="red" class="w-5 h-5">
-                  <path
-                    fill-rule="evenodd"
-                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
-                    clip-rule="evenodd" />
-                </svg>
-              </button>
-            </div>
-
-            <small class=" flex">
+            <small class="flex">
               <!-- <Reviews /> -->
               <svg xmlns="http://www.w3.org/2000/svg" class="{$$props.class} h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path
@@ -229,7 +196,7 @@
                     fill-rule="evenodd"
                     clip-rule="evenodd" /></svg>
               </button>
-              <input type="number" class="border rounded w-20 mx-2 h-10 px-2" placeholder="Quantity" bind:value={quantity} />
+              <input type="number" class="border rounded w-20 mx-2 h-10 px-2" min="1" placeholder="Quantity" bind:value={quantity} />
               <button class="shadow-xl active:shadow-none h-10 w-10 flex flex-row mx-px text-black px-[10px] mb-4 py-[7px] rounded-[.25rem] border">
                 <!-- ^  use:hold={qty_increment} -->
                 <!-- <Plus class="self-center" /> -->
@@ -260,42 +227,22 @@
     </section>
 
     <div class="bg-white py-6 sm:py-8 lg:py-12">
-      <div class="mx-auto max-w-screen-xl px-4 md:px-8">
+      <div class="mx-auto max-w-screen px-4 md:px-8">
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
           <!-- overview - start -->
           <div>
-            <div class="rounded-lg border p-4">
+            <div class="rounded-md border p-4">
               <h2 class="mb-3 text-lg font-bold text-gray-800 lg:text-xl">Customer Reviews</h2>
 
               <div class="mb-0.5 flex items-center gap-2">
-                <!-- stars - start -->
                 <div class="-ml-1 flex gap-0.5">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
+                  {#each { length: 5 } as _, i}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  {/each}
                 </div>
-                <!-- stars - end -->
 
                 <span class="text-sm font-semibold">4/5</span>
               </div>
@@ -315,10 +262,16 @@
                 {/each}
               </div>
 
-              <!-- <a
-                href="#"
-                class="block rounded-lg border bg-white px-4 py-2 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:bg-gray-200 md:px-8 md:py-3 md:text-base"
-                >Write a review</a> -->
+              {#if !$app_user}
+                <button
+                  on:click={() => {
+                    if (!$app_user) {
+                      $authModalStore = true;
+                    }
+                  }}
+                  class=" w-full rounded-lg border bg-white px-4 py-2 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:bg-gray-200 md:px-8 md:py-3 md:text-base"
+                  >Write a review</button>
+              {/if}
             </div>
           </div>
           <!-- overview - end -->
@@ -329,37 +282,83 @@
               <h2 class="text-lg font-bold text-gray-800 lg:text-xl">Top Reviews</h2>
             </div> -->
 
-            <form class="w-full flex flex-col">
-              <!-- <Rating /> -->
+            {#if $app_user}
+              <form class="w-full flex flex-col">
+                <!-- <Rating /> -->
 
-              <div class="mb-2 relative">
-                <textarea
-                  bind:value={user_comment}
-                  class="w-full min-h-[80px] p-2 border rounded focus:outline-none focus:ring-gray-300 focus:ring-1"
-                  name="comment"
-                  maxlength="500"
-                  placeholder="Add a comment" />
-                <!-- ^ use:autoGrow -->
-              </div>
-              {#if char_count > 499}
-                <p class="text-red-600 text-xs">reached max size</p>
-              {/if}
+                <div class="mb-2 relative">
+                  <textarea
+                    bind:value={user_comment}
+                    class="w-full min-h-[80px] p-2 border rounded focus:outline-none focus:ring-gray-300 focus:ring-1"
+                    name="comment"
+                    maxlength="500"
+                    placeholder="Add a comment" />
+                  <!-- ^ use:autoGrow -->
+                </div>
+                {#if char_count > 499}
+                  <p class="text-red-600 text-xs">reached max size</p>
+                {/if}
 
-              <button
-                class="{char_count > 0 ? '' : 'opacity-30'} disabled:{char_count > 0 ? 'false' : 'true'} 
+                <div class="flex justify-between w-full">
+                  <div class="w-52">
+                    {#each stars as star (star.id)}
+                      <button
+                        on:click={() => {
+                          handleRating(star);
+                        }}
+                        type="button"
+                        class=" transition hover:-translate-y-1 active:transform active:translate-y-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="{rating >= star.id ? 'orange' : 'lightgray'}  " viewBox="0 0 24 24" stroke-width="0.5" stroke="none" class="w-6 h-6">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                        </svg>
+                      </button>
+                    {/each}
+                    <button
+                      on:click={() => {
+                        rating = 0;
+                      }}
+                      type="button"
+                      class=" transition hover:-translate-y-1 active:transform active:translate-y-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="red" class="w-5 h-5">
+                        <path
+                          fill-rule="evenodd"
+                          d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                          clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <button
+                    class="{char_count > 0 ? '' : 'opacity-30'} disabled:{char_count > 0 ? 'false' : 'true'} 
                 px-3 transition-all py-2 text-sm text-white bg-blue-600 rounded self-end">
-                Comment
-              </button>
-            </form>
+                    Comment
+                  </button>
+                </div>
+              </form>
+            {/if}
 
-            {#each { length: 5 } as _, i}
-              <Review />
-            {/each}
+            <div class="border p-2">
+              <small class="flex">
+                <!-- <Reviews /> -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="{$$props.class} h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                </svg>
+                132 reviews</small>
 
-            <div class="border-t pt-6">
-              <a href="#" class="flex items-center gap-0.5 font-semibold text-indigo-400 transition duration-100 hover:text-indigo-500 active:text-indigo-600">Read all reviews</a>
+              {#each { length: 5 } as _, i}
+                <Review />
+              {/each}
+
+              <div class="border-t pt-6">
+                <a href="#" class="flex items-center gap-0.5 font-semibold text-indigo-400 transition duration-100 hover:text-indigo-500 active:text-indigo-600">Read all reviews</a>
+              </div>
             </div>
-            <!-- reviews - end -->
           </div>
         </div>
       </div>
