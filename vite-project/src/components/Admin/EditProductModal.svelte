@@ -3,7 +3,7 @@
   import { clickOutside } from "svelte-use-click-outside";
   import { Modal } from "flowbite-svelte";
   import { fade, slide } from "svelte/transition";
-  import Dropzone from "svelte-file-dropzone/Dropzone.svelte";
+  import Dropzone from "svelte-file-dropzone";
   import { onMount } from "svelte";
   import { app_categories, deleteCategory, createCategory, createProduct, getCategories, isFetching, getProducts } from "$stores/dataStore";
   import toast, { Toaster } from "svelte-french-toast";

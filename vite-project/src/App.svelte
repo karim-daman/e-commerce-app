@@ -5,6 +5,8 @@
   import { app_user, app_user_cart, decodeToken, getCartById, getCategories, getProducts, verifyTokenExpiry } from "$stores/dataStore";
   import toast, { Toaster } from "svelte-french-toast";
   import Navbar from "./components/Navbar.svelte";
+  import Navbar2 from "./components/Navbar/Navbar2.svelte";
+
   import AdminSideBar from "$components/Admin/Sidebar.svelte";
   import Footer from "$components/Footer.svelte";
 
@@ -49,7 +51,8 @@
 
 <Toaster />
 <AdminSideBar />
-<Navbar />
+<!-- <Navbar /> -->
+<Navbar2 />
 
 <br /><br /><br />
 

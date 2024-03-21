@@ -1,4 +1,5 @@
 <script>
+  // @ts-nocheck
   import AdminCreateProduct from "$components/Admin/CreateProductModal.svelte";
   import ProductFilter from "$components/ProductFilter.svelte";
   import { addCartItemToCart, app_categories, app_products, app_user, app_user_cart, clearCart, deleteProduct, filteredProducts, getCartById, getCategories, getProducts } from "$stores/dataStore";
