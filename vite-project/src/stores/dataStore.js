@@ -195,43 +195,20 @@ export async function getCarts() {
 }
 
 export async function removeFromCart(id) {
-  // const endPoint = `${import.meta.env.VITE_backend_uri}/cartItems/${id}`;
-  // var myHeaders = new Headers();
-  // myHeaders.append("Content-Type", "application/json");
-  // myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-  // await fetch(endPoint, {
-  //   method: "Delete",
-  //   headers: myHeaders,
-  //   redirect: "follow",
-  // })
-  //   .then((response) => response.text())
-  //   .then((result) => {
-  //     console.log(result);
-  //   })
-  //   .catch((error) => console.log("error", error));
-  //try this:
-  // const endPoint = `${import.meta.env.VITE_backend_uri}/carts/${id}`;
-  // var myHeaders = new Headers();
-  // myHeaders.append("Content-Type", "application/json");
-  // myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-  // let response;
-  // await fetch(endPoint, {
-  //   method: "PUT",
-  //   headers: myHeaders,
-  //   body: JSON.stringify(item),
-  //   redirect: "follow",
-  // })
-  //   .then((response) => response.json())
-  //   .then((result) => {
-  //     console.log(result.cart);
-  //     app_user_cart.set(result.cart);
-  //     response = result;
-  //   })
-  //   .catch((error) => {
-  //     console.log("error", error);
-  //     response = error;
-  //   });
-  // return response;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/cartItems/${id}`;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+  await fetch(endPoint, {
+    method: "Delete",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.text())
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => console.log("error", error));
 }
 
 export async function clearCart(id) {

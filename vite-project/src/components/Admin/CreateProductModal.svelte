@@ -1,4 +1,6 @@
 <script>
+  // @ts-nocheck
+
   import { Button, Dropdown, Chevron, Checkbox, Radio, Toast, Listgroup, DropdownItem, Avatar, Search, SpeedDialButton, SpeedDial, Popover } from "flowbite-svelte";
   import { clickOutside } from "svelte-use-click-outside";
   import { Modal } from "flowbite-svelte";

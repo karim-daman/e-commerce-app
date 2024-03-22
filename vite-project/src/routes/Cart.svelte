@@ -5,6 +5,8 @@
   import { onMount } from "svelte";
   import { fly } from "svelte/transition";
   import { location, querystring } from "svelte-spa-router";
+  import RemoveIcon from "$components/Icons/RemoveIcon.svelte";
+  import ClearCartIcon from "$components/Icons/ClearCartIcon.svelte";
 
   let cartItemList = [];
 
@@ -86,12 +88,7 @@
             class=" transition hover:-translate-y-1 active:transform active:translate-y-0 self-start col-span-full sm:col-auto justify-self-end sm:py-1 sm:px-2 py-2 px-3 rounded-[.25rem] bg-red-500 text-white">
             <!-- <img class="w-7 sm:w-5 h-7 sm:h-5" src="" alt="" /> -->
 
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-            </svg>
+            <ClearCartIcon />
           </button>
 
           <!-- {#each Array.from({ length: 5 }) as _} -->
@@ -137,9 +134,7 @@
               class=" transition hover:-translate-y-1 active:transform active:translate-y-0 self-center col-span-full sm:col-auto sm:py-1 sm:px-2 py-2 px-3 rounded-[.25rem] bg-red-500 text-white">
               <!-- <img class="w-7 sm:w-5 h-7 sm:h-5" src="" alt="" /> -->
 
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentcolor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <RemoveIcon />
             </button>
           {/each}
         {:else}
@@ -180,7 +175,7 @@
       <section id="receipt" class="p-5 self-start flex h-max text-grey-secondary leading-[1.5] flex-col gap-[5px] rounded-[.25rem] border">
         <dl class="w-full flex items-center justify-between">
           <dt>Total Price:</dt>
-          <dd class={$$props.class}>{$app_user_cart.totalPrice}</dd>
+          <dd class={$$props.class}>$ {$app_user_cart.totalPrice.$numberDecimal}</dd>
         </dl>
 
         <dl class="w-full flex items-center justify-between">
@@ -202,7 +197,7 @@
         <dl class=" flex font-bold text-[#212529] text-[1.25rem]">
           <dd class=" justify-start">Total:</dd>
 
-          <dd class="text-xl w-full text-green-500 flex justify-end">$ {$app_user_cart.totalPrice}</dd>
+          <dd class="text-xl w-full text-green-500 flex justify-end">$ {$app_user_cart.totalPrice.$numberDecimal}</dd>
         </dl>
 
         <button class="transition hover:-translate-y-1 active:transform active:translate-y-0 rounded-btn-shadow text-white px-[14px] mt-[11px] mb-4 py-[7px] bg-[#0b5ed7] rounded-[.25rem]"

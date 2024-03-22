@@ -23,11 +23,17 @@
     else authType = false;
     $authModalStore = true;
   }
+
+  //
+
+  function handleClickOutside() {
+    menuOpen = false;
+  }
 </script>
 
 <AuthModal {authType} />
 
-<div use:clickOutside class="relative">
+<div use:clickOutside={handleClickOutside} class="relative">
   <button
     on:click={() => {
       menuOpen = !menuOpen;
