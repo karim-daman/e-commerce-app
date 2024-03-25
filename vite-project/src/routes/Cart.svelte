@@ -175,7 +175,7 @@
       <section id="receipt" class="p-5 self-start flex h-max text-grey-secondary leading-[1.5] flex-col gap-[5px] rounded-[.25rem] border">
         <dl class="w-full flex items-center justify-between">
           <dt>Total Price:</dt>
-          <dd class={$$props.class}>$ {$app_user_cart.totalPrice.$numberDecimal}</dd>
+          <dd class={$$props.class}>$ {$app_user_cart?.totalPrice?.$numberDecimal}</dd>
         </dl>
 
         <dl class="w-full flex items-center justify-between">
@@ -197,7 +197,7 @@
         <dl class=" flex font-bold text-[#212529] text-[1.25rem]">
           <dd class=" justify-start">Total:</dd>
 
-          <dd class="text-xl w-full text-green-500 flex justify-end">$ {$app_user_cart.totalPrice.$numberDecimal}</dd>
+          <dd class="text-xl w-full text-green-500 flex justify-end">$ {$app_user_cart?.totalPrice?.$numberDecimal}</dd>
         </dl>
 
         <button class="transition hover:-translate-y-1 active:transform active:translate-y-0 rounded-btn-shadow text-white px-[14px] mt-[11px] mb-4 py-[7px] bg-[#0b5ed7] rounded-[.25rem]"

@@ -2,7 +2,7 @@
   import Router, { push, location } from "svelte-spa-router";
   import routes from "./routes";
   import { onMount } from "svelte";
-  import { app_user, app_user_cart, decodeToken, getCartById, getCategories, getProducts, verifyTokenExpiry } from "$stores/dataStore";
+  import { app_user, app_user_cart, decodeToken, getCartById, getCategories, getProducts, getUsers, verifyTokenExpiry } from "$stores/dataStore";
   import toast, { Toaster } from "svelte-french-toast";
   import Navbar from "./components/Navbar.svelte";
   import Navbar2 from "./components/Navbar/Navbar2.svelte";
@@ -17,6 +17,7 @@
   onMount(async () => {
     await getCategories();
     await getProducts();
+    await getUsers();
 
     //check if logged user has a valid jwt, if invalid log them out
 

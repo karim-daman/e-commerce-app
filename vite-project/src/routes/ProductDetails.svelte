@@ -1,5 +1,6 @@
 <script>
-  import { app_product_details, app_user, getProductById } from "$stores/dataStore";
+  // @ts-nocheck
+  import { app_user_list, app_product_details, app_review_list, app_user, getProductById, getReviews, postReview } from "$stores/dataStore";
   import { Dropdown, DropdownItem, MenuButton } from "flowbite-svelte";
   import { onMount } from "svelte";
   import Drift from "drift-zoom";
@@ -28,6 +29,8 @@
   onMount(async () => {
     await getProductById(params.product_id);
     thumbnails = $app_product_details.images;
+
+    await getReviews();
   });
 
   const handleChangeImage = (index) => {
@@ -74,9 +77,57 @@
 
   let user_comment = "";
   $: char_count = user_comment.length;
+
+  async function handleAddReview() {
+    if (user_comment.length == 0) return;
+
+    const raw = JSON.stringify({
+      product_id: $app_product_details.id,
+      user_id: $app_user.userId,
+      heart: false,
+      rating: rating,
+      comment: {
+        text: user_comment,
+      },
+    });
+
+    // display notification that the review was posted successfully.
+
+    await postReview(raw);
+  }
+
+  $: localReviewList = $app_review_list.filter((review) => review.product_id === $app_product_details.id);
+
+  $: customersAverageRating = localReviewList
+    .reduce((acc, review) => {
+      return acc + review.rating / $app_review_list.length;
+    }, 0)
+    .toFixed(1);
+
+  function countReviewsByRating() {
+    const ratingCounts = {
+      0: 0,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+    };
+
+    $app_review_list.forEach((review) => {
+      const { rating } = review;
+      ratingCounts[rating] = (ratingCounts[rating] || 0) + 1;
+    });
+
+    return ratingCounts;
+  }
+
+  $: ratingCounts = countReviewsByRating();
 </script>
 
 <pre class="text-xs">
+
+
   <!-- {JSON.stringify(params)} -->
   <!-- {JSON.stringify($app_product_details, null, 2)} -->
 </pre>
@@ -130,14 +181,13 @@
         <div class="my-3">
           <div class="flex justify-between">
             <small class="flex">
-              <!-- <Reviews /> -->
               <svg xmlns="http://www.w3.org/2000/svg" class="{$$props.class} h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
               </svg>
-              132 reviews</small>
+              {localReviewList.length} reviews</small>
             <small class="flex">
               <!-- <Orders /> -->
               <svg class="{$$props.class} h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -237,29 +287,43 @@
               <div class="mb-0.5 flex items-center gap-2">
                 <div class="-ml-1 flex gap-0.5">
                   {#each { length: 5 } as _, i}
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 {customersAverageRating > i ? 'text-yellow-400' : 'text-gray-400'} " viewBox="0 0 20 20" fill="currentColor">
                       <path
                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   {/each}
                 </div>
 
-                <span class="text-sm font-semibold">4/5</span>
+                <span class="text-sm font-semibold">
+                  {customersAverageRating}
+                </span>
               </div>
 
-              <span class="block text-sm text-gray-500">Bases on 27 reviews</span>
+              <span class="block text-sm text-gray-500">Based on {localReviewList.length} reviews</span>
 
               <div class="my-5 flex flex-col gap-2 border-t py-5">
-                {#each { length: 5 } as _, i}
+                {#each { length: 6 } as _, i}
                   <div class="flex items-center gap-3">
-                    <span class="w-10 whitespace-nowrap text-right text-sm text-gray-600">{i + 1} Star</span>
+                    <span class="w-10 whitespace-nowrap text-right text-sm text-gray-600">{i} Star</span>
 
                     <div class="flex h-4 flex-1 overflow-hidden rounded bg-gray-200">
-                      <span class="h-full w-[3%] rounded bg-yellow-400"></span>
+                      <span style="width: {JSON.stringify((ratingCounts[i] / localReviewList.length) * 100)}%;" class="transition-all h-full rounded bg-yellow-400"></span>
                     </div>
-                    <p class="w-8">3%</p>
+
+                    <!-- //fix  -->
+
+                    {ratingCounts[i]}
+                    .
+                    {localReviewList.length}
+
+                    <p class="w-14 text-xs">{JSON.stringify((ratingCounts[i] / localReviewList.length) * 100)} %</p>
+                    <!--  / totalReviews) * 100; -->
                   </div>
                 {/each}
+
+                <!-- <pre class="text-xs">
+                  {JSON.stringify(ratingCounts, null, 2)}
+                </pre> -->
               </div>
 
               {#if !$app_user}
@@ -282,8 +346,12 @@
               <h2 class="text-lg font-bold text-gray-800 lg:text-xl">Top Reviews</h2>
             </div> -->
 
+            <!-- <pre class="text-xs">
+              {JSON.stringify($app_user_list, null, 2)}
+            </pre> -->
+
             {#if $app_user}
-              <form class="w-full flex flex-col">
+              <div class="w-full flex flex-col">
                 <!-- <Rating /> -->
 
                 <div class="mb-2 relative">
@@ -332,15 +400,16 @@
                   </div>
 
                   <button
+                    on:click={handleAddReview}
                     class="{char_count > 0 ? '' : 'opacity-30'} disabled:{char_count > 0 ? 'false' : 'true'} 
                 px-3 transition-all py-2 text-sm text-white bg-blue-600 rounded self-end">
                     Comment
                   </button>
                 </div>
-              </form>
+              </div>
             {/if}
 
-            <div class="border p-2">
+            <div class=" p-2">
               <small class="flex">
                 <!-- <Reviews /> -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="{$$props.class} h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -349,13 +418,24 @@
                     stroke-linejoin="round"
                     d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                 </svg>
-                132 reviews</small>
+                {localReviewList.length} reviews</small>
 
-              {#each { length: 5 } as _, i}
+              <!-- {#each { length: 1 } as _, i}
                 <Review />
+              {/each} -->
+
+              {#each localReviewList.reverse() as review}
+                <!-- <pre class="text-xs">
+                 {JSON.stringify(review, null, 1)}
+                </pre> -->
+                <Review {review} />
               {/each}
 
-              <div class="border-t pt-6">
+              <!-- <pre class="text-xs">
+                {JSON.stringify($app_review_list, null, 2)}
+              </pre> -->
+
+              <div class=" pt-6">
                 <a href="#" class="flex items-center gap-0.5 font-semibold text-indigo-400 transition duration-100 hover:text-indigo-500 active:text-indigo-600">Read all reviews</a>
               </div>
             </div>

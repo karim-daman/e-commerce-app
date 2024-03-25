@@ -334,6 +334,52 @@ export async function getReviews() {
       console.log(error);
     });
 }
+export async function deleteReview(reviewId) {
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/reviews/${reviewId}`;
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  fetch(endPoint, {
+    method: "DELETE",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.text())
+    .then((result) => {
+      console.log(result);
+      app_review_list.update((reviewList) => {
+        return reviewList.filter((review) => review._id !== reviewId).reverse();
+      });
+    })
+    .catch((error) => console.error(error));
+}
+
+export async function postReview(review) {
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/reviews`;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  await fetch(endPoint, {
+    method: "POST",
+    headers: myHeaders,
+    body: review,
+    redirect: "follow",
+  })
+    .then((response) => response.text())
+    .then(async (result) => {
+      console.log(result);
+
+      // app_review_list.update((reviewList) => {
+      //   return [...reviewList, review];
+      // });
+
+      await getReviews();
+    })
+    .catch((error) => console.error(error));
+}
 
 export async function getUsers() {
   const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/users`;
