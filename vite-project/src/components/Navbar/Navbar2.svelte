@@ -1,19 +1,31 @@
 <script>
+  //@ts-nocheck
   import Login from "$components/Icons/Login.svelte";
   import Register from "$components/Icons/Register.svelte";
   import { authModalStore } from "$stores/appStore";
-  import { DropdownItem, Indicator, NavLi } from "flowbite-svelte";
+  import { DropdownItem, Indicator, NavLi, Spinner } from "flowbite-svelte";
   import { location, push } from "svelte-spa-router";
   import AvatarComponent from "./AvatarComponent.svelte";
   import AuthModal from "$components/AuthModal.svelte";
   let menuOpen;
+
+  import { Drawer, Button, CloseButton, Label, Input, Textarea, P, A, Checkbox } from "flowbite-svelte";
+  import { sineIn } from "svelte/easing";
+  import { app_user_cart, app_user } from "$stores/dataStore";
+
+  let hidden3 = true;
+  let transitionParams = {
+    x: -320,
+    duration: 200,
+    easing: sineIn,
+  };
 </script>
 
 <nav class="bg-white border-gray-200 dark:bg-gray-900">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     <a href="#/" class="flex items-center space-x-3 rtl:space-x-reverse">
       <img src="Logo.png" class="h-16" alt="Logo" />
-      <span class="self-center text-3xl font-semibold whitespace-nowrap dark:text-white">E-Shop</span>
+      <span class="self-center text-3xl font-semibold whitespace-nowrap dark:text-white">e-commerce</span>
     </a>
 
     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
@@ -40,10 +52,64 @@
         <NavLi href="#/" active={$location == "/" ? true : false}>Home</NavLi>
         <NavLi href="#/products" active={$location == "/products" ? true : false}>Products</NavLi>
         <NavLi href="#/FAQ" active={$location == "/FAQ" ? true : false}>FAQ</NavLi>
-        <NavLi href="#/about" active={$location == "/about" ? true : false}>About</NavLi>
-        <NavLi href="#/services" active={$location == "/services" ? true : false}>Services</NavLi>
-        <NavLi href="#/contact" active={$location == "/contact" ? true : false}>Contact</NavLi>
+        <!-- <NavLi href="#/about" active={$location == "/about" ? true : false}>About</NavLi>
+        <NavLi href="#/services" active={$location == "/services" ? true : false}>Services</NavLi> -->
+        <NavLi on:click={() => (hidden3 = false)} active={$location == "/contact" ? true : false}>Contact</NavLi>
+
+        {#if $app_user != null}
+          <a
+            href="#/cart"
+            class="h-8 w-9 bg-blue-600 relative border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="white" class="w-5 h-5 m-1.5">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+            </svg>
+            <Indicator color="red" border size="xl" placement="top-right">
+              <span class="text-white text-xs">
+                {#if isNaN($app_user_cart?.cartItems?.length)}
+                  <Spinner color="white" size={5} currentColor="none" />
+                {:else}
+                  {$app_user_cart?.cartItems?.length}
+                {/if}
+              </span>
+            </Indicator>
+          </a>
+        {/if}
       </ul>
     </div>
   </div>
 </nav>
+
+<div class="text-center"></div>
+<Drawer placement="right" transitionType="fly" {transitionParams} bind:hidden={hidden3} id="sidebar3">
+  <div class="flex items-center">
+    <h5 id="drawer-label" class="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
+      <!-- <InfoCircleSolid class="w-4 h-4 me-2.5" /> -->
+      Contact us
+    </h5>
+    <CloseButton on:click={() => (hidden3 = true)} class="mb-4 dark:text-white" />
+  </div>
+  <form action="#" class="mb-6">
+    <div class="mb-6">
+      <Label for="email" class="block mb-2">Your email</Label>
+      <Input id="email" name="email" required placeholder="name@company.com" />
+    </div>
+    <div class="mb-6">
+      <Label for="subject" class="block mb-2">Subject</Label>
+      <Input id="subject" name="subject" required placeholder="Let us know how we can help you" />
+    </div>
+    <div class="mb-6">
+      <Label for="message" class="mb-2">Your message</Label>
+      <Textarea id="message" placeholder="Your message..." rows="4" name="message" />
+    </div>
+    <Button type="submit" class="w-full">Send message</Button>
+  </form>
+  <P class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+    <A href="/" class="text-primary-600 hover:underline dark:text-primary-500">info@company.com</A>
+  </P>
+  <P class="text-sm text-gray-500 dark:text-gray-400">
+    <A href="/" class="text-primary-600 hover:underline dark:text-primary-500">212-456-7890</A>
+  </P>
+</Drawer>

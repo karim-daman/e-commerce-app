@@ -145,7 +145,8 @@
         <EditProductModal product={editedProduct} />
       {/if}
 
-      <!-- <form class="grid grid-cols-[1fr,repeat(2,max-content)]" on:submit|preventDefault>
+      <!-- 
+        <form class="grid grid-cols-[1fr,repeat(2,max-content)]" on:submit|preventDefault>
         <input class="w-full rounded-l-[.25rem] border px-2 h-full" placeholder="Search" bind:value={search} type="text" />
 
         <button type="button" class="border rounded-r-[.25rem] bg-gray-100 text-gray-500 hover:text-blue-primary transition-colors p-2">

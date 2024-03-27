@@ -1,9 +1,11 @@
 <script>
+  // @ts-nocheck
+
   import AuthModal from "$components/AuthModal.svelte";
   import Login from "$components/Icons/Login.svelte";
   import Register from "$components/Icons/Register.svelte";
   import { authModalStore } from "$stores/appStore";
-  import { app_user } from "$stores/dataStore";
+  import { app_user, app_user_cart } from "$stores/dataStore";
   import { DropdownDivider, DropdownHeader, DropdownItem, Indicator } from "flowbite-svelte";
   import { push } from "svelte-spa-router";
   import { clickOutside } from "svelte-use-click-outside";
@@ -12,6 +14,8 @@
 
   function logout() {
     $app_user = null;
+    $app_user_cart = null;
+
     localStorage.clear();
     push("/");
   }
@@ -78,8 +82,7 @@
                 d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
             </svg>
             <Indicator color="red" border size="xl" placement="top-right">
-              <span class="text-white text-xs"> 0 </span>
-              <!-- // $app_user?.cart?.cartItems?.length -->
+              <span class="text-white text-xs">{$app_user_cart?.cartItems?.length} </span>
             </Indicator>
           </a>
 

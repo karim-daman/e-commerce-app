@@ -1,4 +1,5 @@
 <script>
+  //@ts-nocheck
   import Router, { push, location } from "svelte-spa-router";
   import routes from "./routes";
   import { onMount } from "svelte";
@@ -17,9 +18,13 @@
   onMount(async () => {
     await getCategories();
     await getProducts();
-    await getUsers();
+    // await getUsers();
 
-    //check if logged user has a valid jwt, if invalid log them out
+    if ($app_user != null) {
+      await getCartById($app_user.cart._id);
+    }
+
+    // check if logged user has a valid jwt, if invalid log them out
 
     // await verifyTokenExpiry();
 

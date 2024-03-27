@@ -1,5 +1,14 @@
 <script>
-  import { app_user } from "$stores/dataStore";
+  //@ts-nocheck
+
+  import { app_user, app_user_cart, getCartById } from "$stores/dataStore";
+  import { onMount } from "svelte";
+
+  onMount(async () => {
+    await getCartById($app_user?.cart?._id);
+
+    $app_user.cart = $app_user_cart;
+  });
 </script>
 
 <section class="text-gray-600 body-font relative">

@@ -436,7 +436,9 @@ export async function loginHandler(json) {
       localStorage.setItem("token", data.token);
       app_user.set(decodeToken(data.token));
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
 export async function registerHanlder(json) {

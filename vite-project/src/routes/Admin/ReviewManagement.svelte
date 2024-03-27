@@ -1,4 +1,5 @@
 <script>
+  //@ts-nocheck
   import { app_products, app_review_list, getProducts, getReviews } from "$stores/dataStore";
   import { Badge, Card, ChevronLeft, ChevronRight, Input, Pagination, Rating, Textarea } from "flowbite-svelte";
   import { onMount } from "svelte";
@@ -46,10 +47,6 @@
   let commentIndex = 0;
 </script>
 
-<!-- <pre class="text-xs">
-  {JSON.stringify($app_review_list, null, 2)}
-</pre> -->
-
 <div class="grid grid-rows-[max-content,1fr,max-content] min-h-screen">
   <main class="max-w-[1320px] px-5 lg:px-0 w-full grid grid-cols-[minmax(1,308px),1fr] grid-rows-[auto,1fr] my-10 gap-4 justify-self-center">
     <div class="relative overflow-x-auto border p-2 sm:rounded-lg">
@@ -71,12 +68,26 @@
                 <th scope="col" class="px-6 py-3"> Product </th>
                 <th scope="col" class="px-6 py-3"> Heart </th>
                 <th scope="col" class="px-6 py-3"> Rating </th>
-                <th scope="col" class="px-6 py-3" />
                 <th scope="col" class="px-6 py-3"> Comments </th>
-                <th scope="col" class="px-6 py-3" />
-                <th scope="col" class="px-6 py-3" />
+                <th scope="col" class="px-6 py-3">
+                  <button class=" text-red-600 transition hover:-translate-y-1 active:transform active:translate-y-0" on:click={() => {}}>
+                    <div class="flex">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="w-5 h-5 mr-3">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                      </svg>
+                    </div>
+                  </button>
+                </th>
               </tr>
             </thead>
+
+            <!-- <pre class="text-xs">
+            {JSON.stringify({ filteredReviewList }, null, 2)}
+           </pre> -->
+
             <tbody>
               {#each filteredReviewList as review}
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -104,11 +115,11 @@
                     <Rating id="example-3" total={5} rating={review.rating} />
                   </td>
 
-                  <td>
+                  <!-- <td>
                     <button
                       class="mx-1 border rounded-full transition hover:-translate-y-1 active:transform active:translate-y-0"
                       on:click={() => {
-                        commentIndex = ++commentIndex % review.comments.length;
+                        commentIndex = ++commentIndex % review.comment.length;
                       }}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                         <path
@@ -117,27 +128,27 @@
                           clip-rule="evenodd" />
                       </svg>
                     </button>
-                  </td>
+                  </td> -->
 
                   <td class="px-6 py-4">
                     <div>
-                      <Badge class="my-1 w-20" color="green">{commentIndex} / {review.comments.length}</Badge>
-                      <Badge class="my-1" color="green">{review.comments[commentIndex].created_at}</Badge>
+                      <!-- <Badge class="my-1 w-20" color="green">{commentIndex} / {review.comment.length}</Badge> -->
+                      <Badge class="my-1" color="green">{review.created_at}</Badge>
 
                       <textarea
                         disabled
                         id="message"
                         rows="1"
                         class=" block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder={review.comments[commentIndex].text} />
+                        placeholder={review.comment.text} />
                     </div>
                   </td>
 
-                  <td>
+                  <!-- <td>
                     <button
                       class=" mx-1 border rounded-full transition hover:-translate-y-1 active:transform active:translate-y-0"
                       on:click={() => {
-                        commentIndex = ++commentIndex % review.comments.length;
+                        commentIndex = ++commentIndex % review.comment.length;
                       }}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                         <path
@@ -145,7 +156,7 @@
                           d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z"
                           clip-rule="evenodd" />
                       </svg>
-                    </button></td>
+                    </button></td> -->
 
                   <td class="px-6 py-4">
                     <button class="  transition hover:-translate-y-1 active:transform active:translate-y-0" on:click={() => {}}>
@@ -199,3 +210,7 @@
     </div>
   </main>
 </div>
+
+<pre class="text-xs">
+  {JSON.stringify($app_review_list, null, 2)}
+</pre>
