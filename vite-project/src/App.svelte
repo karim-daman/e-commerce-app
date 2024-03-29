@@ -60,8 +60,6 @@
 <!-- <Navbar /> -->
 <Navbar2 />
 
-<br /><br /><br />
-
 <main class="">
   <Router {routes} restoreScrollState={true} />
 </main>

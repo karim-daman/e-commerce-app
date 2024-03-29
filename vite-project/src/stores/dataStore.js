@@ -423,6 +423,8 @@ export async function loginHandler(json) {
     password: json.password,
   });
 
+  let response;
+
   await fetch(endPoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -431,6 +433,7 @@ export async function loginHandler(json) {
   })
     .then((response) => response.json())
     .then((data) => {
+      response = data;
       console.log(data);
       localStorage.setItem("user", data.user);
       localStorage.setItem("token", data.token);
@@ -439,6 +442,8 @@ export async function loginHandler(json) {
     .catch((error) => {
       console.error(error);
     });
+
+  return response;
 }
 
 export async function registerHanlder(json) {

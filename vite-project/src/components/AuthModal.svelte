@@ -1,10 +1,12 @@
 <script>
+  //@ts-nocheck
+
   import { authModalStore, isPasswordLost } from "$stores/appStore";
   import { Alert, Spinner, Button, Modal, Label, Input, Checkbox, Popover } from "flowbite-svelte";
   import { push } from "svelte-spa-router";
   import { fade, fly, scale } from "svelte/transition";
   import { clickOutside } from "svelte-use-click-outside";
-  import { loginHandler, isFetching, registerHanlder } from "$stores/dataStore";
+  import { loginHandler, isFetching, registerHanlder, app_user } from "$stores/dataStore";
   import toast, { Toaster } from "svelte-french-toast";
 
   let passesFirstPasswordCheck, passesSecondPasswordCheck, passesThirdPasswordCheck, passesFourthPasswordCheck;
@@ -99,49 +101,36 @@
 
   async function login() {
     try {
-      await loginHandler({ email: email, password: password });
-      push("/Profile");
-      $isFetching = false;
-      closeAuthModal();
+      // await loginHandler({ email: email, password: password });
+      // push("/Profile");
+
+      const promise = new Promise((resolve, reject) => {
+        loginHandler({ email: email, password: password }).then((response) => {
+          console.log(response);
+          response.success == true ? resolve() : reject();
+        });
+      });
+
+      toast.promise(
+        promise,
+        {
+          loading: `Checking..`,
+          success: `Welcome back ${email}!`,
+          error: `Could not add, Try again!.`,
+        },
+        {
+          position: "top-right",
+        }
+      );
     } catch (error) {
       errorMessage = error;
       setTimeout(() => {
         errorMessage = email = password = "";
       }, 3000);
-      closeAuthModal();
     }
 
-    // try {
-    //   isLoading = true;
-    //   await authHandlers.login(email, password);
-    //   push("/Profile");
-    //   closeAuthModal();
-    //   successMessage = "Login successful!";
-    //   setTimeout(function () {
-    //     successMessage = "";
-    //   }, 3000);
-    // } catch (error) {
-    //   console.log(error);
-    //   errorMessage = error;
-    //   if (error == "FirebaseError: Firebase: Error (auth/wrong-password).") {
-    //     invalidPassword = true;
-    //     setTimeout(function () {
-    //       invalidPassword = false;
-    //       errorMessage = "";
-    //     }, 3000);
-    //   } else if (error == "FirebaseError: Firebase: Error (auth/user-not-found).") {
-    //     invalidEmail = true;
-    //     setTimeout(function () {
-    //       invalidEmail = false;
-    //       errorMessage = "";
-    //     }, 3000);
-    //   } else {
-    //     setTimeout(function () {
-    //       errorMessage = email = password = "";
-    //     }, 3000);
-    //   }
-    //   isLoading = false;
-    // }
+    $isFetching = false;
+    closeAuthModal();
   }
 
   function clearInputs() {
@@ -189,60 +178,23 @@
       }, 3000);
       closeAuthModal();
     }
-
-    // if (password != confirmPassword) {
-    //   invalidPassword = invalidConfirmPassword = true;
-    //   errorMessage = "Password mismatch";
-    //   setTimeout(function () {
-    //     invalidPassword = invalidConfirmPassword = false;
-    //     errorMessage = "";
-    //   }, 3000);
-    //   return;
-    // }
-    // try {
-    //   isLoading = true;
-    //   await authHandlers.signup(email, password);
-    //   push("/Profile");
-    //   closeAuthModal();
-    //   successMessage = "Account created!";
-    //   setTimeout(function () {
-    //     successMessage = "";
-    //   }, 3000);
-    // } catch (error) {
-    //   console.log(error);
-    //   errorMessage = error;
-    //   if (error == "FirebaseError: Firebase: Error (auth/email-already-in-use).") {
-    //     invalidEmail = true;
-    //   } else {
-    //     setTimeout(function () {
-    //       errorMessage = email = password = confirmPassword = "";
-    //     }, 3000);
-    //   }
-    //   setTimeout(function () {
-    //     invalidEmail = false;
-    //     errorMessage = "";
-    //   }, 3000);
-    //   isLoading = false;
-    // }
   }
 </script>
 
-<Toaster />
+<!-- <Toaster /> -->
 
-<!-- {#if successMessage}
-  <Alert border color="green" class="m-4 w-80 absolute z-50 ">
-    <span slot="icon">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-      </svg>
-    </span>
-    <span class="font-medium">Success!</span> <br />
-    <p class="text-xs">{successMessage}</p>
-  </Alert>
-{/if} -->
+<!-- <Alert border color="green" class="m-4 w-80 absolute z-50 ">
+  <span slot="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+    </svg>
+  </span>
+  <span class="font-medium">Success!</span> <br />
+  <p class="text-xs">{successMessage}</p>
+</Alert> -->
 
 {#if $isFetching}
   <div in:scale={{ duration: 100, start: 0.95 }} out:scale={{ duration: 75, start: 0.95 }} class="fixed inset-0 w-full h-full backdrop-blur-sm overflow-auto">
