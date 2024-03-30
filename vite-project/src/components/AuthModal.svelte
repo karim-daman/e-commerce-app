@@ -114,9 +114,9 @@
       toast.promise(
         promise,
         {
-          loading: `Checking..`,
+          loading: `Checking credentials..`,
           success: `Welcome back ${email}!`,
-          error: `Could not add, Try again!.`,
+          error: `Failed login attempt.`,
         },
         {
           position: "top-right",
