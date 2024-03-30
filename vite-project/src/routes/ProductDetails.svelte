@@ -7,6 +7,7 @@
   import Review from "$components/Review.svelte";
   import { random } from "yootils";
   import { authModalStore } from "$stores/appStore";
+  import CustomerReviewStats from "$components/CustomerReviewStats.svelte";
   export let params;
 
   let liked;
@@ -96,35 +97,35 @@
     await postReview(raw);
   }
 
-  $: localReviewList = $app_review_list.filter((review) => review.product_id === $app_product_details.id);
+  // $: localReviewList = $app_review_list.filter((review) => review.product_id === $app_product_details.id);
 
-  $: customersAverageRating = localReviewList
-    .reduce((acc, review) => {
-      return acc + review.rating / $app_review_list.length;
-    }, 0)
-    .toFixed(1);
+  // $: customersAverageRating = localReviewList
+  //   .reduce((acc, review) => {
+  //     return acc + review.rating / $app_review_list.length;
+  //   }, 0)
+  //   .toFixed(1);
 
-  ///// modify the product rating based on the new customersAverageRating.
+  // ///// modify the product rating based on the new customersAverageRating.
 
-  function countReviewsByRating() {
-    const ratingCounts = {
-      0: 0,
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0,
-    };
+  // function countReviewsByRating() {
+  //   const ratingCounts = {
+  //     0: 0,
+  //     1: 0,
+  //     2: 0,
+  //     3: 0,
+  //     4: 0,
+  //     5: 0,
+  //   };
 
-    $app_review_list.forEach((review) => {
-      const { rating } = review;
-      ratingCounts[rating] = (ratingCounts[rating] || 0) + 1;
-    });
+  //   $app_review_list.forEach((review) => {
+  //     const { rating } = review;
+  //     ratingCounts[rating] = (ratingCounts[rating] || 0) + 1;
+  //   });
 
-    return ratingCounts;
-  }
+  //   return ratingCounts;
+  // }
 
-  $: ratingCounts = countReviewsByRating();
+  // $: ratingCounts = countReviewsByRating();
 </script>
 
 <pre class="text-xs">
@@ -190,7 +191,7 @@
                   stroke-linejoin="round"
                   d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
               </svg>
-              {localReviewList.length} reviews</small>
+              {$app_review_list.filter((review) => review.product_id === $app_product_details.id).length} reviews</small>
             <small class="flex">
               <!-- <Orders /> -->
               <svg class="{$$props.class} h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -282,66 +283,7 @@
     <div class="bg-white py-6 sm:py-8 lg:py-12">
       <div class="mx-auto max-w-screen px-4 md:px-8">
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
-          <!-- overview - start -->
-          <div>
-            <div class="rounded-md border p-4">
-              <h2 class="mb-3 text-lg font-bold text-gray-800 lg:text-xl">Customer Reviews</h2>
-
-              <div class="mb-0.5 flex items-center gap-2">
-                <div class="-ml-1 flex gap-0.5">
-                  {#each { length: 5 } as _, i}
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 {customersAverageRating > i ? 'text-yellow-400' : 'text-gray-400'} " viewBox="0 0 20 20" fill="currentColor">
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  {/each}
-                </div>
-
-                <span class="text-sm font-semibold">
-                  {customersAverageRating}
-                </span>
-              </div>
-
-              <span class="block text-sm text-gray-500">Based on {localReviewList.length} reviews</span>
-
-              <div class="my-5 flex flex-col gap-2 border-t py-5">
-                {#each { length: 6 } as _, i}
-                  <div class="flex items-center gap-3">
-                    <span class="w-10 whitespace-nowrap text-right text-sm text-gray-600">{i} Star</span>
-
-                    <div class="flex h-4 flex-1 overflow-hidden rounded bg-gray-200">
-                      <span style="width: {JSON.stringify((ratingCounts[i] / localReviewList.length) * 100)}%;" class="transition-all h-full rounded bg-yellow-400"></span>
-                    </div>
-
-                    <!-- //fix  -->
-
-                    {ratingCounts[i]}
-                    .
-                    {localReviewList.length}
-
-                    <p class="w-14 text-xs">{JSON.stringify((ratingCounts[i] / localReviewList.length) * 100)} %</p>
-                    <!--  / totalReviews) * 100; -->
-                  </div>
-                {/each}
-
-                <!-- <pre class="text-xs">
-                  {JSON.stringify(ratingCounts, null, 2)}
-                </pre> -->
-              </div>
-
-              {#if !$app_user}
-                <button
-                  on:click={() => {
-                    if (!$app_user) {
-                      $authModalStore = true;
-                    }
-                  }}
-                  class=" w-full rounded-lg border bg-white px-4 py-2 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:bg-gray-200 md:px-8 md:py-3 md:text-base"
-                  >Write a review</button>
-              {/if}
-            </div>
-          </div>
-          <!-- overview - end -->
+          <CustomerReviewStats />
 
           <!-- reviews - start -->
           <div class="lg:col-span-2">
@@ -421,13 +363,13 @@
                     stroke-linejoin="round"
                     d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                 </svg>
-                {localReviewList.length} reviews</small>
+                {$app_review_list.filter((review) => review.product_id === $app_product_details.id).length} reviews</small>
 
               <!-- {#each { length: 1 } as _, i}
                 <Review />
               {/each} -->
 
-              {#each localReviewList.reverse() as review}
+              {#each $app_review_list.filter((review) => review.product_id === $app_product_details.id).reverse() as review}
                 <!-- <pre class="text-xs">
                  {JSON.stringify(review, null, 1)}
                 </pre> -->
