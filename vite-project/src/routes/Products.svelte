@@ -268,9 +268,12 @@
               <a href="#/ProductDetails/{product.id}" class="flex justify-between">
                 <h5 class="text- font-semibold tracking-tight hover:text-blue-600 text-gray-900 dark:text-white truncate">{product.name}</h5>
               </a>
-              <Rating rating={product.rating} size="14" class="mt-2.5 mb-5">
-                <Badge slot="text" class="ml-3 text-xs">{product.rating}/5</Badge>
-              </Rating>
+              <div class="flex justify-between">
+                <Rating rating={product.rating} size="14" class="mt-2 mb-5 "></Rating>
+
+                <Badge slot="text" class="ml-3 text-xs mt-2 mb-5 ">{product.rating}/5</Badge>
+              </div>
+
               <div class="flex justify-between items-center">
                 <!-- <span class="text-xs font-bold text-green-500 dark:text-white">${product.price}</span> -->
                 <Button on:click={handleAddToCart(product)} class="w-full transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">

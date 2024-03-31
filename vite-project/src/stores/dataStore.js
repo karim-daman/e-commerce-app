@@ -19,7 +19,7 @@ export async function deleteProduct(id) {
 
   let response;
 
-  const endPoint = `${import.meta.env.VITE_backend_uri}/products/${id}`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/products/${id}`;
   await fetch(endPoint, {
     method: "DELETE",
     headers: myHeaders,
@@ -38,6 +38,26 @@ export async function deleteProduct(id) {
   return response;
 }
 
+export async function updateProduct(product) {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  const raw = JSON.stringify(product);
+
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/products/${product.id}`;
+
+  fetch(endPoint, {
+    method: "PUT",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  })
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.error(error));
+}
+
 export async function deleteCategory(id) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -45,7 +65,7 @@ export async function deleteCategory(id) {
 
   let response;
 
-  const endPoint = `${import.meta.env.VITE_backend_uri}/categories/${id}`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/categories/${id}`;
   await fetch(endPoint, {
     method: "DELETE",
     headers: myHeaders,

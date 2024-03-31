@@ -1,6 +1,6 @@
 <script>
   // @ts-nocheck
-  import { app_user_list, app_product_details, app_review_list, app_user, getProductById, getReviews, postReview } from "$stores/dataStore";
+  import { app_user_list, app_product_details, app_review_list, app_user, getProductById, getReviews, postReview, updateProduct, getProducts } from "$stores/dataStore";
   import { Dropdown, DropdownItem, MenuButton } from "flowbite-svelte";
   import { onMount } from "svelte";
   import Drift from "drift-zoom";
@@ -95,53 +95,25 @@
     // display notification that the review was posted successfully.
 
     await postReview(raw);
+
+    let updatedProduct = $app_product_details;
+
+    await updateProduct(updatedProduct);
+
+    user_comment = "";
+    rating = 0;
   }
-
-  // $: localReviewList = $app_review_list.filter((review) => review.product_id === $app_product_details.id);
-
-  // $: customersAverageRating = localReviewList
-  //   .reduce((acc, review) => {
-  //     return acc + review.rating / $app_review_list.length;
-  //   }, 0)
-  //   .toFixed(1);
-
-  // ///// modify the product rating based on the new customersAverageRating.
-
-  // function countReviewsByRating() {
-  //   const ratingCounts = {
-  //     0: 0,
-  //     1: 0,
-  //     2: 0,
-  //     3: 0,
-  //     4: 0,
-  //     5: 0,
-  //   };
-
-  //   $app_review_list.forEach((review) => {
-  //     const { rating } = review;
-  //     ratingCounts[rating] = (ratingCounts[rating] || 0) + 1;
-  //   });
-
-  //   return ratingCounts;
-  // }
-
-  // $: ratingCounts = countReviewsByRating();
 </script>
 
-<pre class="text-xs">
-
-
-<!-- {JSON.stringify(localReviewList, null, 2)} -->
-  <!-- {JSON.stringify(params)} -->
-  <!-- {JSON.stringify($app_product_details, null, 2)} -->
-</pre>
+<!-- <pre class="text-xs">
+  {JSON.stringify(localReviewList, null, 2)}
+  {JSON.stringify(params)}
+  {JSON.stringify($app_product_details, null, 2)}
+</pre> -->
 
 <div class="grid grid-rows-[max-content,1fr,max-content] min-h-screen">
   <main class="max-w-[1320px] justify-self-center py-[60px]">
     <section class="w-full lg:flex">
-      <!-- <ProductAsideView />
-     -->
-
       <article id="detail" class=" flex justify-center max-w-[660px] w-full px-5 md:px-0">
         <div class="flex flex-col mr-2 w-[100px] h-[500px] overflow-x-auto">
           {#each thumbnails as thumbnail, i}
