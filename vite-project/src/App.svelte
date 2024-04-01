@@ -21,6 +21,8 @@
     // await getUsers();
 
     if ($app_user != null) {
+      console.log($app_user);
+
       await getCartById($app_user.cart._id);
     }
 

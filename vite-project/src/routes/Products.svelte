@@ -187,7 +187,8 @@
         <div in:scale={{ duration: 100, start: 0.95 }} out:scale={{ duration: 75, start: 0.95 }}>
           <!--  in:fly={{ y: 100 }} out:fly={{ y: -100 }} -->
           <Card padding="none">
-            <div class="flex justify-end">
+            <div class="flex justify-end relative">
+              <div class=" absolute left-0 bg-red-600 rounded-sm p-1 text-white font-bold">new!</div>
               <button
                 on:click={() => {
                   liked = !liked;

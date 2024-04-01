@@ -38,6 +38,12 @@
     { name: "Nissan", length: 89, selected: false },
     { name: "Honda", length: 30, selected: false },
     { name: "Honda Accord", length: 30, selected: false },
+    { name: "Mercedes", length: 120, selected: false },
+    { name: "Toyota", length: 15, selected: false },
+    { name: "Mitsubishbi", length: 35, selected: false },
+    { name: "Nissan", length: 89, selected: false },
+    { name: "Honda", length: 30, selected: false },
+    { name: "Honda Accord", length: 30, selected: false },
   ];
 
   const sizes = [
@@ -66,10 +72,16 @@
 
   function handleRating(star) {
     rating = star.id;
+    $filteredProducts = $app_products.filter((product) => product.rating == rating);
   }
 
   function filterByCategory(category) {
     console.log(category.name);
+  }
+
+  function filterByRating(rating) {
+    //  $app_review_list.filter((review) => review.product_id === $app_product_details.id);
+    // console.log($filteredProducts.filter((product) => product.rating < rating));
   }
 
   let productTextFilter = "";
