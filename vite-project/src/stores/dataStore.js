@@ -43,19 +43,27 @@ export async function updateProduct(product) {
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
+  let response;
+
   const raw = JSON.stringify(product);
 
   const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/products/${product.id}`;
-
-  fetch(endPoint, {
+  await fetch(endPoint, {
     method: "PUT",
     headers: myHeaders,
     body: raw,
     redirect: "follow",
   })
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.error(error));
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      response = result;
+    })
+    .catch((error) => {
+      console.error(error);
+      response = error;
+    });
+  return response;
 }
 
 export async function deleteCategory(id) {

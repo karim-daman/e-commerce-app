@@ -1,15 +1,29 @@
 <script>
+  // @ts-nocheck
+
   import { Button, Dropdown, Chevron, Checkbox, Radio, Toast, Listgroup, DropdownItem, Avatar, Search, SpeedDialButton, SpeedDial, Popover } from "flowbite-svelte";
   import { clickOutside } from "svelte-use-click-outside";
   import { Modal } from "flowbite-svelte";
   import { fade, slide } from "svelte/transition";
   import Dropzone from "svelte-file-dropzone";
   import { onMount } from "svelte";
-  import { app_categories, deleteCategory, createCategory, createProduct, getCategories, isFetching, getProducts } from "$stores/dataStore";
+  import { app_categories, deleteCategory, createCategory, updateProduct, createProduct, getCategories, isFetching, getProducts } from "$stores/dataStore";
   import toast, { Toaster } from "svelte-french-toast";
   import { adminProductEditModalStore } from "$stores/appStore";
 
   export let product;
+
+  let newDescription;
+  let newRichDescription;
+  let newBrand;
+  let newProductName;
+  let newPrice;
+  let newProductStockCount;
+  let newIsFeatured;
+
+  onMount(() => {
+    // files.accepted = product.images;
+  });
 
   let categoryOption = "Select a Category";
 
@@ -26,7 +40,7 @@
     filteredCategory = $app_categories;
   });
 
-  let name, description, richDescription, image, images, brand, price, category, countInStock, rating, numReviews, isFeatured;
+  let name, description, richDescription, image, images, brand, price, category, countInStock, rating, numReviews;
 
   async function handleDeleteCategory() {
     let category = $app_categories.filter((item) => item.name == categoryOption)[0];
@@ -57,6 +71,7 @@
   }
 
   let newCategoryName;
+
   async function handleCreateCategory() {
     if (newCategoryName == undefined || newCategoryName == "") {
       toast.error("Invalid field: \n " + Object.keys({ newCategoryName })[0], {
@@ -100,58 +115,57 @@
     });
   }
 
-  async function handleSaveProduct() {}
+  async function handleSaveProduct() {
+    let newCategory = filteredCategory.find((item) => item.name == categoryOption);
 
-  //   async function handleCreateProduct() {
-  //     let selected_category_id;
-  //     $app_categories.map((category) => {
-  //       if (category.name == categoryOption) selected_category_id = category.id;
-  //     });
+    var raw = {
+      id: product.id,
+      name: newProductName || product.name,
+      description: newDescription || product.description,
+      richDescription: newRichDescription || product.newRichDescription,
+      brand: newBrand || product.brand,
+      price: newPrice || product.price,
+      category: newCategory || product.category, /// not working. // newCategory
+      countInStock: newProductStockCount || product.countInStock,
+      isFeatured: newIsFeatured,
 
-  //     if (selected_category_id == undefined || description == undefined || name == undefined || brand == undefined || price == undefined || countInStock == undefined) {
-  //       if (!selected_category_id) displayInvalidToast(Object.keys({ selected_category_id })[0]);
-  //       if (!description) displayInvalidToast(Object.keys({ description })[0]);
-  //       if (!name) displayInvalidToast(Object.keys({ name })[0]);
-  //       if (!brand) displayInvalidToast(Object.keys({ brand })[0]);
-  //       if (!price) displayInvalidToast(Object.keys({ price })[0]);
-  //       if (!countInStock) displayInvalidToast(Object.keys({ countInStock })[0]);
-  //       return;
-  //     }
+      //deal with images
 
-  //     var raw = {
-  //       name: name,
-  //       description: description,
-  //       richDescription: description,
-  //       image: files.accepted[0],
-  //       images: files.accepted,
-  //       brand: brand,
-  //       price: price,
-  //       category: selected_category_id,
-  //       countInStock: countInStock,
-  //       rating: 0,
-  //       numReviews: 0,
-  //       isFeatured: false,
-  //     };
+      image: product.images[0],
+      images: product.images,
 
-  //     const promise = new Promise((resolve, reject) => {
-  //       createProduct(raw).then((response) => {
-  //         response.success == true ? resolve() : reject();
-  //         getProducts();
-  //       });
-  //     });
+      // image: files.accepted[0],
+      // images: files.accepted,
 
-  //     toast.promise(
-  //       promise,
-  //       {
-  //         loading: `Creating a new product..`,
-  //         success: `Created successfully!`,
-  //         error: `Could not create product, try again.`,
-  //       },
-  //       {
-  //         position: "top-right",
-  //       }
-  //     );
-  //   }
+      // these stay the same.
+
+      rating: product.rating,
+      numReviews: product.numReviews,
+    };
+
+    console.log(`<pre> ${JSON.stringify(raw, null, 2)} </pre>`);
+
+    const promise = new Promise((resolve, reject) => {
+      updateProduct(raw).then((response) => {
+        console.log(response);
+
+        response.success == true ? resolve() : reject();
+        getProducts();
+      });
+    });
+
+    toast.promise(
+      promise,
+      {
+        loading: `Updating ${product.name}`,
+        success: `Updated successfully!`,
+        error: `Could not Update.`,
+      },
+      {
+        position: "top-right",
+      }
+    );
+  }
 
   let files = {
     accepted: [],
@@ -261,7 +275,9 @@
           <ul class="h-40 overflow-y-auto border px-3 pb-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
             <Radio class="flex rounded-md p-1 hover:bg-slate-200" bind:group={categoryOption} value={"Select a Category"}>{"Select a Category"}</Radio>
             {#each filteredCategory as category}
-              <Radio class="flex rounded-md p-1 hover:bg-slate-200" bind:group={categoryOption} value={category.name}>{category.name}</Radio>
+              <Radio class="flex rounded-md p-1 hover:bg-slate-200" bind:group={categoryOption} value={category.name} checked={product.category.name == category.name}>
+                {category.name}
+              </Radio>
             {/each}
           </ul>
           <button
@@ -277,12 +293,12 @@
           <div class="w-full m-0.5">
             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
             <input
-              value={product.name}
+              bind:value={newProductName}
+              placeholder={product.name}
               type="text"
               name="name"
               id="name"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Type product name"
               required />
           </div>
         </div>
@@ -291,12 +307,12 @@
           <div class="w-full m-0.5">
             <label for="brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
             <input
-              value={product.brand}
+              bind:value={newBrand}
+              placeholder={product.brand}
               type="text"
               name="brand"
               id="brand"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Product brand"
               required />
           </div>
         </div>
@@ -305,31 +321,30 @@
           <div class="w-full m-0.5">
             <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
             <input
-              value={product.price}
+              bind:value={newPrice}
+              placeholder={product.price}
               type="number"
               name="price"
               id="price"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="$2999"
               required />
           </div>
           <div class="w-full m-0.5">
             <label for="item-weight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Stock count</label>
             <input
+              bind:value={newProductStockCount}
+              placeholder={product.countInStock}
               min="1"
-              value={product.countInStock}
               type="number"
               name="item-weight"
               id="item-weight"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="12"
               required />
           </div>
         </div>
 
-        <div class="mt-9">
-          <!-- <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Featured</label> -->
-          <Checkbox bind:value={isFeatured}>Featured</Checkbox>
+        <div class="my-4">
+          <Checkbox bind:checked={newIsFeatured}>Featured</Checkbox>
         </div>
       </div>
 
@@ -337,11 +352,11 @@
         <div class="flex flex-col m-1">
           <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
           <textarea
-            bind:value={description}
+            placeholder={product.description}
+            bind:value={newDescription}
             id="description"
             rows="6"
-            class=" block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            placeholder="Your description here" />
+            class=" block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
         </div>
       </div>
 

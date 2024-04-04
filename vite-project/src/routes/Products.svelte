@@ -93,6 +93,11 @@
     );
   }
 
+  function handleEditProduct(product) {
+    editedProduct = product;
+    $adminProductEditModalStore = !$adminProductEditModalStore;
+  }
+
   async function handleAddToCart(product) {
     if (!$app_user) {
       $authModalStore = true;
@@ -188,7 +193,9 @@
           <!--  in:fly={{ y: 100 }} out:fly={{ y: -100 }} -->
           <Card padding="none">
             <div class="flex justify-end relative">
-              <div class=" absolute left-0 bg-red-600 rounded-sm p-1 text-white font-bold">new!</div>
+              {#if product.isFeatured}
+                <div class=" absolute left-0 bg-red-600 rounded-sm p-1 text-white font-bold">new!</div>
+              {/if}
               <button
                 on:click={() => {
                   liked = !liked;
@@ -219,12 +226,7 @@
                     </button></DropdownItem>
 
                   <DropdownItem class="flex transition hover:-translate-y-1 active:transform active:translate-y-0 ">
-                    <button
-                      class=""
-                      on:click={() => {
-                        editedProduct = product;
-                        $adminProductEditModalStore = !$adminProductEditModalStore;
-                      }}>
+                    <button class="" on:click={handleEditProduct(product)}>
                       <div class="flex">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                           <path
