@@ -12,6 +12,7 @@ export default {
   "/Users": Chunk(() => import("./routes/Admin/UserManagement.svelte")),
   "/Reviews": Chunk(() => import("./routes/Admin/ReviewManagement.svelte")),
   "/Carts": Chunk(() => import("./routes/Admin/CartManagement.svelte")),
+  "/Likes": Chunk(() => import("./routes/Admin/LikeManagement.svelte")),
 
   "/Products": Chunk(() => import("./routes/Products.svelte")),
   "/ProductDetails/:product_id": Chunk(() => import("./routes/ProductDetails.svelte")),

@@ -2,7 +2,22 @@
   // @ts-nocheck
   import AdminCreateProduct from "$components/Admin/CreateProductModal.svelte";
   import ProductFilter from "$components/ProductFilter.svelte";
-  import { addCartItemToCart, app_categories, app_products, app_user, app_user_cart, clearCart, deleteProduct, filteredProducts, getCartById, getCategories, getProducts } from "$stores/dataStore";
+  import {
+    addCartItemToCart,
+    app_categories,
+    app_like_list,
+    app_products,
+    app_user,
+    app_user_cart,
+    clearCart,
+    deleteProduct,
+    filteredProducts,
+    getCartById,
+    getCategories,
+    getLikes,
+    getProducts,
+    putLike,
+  } from "$stores/dataStore";
   import { authModalStore } from "$stores/appStore";
 
   import { Badge, Button, ButtonGroup, Card, Dropdown, DropdownItem, Input, InputAddon, Label, MenuButton, Modal, Rating } from "flowbite-svelte";
@@ -15,6 +30,8 @@
   import ImageLoader from "$components/ImageLoader.svelte";
   import { adminProductCreateModalStore, adminProductEditModalStore } from "$stores/appStore";
   import EditProductModal from "$components/Admin/EditProductModal.svelte";
+
+  let popupModal = false;
 
   // $: activeUrl = $page.url.searchParams.get("page");
   let pages = [
@@ -47,14 +64,50 @@
     alert("Next btn clicked. Make a call to your server to fetch data.");
   };
 
-  let search = "";
+  onMount(async () => {
+    await getLikes();
+  });
 
-  //   import ProductsDropdown from "./products-dropdown.svelte";
-  //   import ProductsHeartIcon from "./products-heart-icon.svelte";
+  function handlePutLike(product_id, user_id) {
+    const promise = new Promise((resolve, reject) => {
+      putLike(product_id, user_id).then((response) => {
+        console.log(response?.updatedLike?.heart);
 
-  let popupModal = false;
+        app_like_list.update((list) => {
+          const updatedList = list.map((element) => {
+            if (response?.updatedLike?.id === element.id) {
+              // Update the specific properties of the element
+              return {
+                ...element,
+                // Update only the properties you need to change
+                heart: response.updatedLike.heart,
+                // Add more properties as needed
+              };
+            }
+            return element;
+          });
 
-  let liked = false;
+          return updatedList;
+        });
+
+        // console.log($app_like_list.find((item) => item.product_id == product_id && item.user_id === user_id).heart);
+
+        response.success == true ? resolve() : reject();
+      });
+    });
+
+    toast.promise(
+      promise,
+      {
+        loading: `Adding product to your favorites!`,
+        success: `Added product to your favorites!`,
+        error: `Could not add to your favorites :( `,
+      },
+      {
+        position: "top-right",
+      }
+    );
+  }
 
   onMount(async () => {
     if ($app_products.length == 0) await getProducts();
@@ -196,13 +249,26 @@
               {#if product.isFeatured}
                 <div class=" absolute left-0 bg-red-600 rounded-sm p-1 text-white font-bold">new!</div>
               {/if}
+              <!-- on:click={() => {
+                liked = !liked;
+              }} -->
               <button
-                on:click={() => {
-                  liked = !liked;
-                }}
+                on:click={handlePutLike(product.id, $app_user?.userId)}
                 type="button"
                 class="focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 mt-2 mr-2 transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">
-                <svg xmlns="http://www.w3.org/2000/svg" fill={liked ? "red" : "gray"} viewBox="0 0 24 24" stroke-width="1.5" stroke={liked ? "red" : "gray"} class=" w-5 h-5">
+                <!-- 
+                  "product_id": "64566bf2511abc1ff1f988e2",
+                  "user_id": "6449f752bf8fc30222d62c72",
+                  "heart": true,
+                 -->
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill={$app_like_list.find((item) => item.product_id == product.id && item.user_id === $app_user?.userId)?.heart ? "red" : "gray"}
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke={$app_like_list.find((item) => item.product_id == product.id && item.user_id === $app_user?.userId)?.heart ? "red" : "gray"}
+                  class=" w-5 h-5">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"

@@ -143,7 +143,7 @@
       numReviews: product.numReviews,
     };
 
-    console.log(`<pre> ${JSON.stringify(raw, null, 2)} </pre>`);
+    // console.log(`<pre> ${JSON.stringify(raw, null, 2)} </pre>`);
 
     const promise = new Promise((resolve, reject) => {
       updateProduct(raw).then((response) => {

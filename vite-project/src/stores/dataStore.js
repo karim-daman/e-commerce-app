@@ -11,6 +11,7 @@ export const filteredProducts = writable([]);
 export const app_user_list = writable([]);
 export const app_cart_list = writable([]);
 export const app_review_list = writable([]);
+export const app_like_list = writable([]);
 
 export async function deleteProduct(id) {
   var myHeaders = new Headers();
@@ -63,6 +64,57 @@ export async function updateProduct(product) {
       console.error(error);
       response = error;
     });
+  return response;
+}
+
+export async function getLikes() {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/likes`;
+
+  await fetch(endPoint, {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      app_like_list.set(result);
+    })
+    .catch((error) => console.error(error));
+}
+
+export async function putLike(product_id, user_id) {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/likes`;
+  let response;
+
+  const raw = JSON.stringify({
+    product_id: product_id,
+    user_id: user_id,
+  });
+
+  await fetch(endPoint, {
+    method: "PUT",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      response = result;
+
+      // app_like_list = [...app_like_list, result]
+    })
+    .catch((error) => {
+      console.error(error);
+      response = error;
+    });
+
   return response;
 }
 
