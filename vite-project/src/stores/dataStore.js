@@ -12,6 +12,7 @@ export const app_user_list = writable([]);
 export const app_cart_list = writable([]);
 export const app_review_list = writable([]);
 export const app_like_list = writable([]);
+export const app_brand_list = writable([]);
 
 export async function deleteProduct(id) {
   var myHeaders = new Headers();
@@ -274,11 +275,27 @@ export async function getCarts() {
     });
 }
 
+export async function getUniqueBrands() {
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/products/get/brands`;
+
+  await fetch(endPoint, {
+    method: "GET",
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      app_brand_list.set(result);
+    })
+    .catch((error) => console.error(error));
+}
+
 export async function removeFromCart(id) {
-  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/cartItems/${id}`;
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/cartitems/${id}`;
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
   await fetch(endPoint, {
     method: "Delete",
     headers: myHeaders,

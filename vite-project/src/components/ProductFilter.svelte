@@ -4,7 +4,7 @@
   import FilterAccordian from "$components/FilterAccordian.svelte";
   import { Accordion, AccordionItem, Button } from "flowbite-svelte";
   import RangeSlider from "svelte-range-slider-pips";
-  import { app_categories, app_products, filteredProducts } from "$stores/dataStore";
+  import { app_brand_list, app_categories, app_products, filteredProducts, getUniqueBrands } from "$stores/dataStore";
   import { onMount } from "svelte";
 
   //   export let offers = false;
@@ -17,6 +17,10 @@
   //   export let offerPrice = 0;
 
   let categoryArray = [];
+
+  onMount(async () => {
+    await getUniqueBrands();
+  });
 
   onMount(() => {
     $app_categories.forEach((element) => {
@@ -225,13 +229,14 @@
       </span>
 
       <div class="flex flex-col gap-1">
-        {#each items as item}
+        {#each $app_brand_list as item}
+          <!-- {JSON.stringify(item)} -->
           <div class="grid gap-2 items-center grid-cols-[repeat(2,max-content),1fr]">
-            <input class="w-[1rem] h-[1rem] border rounded-none" id="brands-{item.name}" bind:checked={item.selected} type="checkbox" />
-            <label class="text-[#51585e]" for="brands-{item.name}">{item.name}</label>
+            <input class="w-[1rem] h-[1rem] border rounded-none" id="brands-{item.brand}" bind:checked={item.selected} type="checkbox" />
+            <label class="text-[#51585e]" for="brands-{item.brand}">{item.brand}</label>
 
             <p class="justify-self-end text-white bg-[#9da1a7] text-[.83rem] px-[10px] rounded-full">
-              {length}
+              {item.count}
             </p>
           </div>
         {/each}
