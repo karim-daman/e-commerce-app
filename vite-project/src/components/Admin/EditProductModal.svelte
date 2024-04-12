@@ -275,7 +275,8 @@
           <ul class="h-40 overflow-y-auto border px-3 pb-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
             <Radio class="flex rounded-md p-1 hover:bg-slate-200" bind:group={categoryOption} value={"Select a Category"}>{"Select a Category"}</Radio>
             {#each filteredCategory as category}
-              <Radio class="flex rounded-md p-1 hover:bg-slate-200" bind:group={categoryOption} value={category.name} checked={product.category.name == category.name}>
+              <!-- checked={product.category.name == category.name} -->
+              <Radio class="flex rounded-md p-1 hover:bg-slate-200" bind:group={categoryOption} value={category.name}>
                 {category.name}
               </Radio>
             {/each}

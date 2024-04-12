@@ -8,6 +8,7 @@
   import { random } from "yootils";
   import { authModalStore } from "$stores/appStore";
   import CustomerReviewStats from "$components/CustomerReviewStats.svelte";
+  import ImageLoader from "$components/ImageLoader.svelte";
   export let params;
 
   let liked;
@@ -118,7 +119,8 @@
         <div class="flex flex-col mr-2 w-[100px] h-[500px] overflow-x-auto">
           {#each thumbnails as thumbnail, i}
             <button class="mb-2 mr-2 border rounded-md hover:border-black hover:border-2" on:mouseenter={() => handleChangeImage(i)}>
-              <img draggable="false" src={thumbnail} class="border rounded-sm object-cover" alt="thumbnail" />
+              <!-- <img draggable="false" src={thumbnail} class="border rounded-sm object-cover" alt="thumbnail" /> -->
+              <ImageLoader class="border rounded-sm object-cover" src={thumbnail} />
             </button>
           {/each}
         </div>

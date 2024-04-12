@@ -2,17 +2,19 @@ import { writable } from "svelte/store";
 import jwt_decode from "jwt-decode";
 
 export const isFetching = writable(false);
+export const filteredProducts = writable([]);
 export const app_user = writable({});
 export const app_products = writable([]);
 export const app_user_cart = writable({});
 export const app_categories = writable([]);
 export const app_product_details = writable({});
-export const filteredProducts = writable([]);
 export const app_user_list = writable([]);
 export const app_cart_list = writable([]);
 export const app_review_list = writable([]);
 export const app_like_list = writable([]);
 export const app_brand_list = writable([]);
+
+export const app_categories_count = writable([]);
 
 export async function deleteProduct(id) {
   var myHeaders = new Headers();
@@ -286,6 +288,21 @@ export async function getUniqueBrands() {
     .then((result) => {
       console.log(result);
       app_brand_list.set(result);
+    })
+    .catch((error) => console.error(error));
+}
+
+export async function getUniqueCategories() {
+  const endPoint = `${import.meta.env.VITE_backend_uri}/api/v1/products/get/categories`;
+
+  await fetch(endPoint, {
+    method: "GET",
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      app_categories_count.set(result);
     })
     .catch((error) => console.error(error));
 }
