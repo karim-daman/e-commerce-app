@@ -1,4 +1,5 @@
 <script>
+  //@ts-nocheck
   import { app_products, filteredProducts } from "$stores/dataStore";
   import { AccordionItem } from "flowbite-svelte";
   let rating = 0;

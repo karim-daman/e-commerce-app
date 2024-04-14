@@ -1,4 +1,5 @@
 <script>
+  //@ts-nocheck
   import { filteredProducts, app_products } from "$stores/dataStore";
   import { AccordionItem } from "flowbite-svelte";
   import RangeSlider from "svelte-range-slider-pips";

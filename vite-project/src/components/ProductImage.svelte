@@ -16,5 +16,5 @@
   {#if !loaded}
     <Spinner color="purple" />
   {/if}
-  <img class="{loaded ? 'opacity-1' : 'opacity-0'} transition ease-in duration-300" {src} {alt} class:loaded bind:this={thisImage} loading="lazy" />
+  <img draggable="false" class="{loaded ? 'opacity-1' : 'opacity-0'} transition ease-in duration-300" {src} {alt} class:loaded bind:this={thisImage} loading="lazy" />
 </div>

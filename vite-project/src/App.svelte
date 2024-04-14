@@ -62,7 +62,7 @@
 <!-- <Navbar /> -->
 <Navbar2 />
 
-<main class="">
+<main class=" ">
   <Router {routes} restoreScrollState={true} />
 </main>
 
