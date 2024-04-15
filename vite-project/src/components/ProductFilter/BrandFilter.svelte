@@ -101,7 +101,7 @@
           <input class="w-[1rem] h-[1rem]" type="checkbox" bind:group={selected} name={item} value={item} on:change={toggleOne} />
           {item.brand.name}
         </div>
-        <p class="justify-self-end text-white bg-[#9da1a7] text-[.83rem] px-[10px] rounded-full">
+        <p class="justify-self-end text-white bg-[#9da1a7] text-[.83rem] px-[10px] rounded-full mb-1">
           {item.brand.count}
         </p>
       </div>

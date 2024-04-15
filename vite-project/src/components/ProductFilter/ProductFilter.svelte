@@ -1,7 +1,6 @@
 <script>
-  // @ts-nocheck
-
-  import { Accordion, AccordionItem } from "flowbite-svelte";
+  //@ts-nocheck
+  import { Accordion, AccordionItem, Button } from "flowbite-svelte";
   import BrandFilter from "./BrandFilter.svelte";
   import CategoryFilter from "./CategoryFilter.svelte";
   import ProductNameFilter from "./ProductNameFilter.svelte";
@@ -23,10 +22,24 @@
   ];
 </script>
 
-<div class=" flex flex-col col-span-full md:col-auto row-span-full">
+<!-- fixed bg-slate-50 top-0 left-0 z-50 -->
+
+<div class=" flex overflow-clip transition-all flex-col col-span-full md:col-auto row-span-full">
   <!-- <pre class="text-xs">
   {JSON.stringify($app_categories_count, null, 2)}
-</pre> -->
+  </pre> -->
+
+  <!-- <button
+    on:click={() => {
+      toggle = !toggle;
+    }}>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+    </svg>
+  </button> -->
 
   <Accordion multiple>
     <ProductNameFilter />
@@ -62,7 +75,7 @@
   </Accordion>
 </div>
 
-<style>
+<!-- <style>
   ::-webkit-scrollbar {
     width: 5px;
   }
@@ -84,4 +97,4 @@
     height: 500px;
     width: 500px;
   }
-</style>
+</style> -->

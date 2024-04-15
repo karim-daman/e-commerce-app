@@ -13,15 +13,15 @@
   import { sineIn } from "svelte/easing";
   import { app_user_cart, app_user } from "$stores/dataStore";
 
-  let hidden3 = true;
+  let contactToggle = true;
   let transitionParams = {
-    x: -320,
-    duration: 200,
+    x: -50,
+    duration: 100,
     easing: sineIn,
   };
 </script>
 
-<nav class="bg-white border-gray-200 dark:bg-gray-900">
+<nav class=" border-gray-200 dark:bg-gray-900 border-b">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     <a href="#/" class="flex items-center space-x-3 rtl:space-x-reverse">
       <img src="Logo.png" class="h-16" alt="Logo" />
@@ -54,7 +54,7 @@
         <NavLi href="#/FAQ" active={$location == "/FAQ" ? true : false}>FAQ</NavLi>
         <!-- <NavLi href="#/about" active={$location == "/about" ? true : false}>About</NavLi>
         <NavLi href="#/services" active={$location == "/services" ? true : false}>Services</NavLi> -->
-        <NavLi on:click={() => (hidden3 = false)} active={$location == "/contact" ? true : false}>Contact</NavLi>
+        <NavLi on:click={() => (contactToggle = false)} active={$location == "/contact" ? true : false}>Contact</NavLi>
 
         {#if $app_user != null}
           <a
@@ -82,14 +82,14 @@
   </div>
 </nav>
 
-<div class="text-center"></div>
-<Drawer placement="right" transitionType="fly" {transitionParams} bind:hidden={hidden3} id="sidebar3">
+<!-- <div class="text-center"></div> -->
+<Drawer placement="right" transitionType="fly" {transitionParams} bind:hidden={contactToggle} id="sidebar3">
   <div class="flex items-center">
     <h5 id="drawer-label" class="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
       <!-- <InfoCircleSolid class="w-4 h-4 me-2.5" /> -->
       Contact us
     </h5>
-    <CloseButton on:click={() => (hidden3 = true)} class="mb-4 dark:text-white" />
+    <CloseButton on:click={() => (contactToggle = true)} class="mb-4 dark:text-white" />
   </div>
   <form action="#" class="mb-6">
     <div class="mb-6">
@@ -110,6 +110,6 @@
     <A href="/" class="text-primary-600 hover:underline dark:text-primary-500">info@company.com</A>
   </P>
   <P class="text-sm text-gray-500 dark:text-gray-400">
-    <A href="/" class="text-primary-600 hover:underline dark:text-primary-500">212-456-7890</A>
+    <A href="/" class="text-primary-600 hover:underline dark:text-primary-500">phone number</A>
   </P>
 </Drawer>

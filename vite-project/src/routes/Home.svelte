@@ -56,6 +56,23 @@
   </div>
 </div>
 
+<!-- Interior items<br />
+Sport and travel <br />
+Jewellery <br />
+Accessories <br />
+Automobiles <br />
+Home items <br />
+Musical items <br />
+Book, reading <br />
+Kid's toys <br />
+Pet items <br />
+Men's clothing <br />
+Men's clothing <br />
+Smartphones <br />
+Tools <br />
+Education <br />
+Other items <br /> -->
+
 <div class="bg-white border py-6 sm:py-8 lg:py-12 mt-56">
   <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
     <div class="mb-6 flex items-end justify-between gap-4">
