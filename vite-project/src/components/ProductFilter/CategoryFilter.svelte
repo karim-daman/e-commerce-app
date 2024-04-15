@@ -7,9 +7,8 @@
 
   let categoryArray = [];
   let categoryTextFilter = "";
-
+  let selected = [];
   $: allSelected = categoryArray.length === selected.length;
-  let selected = [...categoryArray];
 
   onMount(async () => {
     await getUniqueCategories();
@@ -17,16 +16,14 @@
       categoryArray.push({ selected: true, category: element });
     });
 
-    toggleAll();
     selected = [...categoryArray];
-    console.log(selected);
   });
 
   function applyCategoryTextFilter() {
     let filteredCatergories;
 
     filteredCatergories = categoryArray.filter((item) => {
-      return item.category.category.toLowerCase().includes(categoryTextFilter.toLowerCase());
+      return item.category.name.toLowerCase().includes(categoryTextFilter.toLowerCase());
     });
 
     if (categoryTextFilter) categoryArray = filteredCatergories;
@@ -36,21 +33,15 @@
         const exists = categoryArray.some((item) => item.category === element);
 
         // Only push the element if it doesn't already exist
-        if (!exists) {
-          categoryArray.push({ selected: true, category: element });
-        }
+        if (!exists) categoryArray.push({ selected: true, category: element });
       });
 
       selected = [...categoryArray];
     }
-
-    console.log(filteredCatergories);
   }
 
   function toggleAll() {
     selected = allSelected ? [] : [...categoryArray];
-    console.log(selected);
-
     $filteredProducts = selected.length == 0 ? [] : $app_products;
   }
 
@@ -101,7 +92,7 @@
     </div>
     {#each categoryArray as item}
       <div class="flex justify-between">
-        <div class="">
+        <div>
           <input class="w-[1rem] h-[1rem]" type="checkbox" bind:group={selected} name={item} value={item} on:change={toggleOne} />
           {item.category.name}
         </div>

@@ -1,36 +1,12 @@
 <script>
   // @ts-nocheck
 
-  import FilterAccordian from "$components/FilterAccordian.svelte";
   import { Accordion, AccordionItem } from "flowbite-svelte";
-  import { app_categories_count, app_products, filteredProducts, getUniqueBrands, getUniqueCategories } from "$stores/dataStore";
-  import { onMount } from "svelte";
   import BrandFilter from "./BrandFilter.svelte";
   import CategoryFilter from "./CategoryFilter.svelte";
   import ProductNameFilter from "./ProductNameFilter.svelte";
   import PriceFilter from "./PriceFilter.svelte";
   import RatingFilter from "./RatingFilter.svelte";
-
-  //   export let offers = false;
-  //   export let src;
-  //   export let href;
-
-  //   export let title;
-  //   export let options;
-  //   export let price;
-  //   export let offerPrice = 0;
-
-  let categoryArray = [];
-
-  onMount(() => {
-    $app_categories_count.forEach((element) => {
-      categoryArray.push({ selected: true, category: element });
-    });
-
-    // $app_categories.forEach((element) => {
-    //   categoryArray.push({ selected: true, category: element });
-    // });
-  });
 
   const formater = Intl.NumberFormat("en-GB", {
     style: "currency",

@@ -5,16 +5,51 @@
   import { onMount } from "svelte";
 
   let brandTextFilter = "";
+  let brandArray = [];
+  let selected = [];
+  $: allSelected = brandArray.length === selected.length;
 
   onMount(async () => {
     await getUniqueBrands();
+
+    $app_brand_list.forEach((element) => {
+      brandArray.push({ selected: true, brand: element });
+    });
+
+    selected = [...brandArray];
   });
 
   function applybrandTextFilter() {
-    $filteredProducts = $app_products.filter((product) => {
-      const brandFilter = product.brand.toLowerCase().includes(brandTextFilter.toLowerCase());
-      return brandFilter;
+    let filteredBrands;
+    filteredBrands = brandArray.filter((item) => {
+      return item.brand.name.toLowerCase().includes(brandTextFilter.toLowerCase());
     });
+
+    if (brandTextFilter) brandArray = filteredBrands;
+    else {
+      $app_brand_list.forEach((element) => {
+        // Check if the element already exists in brandArray
+        const exists = brandArray.some((item) => item.brand === element);
+
+        // Only push the element if it doesn't already exist
+        if (!exists) brandArray.push({ selected: true, brand: element });
+      });
+
+      selected = [...brandArray];
+    }
+  }
+
+  function toggleAll() {
+    selected = allSelected ? [] : [...brandArray];
+    $filteredProducts = selected.length == 0 ? [] : $app_products;
+  }
+
+  function toggleOne() {
+    $filteredProducts = $app_products.filter((product) => {
+      return selected.some((item) => item.brand.name === product.brand);
+    });
+
+    console.log($filteredProducts);
   }
 </script>
 
@@ -48,19 +83,26 @@
       on:input={applybrandTextFilter} />
   </div>
 
-  <div class="relative h-64 overflow-y-auto overflow-x-clip border rounded-lg mt-2 p-4">
-    <div class="grid gap-2 items-center grid-cols-[repeat(2,max-content),1fr]">
-      <input class="w-[1rem] h-[1rem] border rounded-none" id="brands-All" type="checkbox" checked={"true"} />
-      <label class="text-[#51585e]" for="brands-All">Select All</label>
-    </div>
-    {#each $app_brand_list as item}
-      <!-- {JSON.stringify(item)} -->
-      <div class="grid gap-2 items-center grid-cols-[repeat(2,max-content),1fr]">
-        <input class="w-[1rem] h-[1rem] border rounded-none" id="brands-{item.brand}" checked={"true"} type="checkbox" />
-        <label class="text-[#51585e]" for="brands-{item.brand}">{item.brand}</label>
+  <div class="text-xs">
+    {selected.length} Selected
+  </div>
 
+  <div class="w-full border flex flex-col h-64 overflow-y-auto rounded-lg mt-2 p-4">
+    <div>
+      <input type="checkbox" on:change={toggleAll} checked={allSelected} />
+      <strong>Select All</strong>
+    </div>
+    {#each brandArray as item}
+      <!-- <pre class="text-xs">
+      {JSON.stringify(item)}
+    </pre> -->
+      <div class="flex justify-between">
+        <div>
+          <input class="w-[1rem] h-[1rem]" type="checkbox" bind:group={selected} name={item} value={item} on:change={toggleOne} />
+          {item.brand.name}
+        </div>
         <p class="justify-self-end text-white bg-[#9da1a7] text-[.83rem] px-[10px] rounded-full">
-          {item.count}
+          {item.brand.count}
         </p>
       </div>
     {/each}
