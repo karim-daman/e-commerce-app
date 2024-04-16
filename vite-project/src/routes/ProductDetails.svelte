@@ -107,7 +107,6 @@
 </script>
 
 <!-- <pre class="text-xs">
-  {JSON.stringify(localReviewList, null, 2)}
   {JSON.stringify(params)}
   {JSON.stringify($app_product_details, null, 2)}
 </pre> -->

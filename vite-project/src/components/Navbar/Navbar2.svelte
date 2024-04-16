@@ -7,6 +7,8 @@
   import { location, push } from "svelte-spa-router";
   import AvatarComponent from "./AvatarComponent.svelte";
   import AuthModal from "$components/AuthModal.svelte";
+  import LanguageSelect from "$lib/LanguageSelect.svelte";
+
   let menuOpen;
 
   import { Drawer, Button, CloseButton, Label, Input, Textarea, P, A, Checkbox } from "flowbite-svelte";
@@ -79,6 +81,9 @@
         {/if}
       </ul>
     </div>
+  </div>
+  <div class="flex justify-end">
+    <LanguageSelect />
   </div>
 </nav>
 
