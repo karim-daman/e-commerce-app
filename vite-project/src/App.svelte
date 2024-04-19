@@ -27,9 +27,6 @@
     }
 
     // check if logged user has a valid jwt, if invalid log them out
-
-    // await verifyTokenExpiry();
-
     const promise = new Promise((resolve, reject) => {
       verifyTokenExpiry().then((response) => {
         response.success == true ? resolve() : reject();
@@ -47,11 +44,6 @@
         );
       });
     });
-
-    // if (localStorage.getItem("token") != "")
-    // await getCartById($app_user.cart.id);
-
-    // console.log($app_user_cart);
   });
 </script>
 
@@ -62,7 +54,7 @@
 <!-- <Navbar /> -->
 <Navbar2 />
 
-<main class=" ">
+<main>
   <Router {routes} restoreScrollState={true} />
 </main>
 

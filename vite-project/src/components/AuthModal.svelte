@@ -168,7 +168,27 @@
     };
 
     try {
-      await registerHanlder(raw);
+      // await registerHanlder(raw);
+
+      const promise = new Promise((resolve, reject) => {
+        registerHanlder(raw).then((response) => {
+          console.log(response);
+          response.success == true ? resolve() : reject();
+        });
+      });
+
+      toast.promise(
+        promise,
+        {
+          loading: `Checking credentials..`,
+          success: `Regestered successfully!`,
+          error: `Failed register attempt.`,
+        },
+        {
+          position: "top-right",
+        }
+      );
+
       clearInputs();
       closeAuthModal();
     } catch (error) {

@@ -1,5 +1,6 @@
 <script>
   //@ts-nocheck
+  import { decodeToken } from "$stores/dataStore";
 
   import { app_user, app_user_cart, getCartById } from "$stores/dataStore";
   import { onMount } from "svelte";
@@ -19,6 +20,10 @@
         {localStorage.getItem("token")}
 
         <p class="rounded-md p-2">{JSON.stringify($app_user, null, 2)}</p>
+        <p class="rounded-md p-2">{JSON.stringify($app_user.isAdmin, null, 2)}</p>
+
+        {JSON.stringify(decodeToken(localStorage.getItem("token")).isAdmin)}
+
       </pre>
     </div>
   </div>

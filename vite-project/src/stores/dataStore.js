@@ -576,6 +576,8 @@ export async function registerHanlder(json) {
     country: "undefined",
   });
 
+  let response;
+
   await fetch(endPoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -585,9 +587,12 @@ export async function registerHanlder(json) {
     .then((response) => response.json())
     .then((data) => {
       isFetching.set(false);
+      response = data;
       console.log(data);
     })
     .catch((error) => console.error(error));
+
+  return response;
 }
 
 export async function verifyTokenExpiry() {

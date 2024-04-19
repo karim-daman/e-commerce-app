@@ -6,6 +6,7 @@
   import { DropdownItem, Indicator, NavLi, Spinner } from "flowbite-svelte";
   import { location, push } from "svelte-spa-router";
   import AvatarComponent from "./AvatarComponent.svelte";
+  import { adminSideBarToggleStore } from "$stores/appStore";
   import AuthModal from "$components/AuthModal.svelte";
   import LanguageSelect from "$lib/LanguageSelect.svelte";
 
@@ -26,8 +27,19 @@
 <nav class=" border-gray-200 dark:bg-gray-900 border-b">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     <a href="#/" class="flex items-center space-x-3 rtl:space-x-reverse">
-      <img src="Logo.png" class="h-16" alt="Logo" />
-      <span class="self-center text-3xl font-semibold whitespace-nowrap dark:text-white">e-commerce</span>
+      {#if $app_user?.isAdmin}
+        <Button
+          on:click={() => {
+            $adminSideBarToggleStore = !$adminSideBarToggleStore;
+          }}
+          ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3 h-3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </Button>
+      {:else}
+        <img src="Logo.png" class="h-16" alt="Logo" />
+        <span class="self-center text-3xl font-semibold whitespace-nowrap dark:text-white">e-commerce</span>
+      {/if}
     </a>
 
     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
@@ -90,10 +102,10 @@
 <!-- <div class="text-center"></div> -->
 <Drawer placement="right" transitionType="fly" {transitionParams} bind:hidden={contactToggle} id="sidebar3">
   <div class="flex items-center">
-    <h5 id="drawer-label" class="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
+    <button id="drawer-label" class="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
       <!-- <InfoCircleSolid class="w-4 h-4 me-2.5" /> -->
-      Contact us
-    </h5>
+      Contact
+    </button>
     <CloseButton on:click={() => (contactToggle = true)} class="mb-4 dark:text-white" />
   </div>
   <form action="#" class="mb-6">

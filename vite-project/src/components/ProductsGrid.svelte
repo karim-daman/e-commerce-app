@@ -1,4 +1,5 @@
 <script>
+  //@ts-nocheck
   import { addCartItemToCart, app_like_list, app_user, deleteProduct, filteredProducts, putLike } from "$stores/dataStore";
   import { Badge, Button, Card, ChevronLeft, Dropdown, DropdownItem, MenuButton, Pagination, Rating, ChevronRight, Modal } from "flowbite-svelte";
   import { scale } from "svelte/transition";

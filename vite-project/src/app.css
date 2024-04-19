@@ -7,4 +7,10 @@
 
  
 
+.press {
+    @apply transition active:transform active:translate-y-1
+}
 
+.hoverPress{
+    @apply transition active:transform active:translate-y-1 hover:-translate-y-1
+}

@@ -15,7 +15,7 @@ dependencies:
     specifier: ^1.5.1
     version: 1.5.1
   firebase:
-    specifier: ^8.6.8
+    specifier: ^8.10.1
     version: 8.10.1
   flowbite:
     specifier: ^1.6.4

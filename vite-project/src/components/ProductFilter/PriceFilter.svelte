@@ -4,7 +4,7 @@
   import { AccordionItem } from "flowbite-svelte";
   import RangeSlider from "svelte-range-slider-pips";
 
-  let rangeValues = [0, 10000];
+  let rangeValues = [0, 50000];
 
   function applyFilters() {
     $filteredProducts = $app_products.filter((product) => {
@@ -26,7 +26,7 @@
     <span class="text-xs"> Price</span>
   </span>
 
-  <RangeSlider min={0} max={10000} range pushy float pips all rest={false} prefix="$" first="label" last="label" bind:values={rangeValues} on:change={applyFilters} />
+  <RangeSlider min={0} max={50000} range pushy float pips all rest={false} prefix="$" first="label" last="label" bind:values={rangeValues} on:change={applyFilters} />
 
   <!-- <Button class="w-full mt-5 transition hover:-translate-y-1 hover:shadow-lg active:shadow-none active:transform active:translate-y-0">Apply</Button> -->
 </AccordionItem>
