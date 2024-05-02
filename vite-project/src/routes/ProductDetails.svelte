@@ -1,6 +1,5 @@
 <script>
-  // @ts-nocheck
-  import { app_user_list, app_product_details, app_review_list, app_user, getProductById, getReviews, postReview, updateProduct, getProducts } from "$stores/dataStore";
+  import { app_user_list, app_product_details, app_review_list, app_user, getProductById, getReviews, postReview, updateProduct, getProducts, addCartItemToCart } from "$stores/dataStore";
   import { Dropdown, DropdownItem, MenuButton } from "flowbite-svelte";
   import { onMount } from "svelte";
   import Drift from "drift-zoom";
@@ -9,6 +8,7 @@
   import { authModalStore } from "$stores/appStore";
   import CustomerReviewStats from "$components/CustomerReviewStats.svelte";
   import ImageLoader from "$components/ImageLoader.svelte";
+  import toast from "svelte-french-toast";
   export let params;
 
   let liked;
@@ -31,7 +31,6 @@
   onMount(async () => {
     await getProductById(params.product_id);
     thumbnails = $app_product_details.images;
-
     await getReviews();
   });
 
@@ -59,7 +58,7 @@
   let filled = false;
   let starId;
 
-  export let quantity;
+  export let quantity = 1;
 
   const min_qty = 1;
   const max_qty = 50;
@@ -103,6 +102,45 @@
 
     user_comment = "";
     rating = 0;
+  }
+
+  async function handleAddToCart() {
+    if (!$app_user) {
+      $authModalStore = true;
+      return;
+    }
+
+    if (quantity < 1) {
+      toast.error("Quantity cannot be less than 1", {
+        position: "top-right",
+      });
+
+      return;
+    }
+
+    let newCartItem = {
+      quantity: quantity,
+      product: $app_product_details.id,
+    };
+
+    const promise = new Promise((resolve, reject) => {
+      addCartItemToCart($app_user?.cart?.id, newCartItem).then((response) => {
+        console.log(response);
+        response.success == true ? resolve() : reject();
+      });
+    });
+
+    toast.promise(
+      promise,
+      {
+        loading: `Adding ${$app_product_details.name} to your cart..`,
+        success: `Added successfully!`,
+        error: `Could not add, Try again!.`,
+      },
+      {
+        position: "top-right",
+      }
+    );
   }
 </script>
 
@@ -210,46 +248,54 @@
             <dd class="col-sm-9 text-green-600">{$app_product_details.countInStock} item(s) In Stock!</dd>
           </td>
 
-          <th class="text-left">Quantity</th>
-          <td class="justify-self-end">
-            <dd class="flex h-10">
-              <button class=" shadow-xl active:shadow-none h-10 w-10 flex flex-row mx-px text-black px-[10px] mb-4 py-[7px] rounded-[.25rem] border">
-                <!-- ^ use:hold={qty_decrement} -->
-                <!-- <Minus class="self-center" /> -->
-                <svg class="self-center h-5 w-5" width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg"
-                  ><path
-                    d="M2.25 7.5C2.25 7.22386 2.47386 7 2.75 7H12.25C12.5261 7 12.75 7.22386 12.75 7.5C12.75 7.77614 12.5261 8 12.25 8H2.75C2.47386 8 2.25 7.77614 2.25 7.5Z"
-                    fill="currentColor"
-                    fill-rule="evenodd"
-                    clip-rule="evenodd" /></svg>
-              </button>
-              <input type="number" class="border rounded w-20 mx-2 h-10 px-2" min="1" placeholder="Quantity" bind:value={quantity} />
-              <button class="shadow-xl active:shadow-none h-10 w-10 flex flex-row mx-px text-black px-[10px] mb-4 py-[7px] rounded-[.25rem] border">
-                <!-- ^  use:hold={qty_increment} -->
-                <!-- <Plus class="self-center" /> -->
+          <th class="text-left flex">
+            <button
+              on:click={() => {
+                quantity--;
+              }}
+              class=" shadow-xl active:shadow-none h-10 w-10 flex flex-row mx-px text-black px-[10px] mb-4 py-[7px] rounded-[.25rem] border">
+              <!-- ^ use:hold={qty_decrement} -->
+              <!-- <Minus class="self-center" /> -->
+              <svg class="self-center h-5 w-5" width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg"
+                ><path
+                  d="M2.25 7.5C2.25 7.22386 2.47386 7 2.75 7H12.25C12.5261 7 12.75 7.22386 12.75 7.5C12.75 7.77614 12.5261 8 12.25 8H2.75C2.47386 8 2.25 7.77614 2.25 7.5Z"
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd" /></svg>
+            </button>
+            <input type="number" class="border rounded w-20 mx-2 h-10 px-2" min="1" bind:value={quantity} />
+            <button
+              on:click={() => {
+                quantity++;
+              }}
+              class="shadow-xl active:shadow-none h-10 w-10 flex flex-row mx-px text-black px-[10px] mb-4 py-[7px] rounded-[.25rem] border">
+              <!-- ^  use:hold={qty_increment} -->
+              <!-- <Plus class="self-center" /> -->
 
-                <svg class="self-center h-5 w-5" width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg"
-                  ><path
-                    d="M8 2.75C8 2.47386 7.77614 2.25 7.5 2.25C7.22386 2.25 7 2.47386 7 2.75V7H2.75C2.47386 7 2.25 7.22386 2.25 7.5C2.25 7.77614 2.47386 8 2.75 8H7V12.25C7 12.5261 7.22386 12.75 7.5 12.75C7.77614 12.75 8 12.5261 8 12.25V8H12.25C12.5261 8 12.75 7.77614 12.75 7.5C12.75 7.22386 12.5261 7 12.25 7H8V2.75Z"
-                    fill="currentColor"
-                    fill-rule="evenodd"
-                    clip-rule="evenodd" /></svg>
+              <svg class="self-center h-5 w-5" width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg"
+                ><path
+                  d="M8 2.75C8 2.47386 7.77614 2.25 7.5 2.25C7.22386 2.25 7 2.47386 7 2.75V7H2.75C2.47386 7 2.25 7.22386 2.25 7.5C2.25 7.77614 2.47386 8 2.75 8H7V12.25C7 12.5261 7.22386 12.75 7.5 12.75C7.77614 12.75 8 12.5261 8 12.25V8H12.25C12.5261 8 12.75 7.77614 12.75 7.5C12.75 7.22386 12.5261 7 12.25 7H8V2.75Z"
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd" /></svg>
+            </button>
+          </th>
+          <td class="justify-self-end">
+            <dd class="flex">
+              <button
+                on:click={handleAddToCart}
+                class="bg-yellow-300 w-full transition hover:-translate-y-1 active:transform active:translate-y-0 flex justify-center rounded-btn-shadow max-w-60 items-center flex-row mx-px text-white px-[14px] mt-[11px] mb-4 py-[7px] rounded-[.25rem]">
+                <!-- <CartIcon class="mx-2" /> -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="mx-2 h-5 w-5" viewBox="0 0 20 20" fill="black">
+                  <path
+                    d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                </svg>
+
+                <p class="text-black text-xl">Add to cart!</p>
               </button>
             </dd>
           </td>
         </table>
-
-        <!-- <ProductDetailsOptions /> -->
-        <button
-          class="bg-yellow-300 transition hover:-translate-y-1 active:transform active:translate-y-0 flex justify-center rounded-btn-shadow max-w-60 w-full items-center flex-row mx-px text-white px-[14px] mt-[11px] mb-4 py-[7px] rounded-[.25rem]">
-          <!-- <CartIcon class="mx-2" /> -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="mx-2 h-5 w-5" viewBox="0 0 20 20" fill="black">
-            <path
-              d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-          </svg>
-
-          <p class="text-black text-xl">Add to cart!</p>
-        </button>
       </article>
     </section>
 
@@ -396,5 +442,17 @@
   }
   .filled {
     fill: #facc15;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
 </style>

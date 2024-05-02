@@ -215,6 +215,8 @@
   </main>
 </div>
 
-<pre class="text-xs">
+{#if $app_user?.isAdmin}
+  <pre class="text-xs">
   {JSON.stringify($app_user_cart, null, 2)}
 </pre>
+{/if}

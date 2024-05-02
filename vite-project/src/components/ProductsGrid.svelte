@@ -7,7 +7,8 @@
   import { authModalStore, adminProductEditModalStore } from "$stores/appStore";
   import toast from "svelte-french-toast";
   import EditProductModal from "$components/Admin/EditProductModal.svelte";
-  import { push } from "svelte-spa-router";
+  import { push, location, querystring } from "svelte-spa-router";
+  import { parse } from "qs";
 
   let popupModal = false;
 

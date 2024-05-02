@@ -26,6 +26,11 @@ export default {
     conditions: [(detail) => checkPermissions(detail, true)],
   }),
 
+  "/Cart": wrap({
+    component: Chunk(() => import("./routes/Cart.svelte")),
+    conditions: [(detail) => checkPermissions(detail, true)],
+  }),
+
   "/Reviews": wrap({
     component: Chunk(() => import("./routes/Admin/ReviewManagement.svelte")),
     conditions: [(detail) => checkPermissions(detail, true)],
@@ -36,10 +41,14 @@ export default {
     conditions: [(detail) => checkPermissions(detail, true)],
   }),
 
+  "/Discounts": wrap({
+    component: Chunk(() => import("./routes/Admin/DiscountManagement.svelte")),
+    conditions: [(detail) => checkPermissions(detail, true)],
+  }),
+
   "/": Chunk(() => import("./routes/Home.svelte")),
   "/Products": Chunk(() => import("./routes/Products.svelte")),
   "/ProductDetails/:product_id": Chunk(() => import("./routes/ProductDetails.svelte")),
-  "/Cart": Chunk(() => import("./routes/Cart.svelte")),
   "/Profile": Chunk(() => import("./routes/Profile.svelte")),
   "/FAQ": Chunk(() => import("./routes/FAQ.svelte")),
   "/Restricted": Chunk(() => import("./routes/Restricted.svelte")),

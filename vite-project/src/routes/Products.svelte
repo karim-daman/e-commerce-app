@@ -1,42 +1,21 @@
 <script>
   // @ts-nocheck
   import AdminCreateProduct from "$components/Admin/CreateProductModal.svelte";
-  import ProductFilter from "$components/ProductFilter/ProductFilter.svelte";
-  import { Button, Radio, Dropdown, DropdownItem } from "flowbite-svelte";
-  import {
-    addCartItemToCart,
-    app_categories,
-    app_like_list,
-    app_products,
-    app_user,
-    app_user_cart,
-    clearCart,
-    deleteProduct,
-    filteredProducts,
-    getCartById,
-    getCategories,
-    getLikes,
-    getProducts,
-    putLike,
-  } from "$stores/dataStore";
-  import { authModalStore } from "$stores/appStore";
+  import AdminCreateDiscount from "$components/Admin/CreateDiscountModal.svelte";
 
-  import { Badge, ButtonGroup, Card, Input, InputAddon, Label, MenuButton, Modal, Rating } from "flowbite-svelte";
+  import ProductFilter from "$components/ProductFilter/ProductFilter.svelte";
+  import { Button, Dropdown, DropdownItem } from "flowbite-svelte";
+  import { push, location, querystring } from "svelte-spa-router";
+  import { parse } from "qs";
+  import { app_categories, app_products, app_user, filteredProducts, getCategories, getLikes, getProducts } from "$stores/dataStore";
   import { onMount } from "svelte";
   import { fade, fly, scale } from "svelte/transition";
-  import toast, { Toaster } from "svelte-french-toast";
-
-  // import { page } from "$app/stores";
-  import { Pagination, ChevronLeft, ChevronRight } from "flowbite-svelte";
-  import ImageLoader from "$components/ImageLoader.svelte";
+  import { Toaster } from "svelte-french-toast";
   import { adminProductCreateModalStore, adminProductEditModalStore } from "$stores/appStore";
-  import EditProductModal from "$components/Admin/EditProductModal.svelte";
   import ProductsGrid from "$components/ProductsGrid.svelte";
   import ProductsList from "$components/ProductsList.svelte";
 
   let gridView = true;
-
-  let popupModal = false;
 
   // $: activeUrl = $page.url.searchParams.get("page");
   let pages = [
@@ -68,11 +47,6 @@
     if ($app_categories.length == 0) await getCategories();
   });
 
-  let suggestedProduct;
-
-  let editedProduct;
-
-  let sortBy = "Relevance";
   function onSortChange(sortType) {
     sortBy = sortType;
 
@@ -101,25 +75,31 @@
       // $filteredProducts = [...$app_products];
     }
   }
+  // Use a reactive statement to ensure parsed
+  // is updated every time $querystring changes
+  $: parsedQuery = parse($querystring);
+  let sortBy;
+
+  onMount(() => {
+    onSortChange(JSON.stringify(parsedQuery) == "" ? "Relevance" : parsedQuery.sort);
+  });
 </script>
 
-<Toaster />
+<!-- <p>The current page is: {$location}</p>
+<p>The querystring is: {$querystring}</p>
+<code>{JSON.stringify(parsed)}</code> -->
+
+<!-- <Toaster /> -->
 
 <div class="grid grid-rows-[max-content,1fr,max-content] min-h-screen">
   <main class="max-w-[1320px] px-5 lg:px-0 w-full grid grid-cols-[minmax(0,308px),1fr] grid-rows-[auto,1fr] my-10 gap-4 justify-self-center">
     <!-- col-span-full md:col-auto w-full grid -->
     <section class="col-span-full md:col-auto w-full grid">
       {#if $app_user?.isAdmin}
-        <div class="mb-2">
-          <Button on:click={() => ($adminProductCreateModalStore = !$adminProductCreateModalStore)}
-            >Add product <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-2 -mr-2 w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-          </Button>
+        <div class="flex">
+          <AdminCreateProduct />
+          <AdminCreateDiscount />
         </div>
-
-        <AdminCreateProduct />
-        <!-- <EditProductModal product={editedProduct} /> -->
       {/if}
 
       <div class="relative">
@@ -145,7 +125,7 @@
         <div class="flex rounded-lg">
           <div class="mx-2">
             <button class="flex text-xs border px-1 rounded-md">
-              Sort
+              Sort : {sortBy}
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
               </svg>

@@ -2,10 +2,15 @@
   import { app_products, getProducts } from "$stores/dataStore";
   import { onMount } from "svelte";
   import tilt from "svelte-tilt";
+  import Carousel from "svelte-carousel";
 
   onMount(async () => {
     await getProducts();
   });
+
+  let carousel;
+
+  let categories = ["Interior items", "Sport and travel", "Jewellery", "Accessories", "Automobiles", "Home items", "Music", "Book, reading", "Kid's toys", "Smartphones"];
 </script>
 
 <svelte:head>
@@ -56,128 +61,106 @@
   </div>
 </div>
 
-<div class="grid grid-cols-5 grid-rows-5 gap-4 mx-20">
-  <button class="hoverPress border rounded-lg h-20">
-    <div class="flex justify-evenly">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-      </svg>
+<div class="h-screen flex justify-center items-center rounded-md mb-20 mx-20">
+  <div class="w-full my-20 bg-white">
+    <div class="bg-white py-6 sm:py-8 lg:py-12">
+      <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
+        <div class="flex flex-col overflow-hidden rounded-lg bg-gray-900 sm:flex-row md:h-80">
+          <!-- content - start -->
+          <div class="flex w-full flex-col p-4 sm:w-1/2 sm:p-8 lg:w-2/5">
+            <h2 class="mb-4 text-xl font-bold text-white md:text-2xl lg:text-4xl">Summer Sale<br />Up to 70% off.</h2>
+
+            <p class="mb-8 max-w-md text-gray-400">This is a section of some simple filler text, also known as placeholder text. It shares some characteristics of a real written text.</p>
+
+            <div class="mt-auto">
+              <!-- sends to best deals using query string -->
+              <!--   href="#/products?query=hello+world&sort=title" -->
+              <a
+                href="#/products?query=sort&sort=Price+ascending"
+                class="inline-block rounded-lg bg-white px-8 py-3 text-center text-sm font-semibold text-gray-800 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:bg-gray-200 md:text-base"
+                >Save now</a>
+            </div>
+          </div>
+          <!-- content - end -->
+
+          <!-- image - start -->
+          <div class="order-first h-48 w-full bg-gray-700 sm:order-none sm:h-auto sm:w-1/2 lg:w-3/5">
+            <img
+              src="https://images.unsplash.com/photo-1505846951821-e25bacf2eccd?auto=format&q=75&fit=crop&crop=top&w=1000&h=500"
+              loading="lazy"
+              alt=" by Dom Hill"
+              class="h-full w-full object-cover object-center" />
+          </div>
+          <!-- image - end -->
+        </div>
+      </div>
     </div>
 
-    <p class="flex justify-evenly">Interior items</p>
-  </button>
-  <button class="hoverPress border rounded-lg h-20">
-    <div class="flex justify-evenly">
-      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-        <path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 11.923A1 1 0 0 1 17.92 21H6.08a1 1 0 0 1-.997-1.077L6 8h12Z" />
-      </svg>
-    </div>
+    <div class="border rounded-lg px-20">
+      <Carousel autoplay autoplayDuration={3000} pauseOnFocus particlesToShow={5} particlesToScroll={4} bind:this={carousel}>
+        {#each $app_products as item}
+          <!-- <img class="" draggable="false" src={item.image} alt="" /> -->
 
-    <p class="flex justify-evenly">Sport and travel</p>
-  </button>
-  <button class="hoverPress border rounded-lg h-20">
-    <div class="flex justify-evenly">
-      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-        <path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2" />
-      </svg>
+          <div class="relative group">
+            <img class="group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all" draggable="false" src={item.image} alt="" />
+            <div class="group-hover:opacity-100 opacity-0 absolute inset-0 flex items-end justify-center">
+              <span class="text-emerald-400 text-lg font-extrabold font-mono backdrop-blur-sm px-4 rounded-md"> $ {item.price}</span>
+            </div>
+          </div>
+        {/each}
+      </Carousel>
     </div>
-    <p class="flex justify-evenly">Jewellery</p>
-  </button>
-  <button class="hoverPress border rounded-lg h-20">
-    <div class="flex justify-evenly">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-      </svg>
-    </div>
-
-    <p class="flex justify-evenly">Accessories</p>
-  </button>
-  <button class="hoverPress border rounded-lg h-20">
-    <div class="flex justify-evenly">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-      </svg>
-    </div>
-    <p class="flex justify-evenly">Automobiles</p>
-  </button>
-  <button class="hoverPress border rounded-lg h-20">
-    <div class="flex justify-evenly">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819" />
-      </svg>
-    </div>
-    <p class="flex justify-evenly">Home items</p>
-  </button>
-  <button class="hoverPress border rounded-lg h-20">
-    <div class=" flex justify-evenly">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="m9 9 10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z" />
-      </svg>
-    </div>
-    <p class="flex justify-evenly">Music</p>
-  </button>
-  <button class="hoverPress border rounded-lg h-20">
-    <div class="flex justify-evenly">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-      </svg>
-    </div>
-
-    <p class="flex justify-evenly">Book, reading</p>
-  </button>
-  <button class="border rounded-lg h-20">
-    <div class=" flex justify-evenly">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-      </svg>
-    </div>
-    <p class=" flex justify-evenly">Kid's toys</p>
-  </button>
-  <button class="hoverPress border rounded-lg h-20">
-    <div class=" flex justify-evenly">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-      </svg>
-    </div>
-    <p class=" flex justify-evenly">Smartphones</p>
-  </button>
+  </div>
 </div>
 
-<div class="bg-white border py-6 sm:py-8 lg:py-12 mt-56">
+<div class="bg-white pb-6 sm:pb-8 lg:pb-12">
+  <section class="mx-auto max-w-screen-2xl px-4 md:px-8">
+    <div class="mb-8 flex flex-wrap justify-between md:mb-16">
+      <div class="mb-6 flex w-full flex-col justify-center sm:mb-12 lg:mb-0 lg:w-1/3 lg:pb-24 lg:pt-48">
+        <h1 class="mb-4 text-4xl font-bold text-black sm:text-5xl md:mb-8 md:text-6xl">Find your<br />style online</h1>
+
+        <p class="max-w-md leading-relaxed text-gray-500 xl:text-lg">This is a section of some simple filler text, also known as placeholder text. It shares characteristics of real text.</p>
+      </div>
+
+      <div class="mb-12 flex w-full md:mb-16 lg:w-2/3">
+        <div class="relative left-12 top-12 z-10 -ml-12 overflow-hidden rounded-lg bg-gray-100 shadow-lg md:left-16 md:top-16 lg:ml-0">
+          <img
+            src="https://images.unsplash.com/photo-1542340916-951bb72c8f74?auto=format&q=75&fit=crop&w=550&h=550"
+            loading="lazy"
+            alt="Photo by Kaung Htet"
+            class="h-full w-full object-cover object-center" />
+        </div>
+
+        <div class="overflow-hidden rounded-lg bg-gray-100 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1586295166487-b265f7e83a7f?auto=format&q=75&fit=crop&w=550&h=550"
+            loading="lazy"
+            alt="Photo by Manny Moreno"
+            class="h-full w-full object-cover object-center" />
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="grid grid-cols-5 grid-rows-5 gap-4 mx-20">
+  {#each categories as item}
+    <button class="hoverPress border rounded-lg h-20">
+      <div class="flex justify-evenly">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+        </svg>
+      </div>
+
+      <p class="flex justify-evenly">{item}</p>
+    </button>
+  {/each}
+</div>
+
+<div class="bg-white border py-6 sm:py-8 lg:py-12">
   <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
     <div class="mb-6 flex items-end justify-between gap-4">
       <h2 class="text-2xl font-bold text-gray-800 lg:text-3xl">Shoe Collections</h2>

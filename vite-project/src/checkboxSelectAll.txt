@@ -1,0 +1,32 @@
+<script>
+	const items = ["a", "b", "c"]
+	let selected = [];
+	$: allSelected = items.length === selected.length
+
+	function toggleAll() {
+		if (allSelected) {
+			selected = [];
+		} else {
+			selected = [...items]
+		}
+// 		selected = allSelected ? [] : [...items] // short version
+	}
+</script>
+
+<div>
+	{selected.length} Selected
+	<div>
+		<input 
+					 type="checkbox" 
+					 on:click={toggleAll} 
+					 checked={allSelected}
+					 />
+		<strong>All</strong>
+	</div>
+	{#each items as item}
+	<div>
+		<input type="checkbox" bind:group={selected} name={item} value={item}  />
+		{item}
+	</div>
+	{/each}
+</div>

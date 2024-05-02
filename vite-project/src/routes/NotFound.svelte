@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { push } from "svelte-spa-router";
+  import tilt from "svelte-tilt";
 
   let words = [
     "zzvtdbeqbifqheseuhzeuhz/PAGE NOT FOUND/euhzjlqpxxmwymxzzpreug",
@@ -8,6 +9,13 @@
     "zwjfhqvdhqutbhiwimuwimu/PAGE NOT FOUND/wimutsyuajsqrgmrheqylj",
     "uuqkyrltjrfziepyunvyunv/PAGE NOT FOUND/yunvxlfdhcjosnqfprfkde",
   ];
+
+  // let words = [
+  //   "zzvtdbeqbifqheseuhzeuhzeuhzjlqpxxmwymxzzpreugxsrjrllvbqhsbrnnugtnugtnugttiovjoxwmdlidafallmdlidafalmdlidafalmdlidafalfa",
+  //   "xsrjrllvbqhsbrnnugtnugtnugttiovjoxwmdlidafallzwjfhqvdhqutbhiwimuwimuwimutsyuajsqrgmrheqyljrgmrheqylrgmrheqylrgmrheqylqy",
+  //   "zwjfhqvdhqutbhiwimuwimuwimutsyuajsqrgmrheqyljuuqkyrltjrfziepyunvyunvyunvxlfdhcjosnqfprfkdesnqfprfkdsnqfprfkdsnqfprfkdfk",
+  //   "uuqkyrltjrfziepyunvyunvyunvxlfdhcjosnqfprfkdeuuqkyrltjrfziepyunvyunvyunvxlfdhcjosnqfprfkdesnqfprfkdsnqfprfkdsnqfprfkdfk",
+  // ];
 
   let currentIndex = 0;
 
@@ -30,4 +38,8 @@
         push("/");
       }}>return</button>
   </div>
+
+  <!-- <div class="block bg-slate-300 w-40 h-40 border break-all" use:tilt>
+    <div class="" style="transform: translateZ(20px); display: block;">{word}</div>
+  </div> -->
 </div>
