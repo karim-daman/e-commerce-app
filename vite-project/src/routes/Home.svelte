@@ -1,11 +1,15 @@
 <script>
+  // @ts-nocheck
+
   import { app_products, getProducts } from "$stores/dataStore";
   import { onMount } from "svelte";
   import tilt from "svelte-tilt";
   import Carousel from "svelte-carousel";
-
+  import { push } from "svelte-spa-router";
+  let ready = false;
   onMount(async () => {
     await getProducts();
+    ready = true;
   });
 
   let carousel;
@@ -18,98 +22,42 @@
 </svelte:head>
 
 <div class="h-screen flex items-center justify-center">
-  <div class="">
-    <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
-      <section class="mb-8 flex flex-col justify-between gap-6 sm:gap-10 md:mb-16 md:gap-16 lg:flex-row">
-        <!-- content - start -->
-        <div class="flex flex-col justify-center sm:text-center lg:py-12 lg:text-left xl:w-5/12">
-          <p class="mb-4 font-semibold text-indigo-500 md:mb-6 md:text-lg xl:text-xl">Your Online Shopping Experiance</p>
+  <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
+    <section class="mb-8 flex flex-col justify-between gap-6 sm:gap-10 md:mb-16 md:gap-16 lg:flex-row">
+      <!-- content - start -->
+      <div class="flex flex-col justify-center sm:text-center lg:py-12 lg:text-left xl:w-5/12">
+        <p class="mb-4 font-semibold text-indigo-500 md:mb-6 md:text-lg xl:text-xl">Your Online Shopping Experiance</p>
 
-          <h1 class="mb-8 text-4xl font-bold text-black sm:text-5xl md:mb-12 md:text-6xl">Discover Your Next Favorite Product</h1>
+        <h1 class="mb-8 text-4xl font-bold text-black sm:text-5xl md:mb-12 md:text-6xl">Discover Your Next Favorite Product</h1>
 
-          <div class=" z-10 gap-2.5 sm:flex-row sm:justify-center lg:justify-start">
-            <div class="space-x-4">
-              <a
-                class=" inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-5 text-2xl sm:text-7xl w-full font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                href="#/products">
-                Start Shopping
-              </a>
-            </div>
+        <div class=" z-10 gap-2.5 sm:flex-row sm:justify-center lg:justify-start">
+          <div class="space-x-4">
+            <a
+              class=" inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-5 text-2xl sm:text-7xl w-full font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
+              href="#/products">
+              Start Shopping
+            </a>
           </div>
-        </div>
-        <!-- content - end -->
-
-        <div class="flex flex-row h-[300px] sm:min-h-screen justify-center items-center">
-          <!-- Use it like any other HTML element -->
-          <model-viewer
-            auto-rotate
-            min-camera-orbit="auto auto 100%"
-            max-camera-orbit="auto auto 100%"
-            disable-zoom
-            class=" h-screen w-[300px] sm:w-[800px]"
-            alt="3DCart"
-            src="3DCart/scene.gltf"
-            ar
-            shadow-intensity="1"
-            camera-controls
-            touch-action="pan-y" />
-        </div>
-      </section>
-
-      <!--  -->
-    </div>
-  </div>
-</div>
-
-<div class="h-screen flex justify-center items-center rounded-md mb-20 mx-20">
-  <div class="w-full my-20 bg-white">
-    <div class="bg-white py-6 sm:py-8 lg:py-12">
-      <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
-        <div class="flex flex-col overflow-hidden rounded-lg bg-gray-900 sm:flex-row md:h-80">
-          <!-- content - start -->
-          <div class="flex w-full flex-col p-4 sm:w-1/2 sm:p-8 lg:w-2/5">
-            <h2 class="mb-4 text-xl font-bold text-white md:text-2xl lg:text-4xl">Summer Sale<br />Up to 70% off.</h2>
-
-            <p class="mb-8 max-w-md text-gray-400">This is a section of some simple filler text, also known as placeholder text. It shares some characteristics of a real written text.</p>
-
-            <div class="mt-auto">
-              <!-- sends to best deals using query string -->
-              <!--   href="#/products?query=hello+world&sort=title" -->
-              <a
-                href="#/products?query=sort&sort=Price+ascending"
-                class="inline-block rounded-lg bg-white px-8 py-3 text-center text-sm font-semibold text-gray-800 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:bg-gray-200 md:text-base"
-                >Save now</a>
-            </div>
-          </div>
-          <!-- content - end -->
-
-          <!-- image - start -->
-          <div class="order-first h-48 w-full bg-gray-700 sm:order-none sm:h-auto sm:w-1/2 lg:w-3/5">
-            <img
-              src="https://images.unsplash.com/photo-1505846951821-e25bacf2eccd?auto=format&q=75&fit=crop&crop=top&w=1000&h=500"
-              loading="lazy"
-              alt=" by Dom Hill"
-              class="h-full w-full object-cover object-center" />
-          </div>
-          <!-- image - end -->
         </div>
       </div>
-    </div>
+      <!-- content - end -->
 
-    <div class="border rounded-lg px-20">
-      <Carousel autoplay autoplayDuration={3000} pauseOnFocus particlesToShow={5} particlesToScroll={4} bind:this={carousel}>
-        {#each $app_products as item}
-          <!-- <img class="" draggable="false" src={item.image} alt="" /> -->
-
-          <div class="relative group">
-            <img class="group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all" draggable="false" src={item.image} alt="" />
-            <div class="group-hover:opacity-100 opacity-0 absolute inset-0 flex items-end justify-center">
-              <span class="text-emerald-400 text-lg font-extrabold font-mono backdrop-blur-sm px-4 rounded-md"> $ {item.price}</span>
-            </div>
-          </div>
-        {/each}
-      </Carousel>
-    </div>
+      <div class="flex flex-row h-[300px] sm:min-h-screen justify-center items-center">
+        <!-- Use it like any other HTML element -->
+        <model-viewer
+          auto-rotate
+          min-camera-orbit="auto auto 100%"
+          max-camera-orbit="auto auto 100%"
+          disable-zoom
+          class=" h-screen w-[300px] sm:w-[800px]"
+          alt="3DCart"
+          src="3DCart/scene.gltf"
+          ar
+          shadow-intensity="1"
+          camera-controls
+          touch-action="pan-y" />
+      </div>
+    </section>
   </div>
 </div>
 
@@ -124,26 +72,69 @@
 
       <div class="mb-12 flex w-full md:mb-16 lg:w-2/3">
         <div class="relative left-12 top-12 z-10 -ml-12 overflow-hidden rounded-lg bg-gray-100 shadow-lg md:left-16 md:top-16 lg:ml-0">
-          <img
-            src="https://images.unsplash.com/photo-1542340916-951bb72c8f74?auto=format&q=75&fit=crop&w=550&h=550"
-            loading="lazy"
-            alt="Photo by Kaung Htet"
-            class="h-full w-full object-cover object-center" />
+          <img src="https://images.unsplash.com/photo-1542340916-951bb72c8f74?auto=format&q=75&fit=crop&w=550&h=550" loading="lazy" alt="splash" class="h-full w-full object-cover object-center" />
         </div>
 
         <div class="overflow-hidden rounded-lg bg-gray-100 shadow-lg">
-          <img
-            src="https://images.unsplash.com/photo-1586295166487-b265f7e83a7f?auto=format&q=75&fit=crop&w=550&h=550"
-            loading="lazy"
-            alt="Photo by Manny Moreno"
-            class="h-full w-full object-cover object-center" />
+          <img src="https://images.unsplash.com/photo-1586295166487-b265f7e83a7f?auto=format&q=75&fit=crop&w=550&h=550" loading="lazy" alt="splash" class="h-full w-full object-cover object-center" />
         </div>
       </div>
     </div>
   </section>
 </div>
 
-<div class="grid grid-cols-5 grid-rows-5 gap-4 mx-20">
+<div class="h-screen flex justify-center items-center rounded-md mx-5">
+  <div class="w-full my-20">
+    <div class="border rounded-lg">
+      {#if ready}
+        <Carousel autoplay autoplayDuration={3000} pauseOnFocus particlesToShow={5} particlesToScroll={4} bind:this={carousel}>
+          {#each $app_products as item}
+            <div class="relative group">
+              <img class="group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all" draggable="false" src={item.image} alt="" />
+              <div class="group-hover:opacity-100 opacity-0 absolute inset-0 flex items-end justify-center">
+                <span
+                  on:click={() => {
+                    push("#/ProductDetails/" + item.id);
+                  }}
+                  class="border hover:cursor-pointer text-emerald-400 text-lg font-extrabold font-mono backdrop-blur-sm px-4 rounded-md">
+                  $ {item.price}</span>
+              </div>
+            </div>
+          {/each}
+        </Carousel>
+      {/if}
+    </div>
+
+    <div class=" py-6 sm:py-8 lg:py-12">
+      <div class=" max-w-screen-3xl">
+        <div class="flex flex-col overflow-hidden rounded-lg bg-gray-900 sm:flex-row md:h-80">
+          <div class="flex w-full flex-col p-4 sm:w-1/2 sm:p-8 lg:w-2/5">
+            <h2 class="mb-4 text-xl font-bold text-white md:text-2xl lg:text-4xl">Summer Sale<br />Up to 70% off.</h2>
+            <p class="mb-8 max-w-md text-gray-400">This is a section of some simple filler text, also known as placeholder text. It shares some characteristics of a real written text.</p>
+            <div class="mt-auto">
+              <!-- sends to best deals using query string -->
+              <!--   href="#/products?query=hello+world&sort=title" -->
+              <a
+                href="#/products?query=sort&sort=Price+ascending"
+                class="w-full inline-block rounded-lg bg-white px-8 py-3 text-center text-sm font-semibold text-gray-800 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:bg-gray-200 md:text-base"
+                >Save now</a>
+            </div>
+          </div>
+
+          <div class="order-first h-48 w-full bg-gray-700 sm:order-none sm:h-auto sm:w-1/2 lg:w-3/5">
+            <img
+              src="https://images.unsplash.com/photo-1505846951821-e25bacf2eccd?auto=format&q=75&fit=crop&crop=top&w=1000&h=500"
+              loading="lazy"
+              alt=" by Dom Hill"
+              class="h-full w-full object-cover object-center" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="grid grid-cols-5 grid-rows-5 gap-4 mx-20">
   {#each categories as item}
     <button class="hoverPress border rounded-lg h-20">
       <div class="flex justify-evenly">
@@ -158,7 +149,7 @@
       <p class="flex justify-evenly">{item}</p>
     </button>
   {/each}
-</div>
+</div> -->
 
 <div class="bg-white border py-6 sm:py-8 lg:py-12">
   <div class="mx-auto max-w-screen-2xl px-4 md:px-8">

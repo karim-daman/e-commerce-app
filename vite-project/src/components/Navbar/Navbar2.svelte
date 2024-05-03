@@ -1,5 +1,6 @@
 <script>
   //@ts-nocheck
+
   import Login from "$components/Icons/Login.svelte";
   import Register from "$components/Icons/Register.svelte";
   import { authModalStore } from "$stores/appStore";
@@ -15,6 +16,7 @@
   import { Drawer, Button, CloseButton, Label, Input, Textarea, P, A, Checkbox } from "flowbite-svelte";
   import { sineIn } from "svelte/easing";
   import { app_user_cart, app_user } from "$stores/dataStore";
+  import { onMount } from "svelte";
 
   let contactToggle = true;
   let transitionParams = {
@@ -22,7 +24,16 @@
     duration: 100,
     easing: sineIn,
   };
+
+  let screenWidth;
+  $: isMobile = screenWidth < 768 ? true : false;
 </script>
+
+<svelte:window bind:innerWidth={screenWidth} />
+
+<div class="flex justify-end">
+  <LanguageSelect />
+</div>
 
 <nav class=" border-gray-200 dark:bg-gray-900 border-b">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -60,9 +71,15 @@
       </button>
     </div>
 
-    <div class="items-center justify-between {menuOpen ? 'block' : 'hidden'} w-full md:flex md:w-auto md:order-1" id="navbar-user">
+    <div
+      class=" {isMobile ? (menuOpen ? 'h-60 ' : 'h-0') : menuOpen ? 'block' : 'hidden'}  transition-all ease-in-out items-center justify-between duration-300 w-full md:flex md:w-auto md:order-1"
+      id="navbar-user">
       <ul
-        class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+        class="
+        
+        {isMobile ? (menuOpen ? 'opacity-100 ' : 'opacity-0') : 'block'} 
+        
+    transition-all duration-200 relative flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
         <NavLi href="#/" active={$location == "/" ? true : false}>Home</NavLi>
         <NavLi href="#/products" active={$location == "/products" ? true : false}>Products</NavLi>
         <NavLi href="#/FAQ" active={$location == "/FAQ" ? true : false}>FAQ</NavLi>
@@ -93,9 +110,6 @@
         {/if}
       </ul>
     </div>
-  </div>
-  <div class="flex justify-end">
-    <LanguageSelect />
   </div>
 </nav>
 

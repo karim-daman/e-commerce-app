@@ -28,7 +28,7 @@ export default {
 
   "/Cart": wrap({
     component: Chunk(() => import("./routes/Cart.svelte")),
-    conditions: [(detail) => checkPermissions(detail, true)],
+    conditions: [(detail) => checkPermissions(detail, false)],
   }),
 
   "/Reviews": wrap({
