@@ -47,12 +47,14 @@ export default {
   }),
 
   "/": Chunk(() => import("./routes/Home.svelte")),
+
   "/Products": Chunk(() => import("./routes/Products.svelte")),
   "/ProductDetails/:product_id": Chunk(() => import("./routes/ProductDetails.svelte")),
   "/Profile": Chunk(() => import("./routes/Profile.svelte")),
   "/FAQ": Chunk(() => import("./routes/FAQ.svelte")),
   "/Restricted": Chunk(() => import("./routes/Restricted.svelte")),
   "/NotFound": Chunk(() => import("./routes/NotFound.svelte")),
+  "/test": Chunk(() => import("./routes/test.svelte")),
   "*": Chunk(() => import("./routes/NotFound.svelte")),
 };
 

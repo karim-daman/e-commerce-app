@@ -68,7 +68,7 @@
         <div class="flex justify-between">
           <span class="block text-sm font-bold">
             <div class="flex">
-              <div class="mr-3">{getUserNameById($app_user_list, review.user_id)}</div>
+              <!-- <div class="mr-3">{getUserNameById($app_user_list, review.user_id)}</div> -->
               <div class="mr-3">{review.user_name}</div>
 
               <div class="text-gray-400 text-xs mt-0.5">
